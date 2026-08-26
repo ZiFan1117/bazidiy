@@ -1,0 +1,22 @@
+# 构建产物
+lib/
+*.tsbuildinfo
+node_modules/
+dist/
+
+# dsh 本地数据盘
+.dsh-dev/
+.dsh-build/
+
+# 依赖锁文件（monorepo workspace 引用，不独立发布）
+pnpm-lock.yaml
+
+# 系统/IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# 环境变量（绝不提交任何 Key）
+.env
+.env.*
