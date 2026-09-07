@@ -1,0 +1,101 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix bzd:  <https://bazidiy.example/ontology#> .
+
+# =====================================================================
+# BaziDIY 基础词库本体（草案）
+# 内容：五行 / 天干 / 地支 / 时节 的概念、个体与关系（含生/克对象属性）。
+# 单一事实源；其它 kb 与本体的规则/代码一律通过 IRI 引用（C1/C2）。
+# 生成说明：现行 `packages/ontology/src/data/wuxing.ts` elements/generates/restricts
+#           与 `src/bazi.ts` 内联 TIAN_GAN/DI_ZHI/节气表 的收口处。
+# =====================================================================
+
+bzd:WuxingGanzhiOntology  a owl:Ontology ;
+    rdfs:label "BaziDIY 五行·干支基础词库"@zh ;
+    rdfs:comment "五行元素、天干地支个体、生/克关系、时节节气节点。"@zh .
+
+# ---------------------------------------------------------------- 类
+bzd:WuxingElement  a owl:Class ; rdfs:label "五行元素"@zh .
+bzd:HeavenlyStem   a owl:Class ; rdfs:label "天干"@zh .
+bzd:EarthlyBranch  a owl:Class ; rdfs:label "地支"@zh .
+bzd:SeasonNode     a owl:Class ; rdfs:label "时节节点"@zh .
+
+# ------------------------------------------------------------- 对象属性
+bzd:generates  a owl:ObjectProperty ;
+    rdfs:label "生"@zh ;
+    rdfs:domain bzd:WuxingElement ; rdfs:range bzd:WuxingElement ;
+    owl:inverseOf bzd:generatedBy .
+bzd:generatedBy a owl:ObjectProperty ; rdfs:label "被生"@zh .
+
+bzd:restricts  a owl:ObjectProperty ;
+    rdfs:label "克"@zh ;
+    rdfs:domain bzd:WuxingElement ; rdfs:range bzd:WuxingElement ;
+    owl:inverseOf bzd:restrictedBy .
+bzd:restrictedBy a owl:ObjectProperty ; rdfs:label "被克"@zh .
+
+# 干支归属五行
+bzd:belongsToElement a owl:ObjectProperty ;
+    rdfs:label "属五行"@zh ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( bzd:HeavenlyStem bzd:EarthlyBranch ) ] ;
+    rdfs:range bzd:WuxingElement .
+
+# ------------------------------------------------------------- 数据属性
+bzd:month  a owl:DatatypeProperty ; rdfs:label "公历月"@zh ; rdfs:range xsd:integer .
+bzd:day    a owl:DatatypeProperty ; rdfs:label "公历日"@zh ; rdfs:range xsd:integer .
+bzd:order  a owl:DatatypeProperty ; rdfs:label "序数"@zh ; rdfs:range xsd:integer .
+
+# --------------------------------------------------------- 五行个体 + 生克
+bzd:木 a bzd:WuxingElement ; rdfs:label "木"@zh .
+bzd:火 a bzd:WuxingElement ; rdfs:label "火"@zh .
+bzd:土 a bzd:WuxingElement ; rdfs:label "土"@zh .
+bzd:金 a bzd:WuxingElement ; rdfs:label "金"@zh .
+bzd:水 a bzd:WuxingElement ; rdfs:label "水"@zh .
+
+bzd:木 bzd:generates bzd:火 .  bzd:木 bzd:restricts bzd:土 .
+bzd:火 bzd:generates bzd:土 .  bzd:火 bzd:restricts bzd:金 .
+bzd:土 bzd:generates bzd:金 .  bzd:土 bzd:restricts bzd:水 .
+bzd:金 bzd:generates bzd:水 .  bzd:金 bzd:restricts bzd:木 .
+bzd:水 bzd:generates bzd:木 .  bzd:水 bzd:restricts bzd:火 .
+
+# ----------------------------------------------------------- 天干个体
+bzd:甲 a bzd:HeavenlyStem ; rdfs:label "甲"@zh ; bzd:order 0 ; bzd:belongsToElement bzd:木 .
+bzd:乙 a bzd:HeavenlyStem ; rdfs:label "乙"@zh ; bzd:order 1 ; bzd:belongsToElement bzd:木 .
+bzd:丙 a bzd:HeavenlyStem ; rdfs:label "丙"@zh ; bzd:order 2 ; bzd:belongsToElement bzd:火 .
+bzd:丁 a bzd:HeavenlyStem ; rdfs:label "丁"@zh ; bzd:order 3 ; bzd:belongsToElement bzd:火 .
+bzd:戊 a bzd:HeavenlyStem ; rdfs:label "戊"@zh ; bzd:order 4 ; bzd:belongsToElement bzd:土 .
+bzd:己 a bzd:HeavenlyStem ; rdfs:label "己"@zh ; bzd:order 5 ; bzd:belongsToElement bzd:土 .
+bzd:庚 a bzd:HeavenlyStem ; rdfs:label "庚"@zh ; bzd:order 6 ; bzd:belongsToElement bzd:金 .
+bzd:辛 a bzd:HeavenlyStem ; rdfs:label "辛"@zh ; bzd:order 7 ; bzd:belongsToElement bzd:金 .
+bzd:壬 a bzd:HeavenlyStem ; rdfs:label "壬"@zh ; bzd:order 8 ; bzd:belongsToElement bzd:水 .
+bzd:癸 a bzd:HeavenlyStem ; rdfs:label "癸"@zh ; bzd:order 9 ; bzd:belongsToElement bzd:水 .
+
+# ----------------------------------------------------------- 地支个体
+bzd:子 a bzd:EarthlyBranch ; rdfs:label "子"@zh ; bzd:order 0  ; bzd:belongsToElement bzd:水 .
+bzd:丑 a bzd:EarthlyBranch ; rdfs:label "丑"@zh ; bzd:order 1  ; bzd:belongsToElement bzd:土 .
+bzd:寅 a bzd:EarthlyBranch ; rdfs:label "寅"@zh ; bzd:order 2  ; bzd:belongsToElement bzd:木 .
+bzd:卯 a bzd:EarthlyBranch ; rdfs:label "卯"@zh ; bzd:order 3  ; bzd:belongsToElement bzd:木 .
+bzd:辰 a bzd:EarthlyBranch ; rdfs:label "辰"@zh ; bzd:order 4  ; bzd:belongsToElement bzd:土 .
+bzd:巳 a bzd:EarthlyBranch ; rdfs:label "巳"@zh ; bzd:order 5  ; bzd:belongsToElement bzd:火 .
+bzd:午 a bzd:EarthlyBranch ; rdfs:label "午"@zh ; bzd:order 6  ; bzd:belongsToElement bzd:火 .
+bzd:未 a bzd:EarthlyBranch ; rdfs:label "未"@zh ; bzd:order 7  ; bzd:belongsToElement bzd:土 .
+bzd:申 a bzd:EarthlyBranch ; rdfs:label "申"@zh ; bzd:order 8  ; bzd:belongsToElement bzd:金 .
+bzd:酉 a bzd:EarthlyBranch ; rdfs:label "酉"@zh ; bzd:order 9  ; bzd:belongsToElement bzd:金 .
+bzd:戌 a bzd:EarthlyBranch ; rdfs:label "戌"@zh ; bzd:order 10 ; bzd:belongsToElement bzd:土 .
+bzd:亥 a bzd:EarthlyBranch ; rdfs:label "亥"@zh ; bzd:order 11 ; bzd:belongsToElement bzd:水 .
+
+# ------------------------------------------------------- 时节节点（月界）
+# 现行 `src/bazi.ts` JIE_QI 收口：月份分界（简化版，逐月节气日）。
+bzd:立春 a bzd:SeasonNode ; rdfs:label "立春"@zh ; bzd:month 2 ; bzd:day 4 .
+bzd:惊蛰 a bzd:SeasonNode ; rdfs:label "惊蛰"@zh ; bzd:month 3 ; bzd:day 6 .
+bzd:清明 a bzd:SeasonNode ; rdfs:label "清明"@zh ; bzd:month 4 ; bzd:day 5 .
+bzd:立夏 a bzd:SeasonNode ; rdfs:label "立夏"@zh ; bzd:month 5 ; bzd:day 6 .
+bzd:芒种 a bzd:SeasonNode ; rdfs:label "芒种"@zh ; bzd:month 6 ; bzd:day 6 .
+bzd:小暑 a bzd:SeasonNode ; rdfs:label "小暑"@zh ; bzd:month 7 ; bzd:day 7 .
+bzd:立秋 a bzd:SeasonNode ; rdfs:label "立秋"@zh ; bzd:month 8 ; bzd:day 7 .
+bzd:白露 a bzd:SeasonNode ; rdfs:label "白露"@zh ; bzd:month 9 ; bzd:day 8 .
+bzd:寒露 a bzd:SeasonNode ; rdfs:label "寒露"@zh ; bzd:month 10 ; bzd:day 8 .
+bzd:立冬 a bzd:SeasonNode ; rdfs:label "立冬"@zh ; bzd:month 11 ; bzd:day 7 .
+bzd:大雪 a bzd:SeasonNode ; rdfs:label "大雪"@zh ; bzd:month 12 ; bzd:day 7 .
+bzd:小寒 a bzd:SeasonNode ; rdfs:label "小寒"@zh ; bzd:month 1 ; bzd:day 6 .
