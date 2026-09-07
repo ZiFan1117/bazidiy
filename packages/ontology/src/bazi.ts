@@ -1,20 +1,12 @@
 /**
  * 确定性八字排盘 — 纯日历数学（公历 → 四柱 + 五行统计）。
+ * 天干/地支/五行/节气 = 本体单一事实源 kb/wuxing-ganzhi.ttl 的绑定（src/kb/vocab.ts）。
  * @module @bazidiy/ontology/bazi
  */
 
-const TIAN_GAN = '甲乙丙丁戊己庚辛壬癸'
-const DI_ZHI = '子丑寅卯辰巳午未申酉戌亥'
-const WX_TG = '木木火火土土金金水水'
-const WX_DZ = '水土木木土火火土金金土水'
+import { STEM_NAMES, BRANCH_NAMES, STEM_ELEMENT, BRANCH_ELEMENT, seasons as JIE_QI } from './kb/vocab.ts'
 
-/** 节气月分界（简化版）。 */
-const JIE_QI: Array<[string, number, number]> = [
-  ['立春', 2, 4], ['惊蛰', 3, 6], ['清明', 4, 5], ['立夏', 5, 6],
-  ['芒种', 6, 6], ['小暑', 7, 7], ['立秋', 8, 7], ['白露', 9, 8],
-  ['寒露', 10, 8], ['立冬', 11, 7], ['大雪', 12, 7], ['小寒', 1, 6],
-]
-
+/** 运算表（属本操作内部算法，非词库）：时辰→时支、年上起月、日上起时。 */
 const HOUR_DZ: Array<[number, number, number]> = [
   [23, 0, 0], [1, 2, 1], [3, 4, 2], [5, 6, 3], [7, 8, 4],
   [9, 10, 5], [11, 12, 6], [13, 14, 7], [15, 16, 8], [17, 18, 9],
@@ -38,8 +30,8 @@ function getDayGz(dt: Date): [number, number] {
 
 function getMonthGz(month: number, day: number, yearG: number): [number, number] {
   let solarMonth = month
-  for (const [, m, d] of JIE_QI) {
-    if (month === m && day < d) {
+  for (const s of JIE_QI) {
+    if (month === s.month && day < s.day) {
       solarMonth = month - 1
       break
     }
@@ -72,9 +64,7 @@ function resolveHourDz(hour: string): number {
 }
 
 function lookupWuxing(tgName: string, dzName: string): [string, string] {
-  const tgIdx = TIAN_GAN.indexOf(tgName)
-  const dzIdx = DI_ZHI.indexOf(dzName)
-  return [tgIdx >= 0 ? WX_TG.charAt(tgIdx) : '', dzIdx >= 0 ? WX_DZ.charAt(dzIdx) : '']
+  return [STEM_ELEMENT[tgName] ?? '', BRANCH_ELEMENT[dzName] ?? '']
 }
 
 export interface BaziResult {
@@ -110,33 +100,37 @@ export function calculateBazi(birthDate: string, birthHour: string, gender: stri
   const hourDz = resolveHourDz(birthHour)
 
   const [yearTg, yearDz] = getYearGz(y)
-  const yearPillar = TIAN_GAN.charAt(yearTg) + DI_ZHI.charAt(yearDz)
+  const yearStem = STEM_NAMES[yearTg] ?? ''
+  const yearBranch = BRANCH_NAMES[yearDz] ?? ''
+  const yearPillar = yearStem + yearBranch
 
   const [monthTg, monthDz] = getMonthGz(m, d, yearTg)
-  const monthPillar = TIAN_GAN.charAt(monthTg) + DI_ZHI.charAt(monthDz)
+  const monthStem = STEM_NAMES[monthTg] ?? ''
+  const monthBranch = BRANCH_NAMES[monthDz] ?? ''
+  const monthPillar = monthStem + monthBranch
 
   const [dayTg, dayDz] = getDayGz(dt)
-  const dayPillar = TIAN_GAN.charAt(dayTg) + DI_ZHI.charAt(dayDz)
+  const dayStem = STEM_NAMES[dayTg] ?? ''
+  const dayBranch = BRANCH_NAMES[dayDz] ?? ''
+  const dayPillar = dayStem + dayBranch
 
   const [hourTg] = getHourGz(hourDz, dayTg)
-  const hourPillar = TIAN_GAN.charAt(hourTg) + DI_ZHI.charAt(hourDz)
+  const hourStem = STEM_NAMES[hourTg] ?? ''
+  const hourPillar = hourStem + (BRANCH_NAMES[hourDz] ?? '')
 
   const fourPillars = `${yearPillar} ${monthPillar} ${dayPillar} ${hourPillar}`
 
-  const dayTgName = TIAN_GAN.charAt(dayTg)
-  const dayDzName = DI_ZHI.charAt(dayDz)
-  const [dayTgWx] = lookupWuxing(dayTgName, dayDzName)
+  const [dayTgWx] = lookupWuxing(dayStem, dayBranch)
   const dayMasterElement = dayTgWx
-  const dayMaster = `${dayTgName}${dayMasterElement}`
+  const dayMaster = `${dayStem}${dayMasterElement}`
 
-  const monthDzName = DI_ZHI.charAt(monthDz)
-  const monthBranchWx = WX_DZ.charAt(monthDz)
+  const monthBranchWx = BRANCH_ELEMENT[monthBranch] ?? ''
 
   const pillars = [
-    { 天干: TIAN_GAN.charAt(yearTg), 地支: DI_ZHI.charAt(yearDz), 柱: '年' },
-    { 天干: TIAN_GAN.charAt(monthTg), 地支: DI_ZHI.charAt(monthDz), 柱: '月' },
-    { 天干: TIAN_GAN.charAt(dayTg), 地支: DI_ZHI.charAt(dayDz), 柱: '日' },
-    { 天干: TIAN_GAN.charAt(hourTg), 地支: DI_ZHI.charAt(hourDz), 柱: '时' },
+    { 天干: yearStem, 地支: yearBranch, 柱: '年' },
+    { 天干: monthStem, 地支: monthBranch, 柱: '月' },
+    { 天干: dayStem, 地支: dayBranch, 柱: '日' },
+    { 天干: hourStem, 地支: BRANCH_NAMES[hourDz] ?? '', 柱: '时' },
   ]
 
   const wuxingCount: Record<string, number> = { 木: 0, 火: 0, 土: 0, 金: 0, 水: 0 }
@@ -155,7 +149,7 @@ export function calculateBazi(birthDate: string, birthHour: string, gender: stri
     day_master_element: dayMasterElement,
     wuxing_count: wuxingCount,
     wuxing_details: wuxingDetails,
-    month_branch: monthDzName,
+    month_branch: monthBranch,
     month_branch_wuxing: monthBranchWx,
   }
 }
