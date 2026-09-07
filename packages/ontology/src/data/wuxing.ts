@@ -1,34 +1,19 @@
 /**
- * BaziDIY ontology data —?the single source of truth for the deterministic rules.
- * Generated from backend/ontology/data (schema v3, hardness removed).
- * Do not hand-edit; edit the JSON source and regenerate.
- * @module @bazidiy/ontology/data
+ * BaziDIY ontology data — wuxing rule tables.
+ * 五行元素/生克关系：单一事实源 = repo 根 kb/wuxing-ganzhi.ttl（经 ../kb/vocab.ts 绑定）。
+ * 旺衰/喜忌判据规则（strength/favorable/unfavorable）：随规则原子独立维护（非 kb 词库层）。
+ * 勿手改元素/生克；改 .ttl 后跑 `node tools/gen-kb.mjs`。
+ * @module @bazidiy/ontology/data/wuxing
  */
-/* oxlint-disable -- generated literal data, not hand-written logic */
+/* oxlint-disable -- rule data literal */
+import { elementOrder, generates as kbGenerates, restricts as kbRestricts } from '../kb/vocab.ts'
+
 export const wuxing = {
-  "schema_version": 3,
-  "elements": [
-    "木",
-    "火",
-    "土",
-    "金",
-    "水"
-  ],
-  "generates": {
-    "木": "火",
-    "火": "土",
-    "土": "金",
-    "金": "水",
-    "水": "木"
-  },
-  "restricts": {
-    "木": "土",
-    "土": "水",
-    "水": "火",
-    "火": "金",
-    "金": "木"
-  },
-  "strength_rules": [
+  schema_version: 3,
+  elements: [...elementOrder],
+  generates: { ...kbGenerates },
+  restricts: { ...kbRestricts },
+  strength_rules: [
     {
       "id": "strong_same",
       "name": "月令同日主",
@@ -52,7 +37,7 @@ export const wuxing = {
       "reason": "月令生扶日主，日主身旺"
     }
   ],
-  "favorable_rules": [
+  favorable_rules: [
     {
       "id": "fav_strong",
       "name": "身旺喜克泄耗",
@@ -79,7 +64,7 @@ export const wuxing = {
       "reason": "日主弱，喜生扶：印星(生我)与比劫(同我)"
     }
   ],
-  "unfavorable_rules": [
+  unfavorable_rules: [
     {
       "id": "unfav_strong",
       "name": "身旺忌比劫印",
