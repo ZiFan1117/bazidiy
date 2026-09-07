@@ -1,107 +1,446 @@
-@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix owl:  <http://www.w3.org/2002/07/owl#> .
-@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
-@prefix bzd:  <https://bazidiy.example/ontology#> .
+@prefix bzd: <https://bazidiy.example/ontology#> .
 
-# =====================================================================
-# BaziDIY 珠子库本体（草案）
-# 内容：珠料/变体类、33 珠实例；对象属性 属五行(→ 词库)/是变体；数据属性 直径/颜色/图/宽高比。
-# 单一事实源（C1）；完整实例集 1:1 转录自 `packages/ontology/src/data/beads.ts`。
-# 草案仅列代表个体；落地时由生成脚本按 data/beads.ts 全量产出（33 行）。
-# =====================================================================
+bzd:BeadCatalogOntology a owl:Ontology .
 
-bzd:BeadCatalogOntology a owl:Ontology ;
-    rdfs:label "BaziDIY 珠子库本体"@zh ;
-    rdfs:comment "手串珠子实例库：珠料、变体、五行归属、直径、颜色与图资源。"@zh .
+bzd:Bead a owl:Class .
+bzd:BeadVariant a owl:Class .
+bzd:hasVariant a owl:ObjectProperty .
+bzd:belongsToElement a owl:ObjectProperty .
+bzd:hasBeadId a owl:DatatypeProperty .
+bzd:hasDiameter a owl:DatatypeProperty .
+bzd:hasColor a owl:DatatypeProperty .
+bzd:hasImage a owl:DatatypeProperty .
+bzd:hasImageW a owl:DatatypeProperty .
+bzd:hasImageH a owl:DatatypeProperty .
+bzd:label a owl:DatatypeProperty .
 
-# ---------------------------------------------------------------- 类
-bzd:Bead         a owl:Class ; rdfs:label "珠实例"@zh .
-bzd:BeadVariant  a owl:Class ; rdfs:label "变体"@zh .
-bzd:BeadMaterial a owl:Class ; rdfs:label "珠料"@zh .
+bzd:round a bzd:BeadVariant .
+bzd:buddha a bzd:BeadVariant .
+bzd:spacer a bzd:BeadVariant .
 
-# ------------------------------------------------------------- 对象属性
-bzd:hasVariant a owl:ObjectProperty ;
-    rdfs:label "是变体"@zh ;
-    rdfs:domain bzd:Bead ; rdfs:range bzd:BeadVariant .
-# 引用词库本体的五行个体（bzd:木/火/土/金/水），保证术语全系统唯一。
-bzd:belongsToElement a owl:ObjectProperty ;
-    rdfs:label "属五行"@zh ;
-    rdfs:domain bzd:Bead ; rdfs:range bzd:WuxingElement .
-bzd:isMaterialOf a owl:ObjectProperty ;
-    rdfs:label "材质"@zh ;
-    rdfs:domain bzd:Bead ; rdfs:range bzd:BeadMaterial .
-
-# ------------------------------------------------------------- 数据属性
-bzd:hasDiameter  a owl:DatatypeProperty ; rdfs:label "直径(mm)"@zh ; rdfs:range xsd:integer .
-bzd:hasColor     a owl:DatatypeProperty ; rdfs:label "颜色"@zh ; rdfs:range xsd:string .
-bzd:hasImage     a owl:DatatypeProperty ; rdfs:label "图片"@zh ; rdfs:range xsd:string .
-bzd:hasAspect    a owl:DatatypeProperty ; rdfs:label "宽高比"@zh ; rdfs:range xsd:decimal .
-bzd:hasBeadId    a owl:DatatypeProperty ; rdfs:label "珠id"@zh ; rdfs:range xsd:string .
-
-# -------------------------------------------------------------- 变体个体
-bzd:round  a bzd:BeadVariant ; rdfs:label "圆珠"@zh .
-bzd:buddha a bzd:BeadVariant ; rdfs:label "佛珠/桶珠"@zh .
-bzd:barrel a bzd:BeadVariant ; rdfs:label "桶珠"@zh .
-bzd:spacer a bzd:BeadVariant ; rdfs:label "隔片"@zh .
-bzd:pixiu  a bzd:BeadVariant ; rdfs:label "貔貅"@zh .
-
-# -------------------------------------------------------------- 珠料个体
-bzd:material_xiaoye-zitan a bzd:BeadMaterial ; rdfs:label "小叶紫檀"@zh .
-bzd:material_nanhong     a bzd:BeadMaterial ; rdfs:label "南红"@zh .
-bzd:material_baiyin      a bzd:BeadMaterial ; rdfs:label "白银"@zh .
-bzd:material_taishan-yu  a bzd:BeadMaterial ; rdfs:label "泰山玉"@zh .
-# …（其余珠料由 data/beads.ts 生成）
-
-# -------------------------------------------------------------- 珠实例（代表）
-# 木
-bzd:xiaoye-zitan_round a bzd:Bead ;
-    rdfs:label "小叶紫檀"@zh ;
-    bzd:hasBeadId "xiaoye-zitan" ; bzd:hasVariant bzd:round ;
-    bzd:isMaterialOf bzd:material_xiaoye-zitan ;
-    bzd:belongsToElement bzd:木 ;
-    bzd:hasDiameter 6, 8, 10, 12 ; bzd:hasColor "#5B2333" ;
-    bzd:hasImage "/beads/trimmed/xiaoye-zitan_round.png" ; bzd:hasAspect 1.0 .
-# 火
-bzd:nanhong_round a bzd:Bead ;
-    rdfs:label "南红"@zh ;
-    bzd:hasBeadId "nanhong" ; bzd:hasVariant bzd:round ;
-    bzd:belongsToElement bzd:火 ;
-    bzd:hasDiameter 6, 8, 10, 12 ; bzd:hasColor "#D89575" ;
-    bzd:hasImage "/beads/trimmed/nanhong_round.png" ; bzd:hasAspect 1.0 .
-# 土
-bzd:taishan-yu_round a bzd:Bead ;
-    rdfs:label "泰山玉"@zh ;
-    bzd:hasBeadId "taishan-yu" ; bzd:hasVariant bzd:round ;
-    bzd:isMaterialOf bzd:material_taishan-yu ;
-    bzd:belongsToElement bzd:土 ;
-    bzd:hasDiameter 6, 8, 10, 12 ; bzd:hasColor "#33691E" ;
-    bzd:hasImage "/beads/trimmed/taishan-yu_round.png" ; bzd:hasAspect 1.0 .
-# 金（含隔片变体）
-bzd:baiyin_round a bzd:Bead ;
-    rdfs:label "白银"@zh ;
-    bzd:hasBeadId "baiyin" ; bzd:hasVariant bzd:round ;
-    bzd:isMaterialOf bzd:material_baiyin ;
-    bzd:belongsToElement bzd:金 ;
-    bzd:hasDiameter 6, 8, 10, 12 ; bzd:hasColor "#D1D5DB" ;
-    bzd:hasImage "/beads/trimmed/baiyin_round.png" ; bzd:hasAspect 1.0 .
-bzd:baiyin_spacer a bzd:Bead ;
-    rdfs:label "白银"@zh ;
-    bzd:hasBeadId "baiyin" ; bzd:hasVariant bzd:spacer ;
-    bzd:isMaterialOf bzd:material_baiyin ;
-    bzd:belongsToElement bzd:金 ;
-    bzd:hasDiameter 4, 5, 6 ; bzd:hasColor "#D1D5DB" ;
-    bzd:hasImage "/beads/trimmed/baiyin_spacer.png" ; bzd:hasAspect 0.3229 .
-bzd:suiyinzi_spacer a bzd:Bead ;
-    rdfs:label "碎银子"@zh ;
-    bzd:hasBeadId "suiyinzi" ; bzd:hasVariant bzd:spacer ;
-    bzd:belongsToElement bzd:金 ;
-    bzd:hasDiameter 4, 5, 6 ; bzd:hasColor "#A8A8A8" ;
-    bzd:hasImage "/beads/trimmed/suiyinzi_spacer.png" ; bzd:hasAspect 1.0 .
-# 水
-bzd:qingjinji_round a bzd:Bead ;
-    rdfs:label "青金石"@zh ;
-    bzd:hasBeadId "qingjinji" ; bzd:hasVariant bzd:round ;
-    bzd:belongsToElement bzd:水 ;
-    bzd:hasDiameter 6, 8, 10, 12 ; bzd:hasColor "#1A237E" ;
-    bzd:hasImage "/beads/trimmed/qingjinji_round.png" ; bzd:hasAspect 1.0 .
+bzd:xiaoye-zitan_round a bzd:Bead .
+bzd:xiaoye-zitan_round bzd:label "小叶紫檀" .
+bzd:xiaoye-zitan_round bzd:hasBeadId "xiaoye-zitan" .
+bzd:xiaoye-zitan_round bzd:hasVariant bzd:round .
+bzd:xiaoye-zitan_round bzd:belongsToElement bzd:木 .
+bzd:xiaoye-zitan_round bzd:hasDiameter 6 .
+bzd:xiaoye-zitan_round bzd:hasDiameter 8 .
+bzd:xiaoye-zitan_round bzd:hasDiameter 10 .
+bzd:xiaoye-zitan_round bzd:hasDiameter 12 .
+bzd:xiaoye-zitan_round bzd:hasColor "#5B2333" .
+bzd:xiaoye-zitan_round bzd:hasImage "/beads/trimmed/xiaoye-zitan_round.png" .
+bzd:xiaoye-zitan_round bzd:hasImageW 96 .
+bzd:xiaoye-zitan_round bzd:hasImageH 96 .
+bzd:xiaoye-zitan_buddha a bzd:Bead .
+bzd:xiaoye-zitan_buddha bzd:label "小叶紫檀" .
+bzd:xiaoye-zitan_buddha bzd:hasBeadId "xiaoye-zitan" .
+bzd:xiaoye-zitan_buddha bzd:hasVariant bzd:buddha .
+bzd:xiaoye-zitan_buddha bzd:belongsToElement bzd:木 .
+bzd:xiaoye-zitan_buddha bzd:hasDiameter 10 .
+bzd:xiaoye-zitan_buddha bzd:hasDiameter 12 .
+bzd:xiaoye-zitan_buddha bzd:hasDiameter 15 .
+bzd:xiaoye-zitan_buddha bzd:hasColor "#5B2333" .
+bzd:xiaoye-zitan_buddha bzd:hasImage "/beads/trimmed/xiaoye-zitan_buddha.png" .
+bzd:xiaoye-zitan_buddha bzd:hasImageW 76 .
+bzd:xiaoye-zitan_buddha bzd:hasImageH 96 .
+bzd:jinsi-nan_round a bzd:Bead .
+bzd:jinsi-nan_round bzd:label "金丝楠" .
+bzd:jinsi-nan_round bzd:hasBeadId "jinsi-nan" .
+bzd:jinsi-nan_round bzd:hasVariant bzd:round .
+bzd:jinsi-nan_round bzd:belongsToElement bzd:木 .
+bzd:jinsi-nan_round bzd:hasDiameter 6 .
+bzd:jinsi-nan_round bzd:hasDiameter 8 .
+bzd:jinsi-nan_round bzd:hasDiameter 10 .
+bzd:jinsi-nan_round bzd:hasDiameter 12 .
+bzd:jinsi-nan_round bzd:hasColor "#C8A951" .
+bzd:jinsi-nan_round bzd:hasImage "/beads/trimmed/jinsi-nan_round.png" .
+bzd:jinsi-nan_round bzd:hasImageW 96 .
+bzd:jinsi-nan_round bzd:hasImageH 96 .
+bzd:chenxiang_round a bzd:Bead .
+bzd:chenxiang_round bzd:label "沉香" .
+bzd:chenxiang_round bzd:hasBeadId "chenxiang" .
+bzd:chenxiang_round bzd:hasVariant bzd:round .
+bzd:chenxiang_round bzd:belongsToElement bzd:木 .
+bzd:chenxiang_round bzd:hasDiameter 6 .
+bzd:chenxiang_round bzd:hasDiameter 8 .
+bzd:chenxiang_round bzd:hasDiameter 10 .
+bzd:chenxiang_round bzd:hasDiameter 12 .
+bzd:chenxiang_round bzd:hasColor "#6B4226" .
+bzd:chenxiang_round bzd:hasImage "/beads/trimmed/chenxiang_round.png" .
+bzd:chenxiang_round bzd:hasImageW 96 .
+bzd:chenxiang_round bzd:hasImageH 96 .
+bzd:leiji-zaomu_round a bzd:Bead .
+bzd:leiji-zaomu_round bzd:label "雷击枣木" .
+bzd:leiji-zaomu_round bzd:hasBeadId "leiji-zaomu" .
+bzd:leiji-zaomu_round bzd:hasVariant bzd:round .
+bzd:leiji-zaomu_round bzd:belongsToElement bzd:木 .
+bzd:leiji-zaomu_round bzd:hasDiameter 6 .
+bzd:leiji-zaomu_round bzd:hasDiameter 8 .
+bzd:leiji-zaomu_round bzd:hasDiameter 10 .
+bzd:leiji-zaomu_round bzd:hasDiameter 12 .
+bzd:leiji-zaomu_round bzd:hasColor "#3E2723" .
+bzd:leiji-zaomu_round bzd:hasImage "/beads/trimmed/leiji-zaomu_round.png" .
+bzd:leiji-zaomu_round bzd:hasImageW 96 .
+bzd:leiji-zaomu_round bzd:hasImageH 96 .
+bzd:jiangzhenxiang_round a bzd:Bead .
+bzd:jiangzhenxiang_round bzd:label "降真香" .
+bzd:jiangzhenxiang_round bzd:hasBeadId "jiangzhenxiang" .
+bzd:jiangzhenxiang_round bzd:hasVariant bzd:round .
+bzd:jiangzhenxiang_round bzd:belongsToElement bzd:木 .
+bzd:jiangzhenxiang_round bzd:hasDiameter 6 .
+bzd:jiangzhenxiang_round bzd:hasDiameter 8 .
+bzd:jiangzhenxiang_round bzd:hasDiameter 10 .
+bzd:jiangzhenxiang_round bzd:hasDiameter 12 .
+bzd:jiangzhenxiang_round bzd:hasColor "#5D4037" .
+bzd:jiangzhenxiang_round bzd:hasImage "/beads/trimmed/jiangzhenxiang_round.png" .
+bzd:jiangzhenxiang_round bzd:hasImageW 96 .
+bzd:jiangzhenxiang_round bzd:hasImageH 96 .
+bzd:yingge-lv-qinan_round a bzd:Bead .
+bzd:yingge-lv-qinan_round bzd:label "莺歌绿奇楠" .
+bzd:yingge-lv-qinan_round bzd:hasBeadId "yingge-lv-qinan" .
+bzd:yingge-lv-qinan_round bzd:hasVariant bzd:round .
+bzd:yingge-lv-qinan_round bzd:belongsToElement bzd:木 .
+bzd:yingge-lv-qinan_round bzd:hasDiameter 6 .
+bzd:yingge-lv-qinan_round bzd:hasDiameter 8 .
+bzd:yingge-lv-qinan_round bzd:hasDiameter 10 .
+bzd:yingge-lv-qinan_round bzd:hasDiameter 12 .
+bzd:yingge-lv-qinan_round bzd:hasColor "#388E3C" .
+bzd:yingge-lv-qinan_round bzd:hasImage "/beads/trimmed/yingge-lv-qinan_round.png" .
+bzd:yingge-lv-qinan_round bzd:hasImageW 96 .
+bzd:yingge-lv-qinan_round bzd:hasImageH 96 .
+bzd:lvtan_round a bzd:Bead .
+bzd:lvtan_round bzd:label "绿檀" .
+bzd:lvtan_round bzd:hasBeadId "lvtan" .
+bzd:lvtan_round bzd:hasVariant bzd:round .
+bzd:lvtan_round bzd:belongsToElement bzd:木 .
+bzd:lvtan_round bzd:hasDiameter 6 .
+bzd:lvtan_round bzd:hasDiameter 8 .
+bzd:lvtan_round bzd:hasDiameter 10 .
+bzd:lvtan_round bzd:hasDiameter 12 .
+bzd:lvtan_round bzd:hasColor "#558B2F" .
+bzd:lvtan_round bzd:hasImage "/beads/trimmed/lvtan_round.png" .
+bzd:lvtan_round bzd:hasImageW 96 .
+bzd:lvtan_round bzd:hasImageH 96 .
+bzd:heitan_round a bzd:Bead .
+bzd:heitan_round bzd:label "黑檀" .
+bzd:heitan_round bzd:hasBeadId "heitan" .
+bzd:heitan_round bzd:hasVariant bzd:round .
+bzd:heitan_round bzd:belongsToElement bzd:木 .
+bzd:heitan_round bzd:hasDiameter 6 .
+bzd:heitan_round bzd:hasDiameter 8 .
+bzd:heitan_round bzd:hasDiameter 10 .
+bzd:heitan_round bzd:hasDiameter 12 .
+bzd:heitan_round bzd:hasColor "#212121" .
+bzd:heitan_round bzd:hasImage "/beads/trimmed/heitan_round.png" .
+bzd:heitan_round bzd:hasImageW 96 .
+bzd:heitan_round bzd:hasImageH 96 .
+bzd:hainan-huanghuali_round a bzd:Bead .
+bzd:hainan-huanghuali_round bzd:label "海南黄花梨" .
+bzd:hainan-huanghuali_round bzd:hasBeadId "hainan-huanghuali" .
+bzd:hainan-huanghuali_round bzd:hasVariant bzd:round .
+bzd:hainan-huanghuali_round bzd:belongsToElement bzd:木 .
+bzd:hainan-huanghuali_round bzd:hasDiameter 6 .
+bzd:hainan-huanghuali_round bzd:hasDiameter 8 .
+bzd:hainan-huanghuali_round bzd:hasDiameter 10 .
+bzd:hainan-huanghuali_round bzd:hasDiameter 12 .
+bzd:hainan-huanghuali_round bzd:hasColor "#795548" .
+bzd:hainan-huanghuali_round bzd:hasImage "/beads/trimmed/hainan-huanghuali_round.png" .
+bzd:hainan-huanghuali_round bzd:hasImageW 96 .
+bzd:hainan-huanghuali_round bzd:hasImageH 96 .
+bzd:daqi_round a bzd:Bead .
+bzd:daqi_round bzd:label "大漆珠" .
+bzd:daqi_round bzd:hasBeadId "daqi" .
+bzd:daqi_round bzd:hasVariant bzd:round .
+bzd:daqi_round bzd:belongsToElement bzd:木 .
+bzd:daqi_round bzd:hasDiameter 6 .
+bzd:daqi_round bzd:hasDiameter 8 .
+bzd:daqi_round bzd:hasDiameter 10 .
+bzd:daqi_round bzd:hasDiameter 12 .
+bzd:daqi_round bzd:hasColor "#E65100" .
+bzd:daqi_round bzd:hasImage "/beads/trimmed/daqi_round.png" .
+bzd:daqi_round bzd:hasImageW 96 .
+bzd:daqi_round bzd:hasImageH 96 .
+bzd:nanhong_round a bzd:Bead .
+bzd:nanhong_round bzd:label "南红" .
+bzd:nanhong_round bzd:hasBeadId "nanhong" .
+bzd:nanhong_round bzd:hasVariant bzd:round .
+bzd:nanhong_round bzd:belongsToElement bzd:火 .
+bzd:nanhong_round bzd:hasDiameter 6 .
+bzd:nanhong_round bzd:hasDiameter 8 .
+bzd:nanhong_round bzd:hasDiameter 10 .
+bzd:nanhong_round bzd:hasDiameter 12 .
+bzd:nanhong_round bzd:hasColor "#D89575" .
+bzd:nanhong_round bzd:hasImage "/beads/trimmed/nanhong_round.png" .
+bzd:nanhong_round bzd:hasImageW 96 .
+bzd:nanhong_round bzd:hasImageH 96 .
+bzd:zijin-sha_round a bzd:Bead .
+bzd:zijin-sha_round bzd:label "紫金砂" .
+bzd:zijin-sha_round bzd:hasBeadId "zijin-sha" .
+bzd:zijin-sha_round bzd:hasVariant bzd:round .
+bzd:zijin-sha_round bzd:belongsToElement bzd:火 .
+bzd:zijin-sha_round bzd:hasDiameter 6 .
+bzd:zijin-sha_round bzd:hasDiameter 8 .
+bzd:zijin-sha_round bzd:hasDiameter 10 .
+bzd:zijin-sha_round bzd:hasDiameter 12 .
+bzd:zijin-sha_round bzd:hasColor "#7B1FA2" .
+bzd:zijin-sha_round bzd:hasImage "/beads/trimmed/zijin-sha_round.png" .
+bzd:zijin-sha_round bzd:hasImageW 96 .
+bzd:zijin-sha_round bzd:hasImageH 96 .
+bzd:shanhu_round a bzd:Bead .
+bzd:shanhu_round bzd:label "珊瑚" .
+bzd:shanhu_round bzd:hasBeadId "shanhu" .
+bzd:shanhu_round bzd:hasVariant bzd:round .
+bzd:shanhu_round bzd:belongsToElement bzd:火 .
+bzd:shanhu_round bzd:hasDiameter 6 .
+bzd:shanhu_round bzd:hasDiameter 8 .
+bzd:shanhu_round bzd:hasDiameter 10 .
+bzd:shanhu_round bzd:hasDiameter 12 .
+bzd:shanhu_round bzd:hasColor "#FF8A80" .
+bzd:shanhu_round bzd:hasImage "/beads/trimmed/shanhu_round.png" .
+bzd:shanhu_round bzd:hasImageW 96 .
+bzd:shanhu_round bzd:hasImageH 96 .
+bzd:taishan-yu_round a bzd:Bead .
+bzd:taishan-yu_round bzd:label "泰山玉" .
+bzd:taishan-yu_round bzd:hasBeadId "taishan-yu" .
+bzd:taishan-yu_round bzd:hasVariant bzd:round .
+bzd:taishan-yu_round bzd:belongsToElement bzd:土 .
+bzd:taishan-yu_round bzd:hasDiameter 6 .
+bzd:taishan-yu_round bzd:hasDiameter 8 .
+bzd:taishan-yu_round bzd:hasDiameter 10 .
+bzd:taishan-yu_round bzd:hasDiameter 12 .
+bzd:taishan-yu_round bzd:hasColor "#33691E" .
+bzd:taishan-yu_round bzd:hasImage "/beads/trimmed/taishan-yu_round.png" .
+bzd:taishan-yu_round bzd:hasImageW 96 .
+bzd:taishan-yu_round bzd:hasImageH 96 .
+bzd:huanglong-yu_round a bzd:Bead .
+bzd:huanglong-yu_round bzd:label "黄龙玉" .
+bzd:huanglong-yu_round bzd:hasBeadId "huanglong-yu" .
+bzd:huanglong-yu_round bzd:hasVariant bzd:round .
+bzd:huanglong-yu_round bzd:belongsToElement bzd:土 .
+bzd:huanglong-yu_round bzd:hasDiameter 6 .
+bzd:huanglong-yu_round bzd:hasDiameter 8 .
+bzd:huanglong-yu_round bzd:hasDiameter 10 .
+bzd:huanglong-yu_round bzd:hasDiameter 12 .
+bzd:huanglong-yu_round bzd:hasColor "#F57F17" .
+bzd:huanglong-yu_round bzd:hasImage "/beads/trimmed/huanglong-yu_round.png" .
+bzd:huanglong-yu_round bzd:hasImageW 96 .
+bzd:huanglong-yu_round bzd:hasImageH 96 .
+bzd:mihuang_round a bzd:Bead .
+bzd:mihuang_round bzd:label "蜜蜡" .
+bzd:mihuang_round bzd:hasBeadId "mihuang" .
+bzd:mihuang_round bzd:hasVariant bzd:round .
+bzd:mihuang_round bzd:belongsToElement bzd:土 .
+bzd:mihuang_round bzd:hasDiameter 6 .
+bzd:mihuang_round bzd:hasDiameter 8 .
+bzd:mihuang_round bzd:hasDiameter 10 .
+bzd:mihuang_round bzd:hasDiameter 12 .
+bzd:mihuang_round bzd:hasColor "#FFCA28" .
+bzd:mihuang_round bzd:hasImage "/beads/trimmed/mihuang_round.png" .
+bzd:mihuang_round bzd:hasImageW 96 .
+bzd:mihuang_round bzd:hasImageH 96 .
+bzd:180-yu_round a bzd:Bead .
+bzd:180-yu_round bzd:label "180玉" .
+bzd:180-yu_round bzd:hasBeadId "180-yu" .
+bzd:180-yu_round bzd:hasVariant bzd:round .
+bzd:180-yu_round bzd:belongsToElement bzd:土 .
+bzd:180-yu_round bzd:hasDiameter 6 .
+bzd:180-yu_round bzd:hasDiameter 8 .
+bzd:180-yu_round bzd:hasDiameter 10 .
+bzd:180-yu_round bzd:hasDiameter 12 .
+bzd:180-yu_round bzd:hasColor "#827717" .
+bzd:180-yu_round bzd:hasImage "/beads/trimmed/180-yu_round.png" .
+bzd:180-yu_round bzd:hasImageW 96 .
+bzd:180-yu_round bzd:hasImageH 96 .
+bzd:qinghai-liao-yu_round a bzd:Bead .
+bzd:qinghai-liao-yu_round bzd:label "青海料玉" .
+bzd:qinghai-liao-yu_round bzd:hasBeadId "qinghai-liao-yu" .
+bzd:qinghai-liao-yu_round bzd:hasVariant bzd:round .
+bzd:qinghai-liao-yu_round bzd:belongsToElement bzd:土 .
+bzd:qinghai-liao-yu_round bzd:hasDiameter 6 .
+bzd:qinghai-liao-yu_round bzd:hasDiameter 8 .
+bzd:qinghai-liao-yu_round bzd:hasDiameter 10 .
+bzd:qinghai-liao-yu_round bzd:hasDiameter 12 .
+bzd:qinghai-liao-yu_round bzd:hasColor "#A5D6A7" .
+bzd:qinghai-liao-yu_round bzd:hasImage "/beads/trimmed/qinghai-liao-yu_round.png" .
+bzd:qinghai-liao-yu_round bzd:hasImageW 96 .
+bzd:qinghai-liao-yu_round bzd:hasImageH 96 .
+bzd:jinshan-tangyu_round a bzd:Bead .
+bzd:jinshan-tangyu_round bzd:label "金山糖玉" .
+bzd:jinshan-tangyu_round bzd:hasBeadId "jinshan-tangyu" .
+bzd:jinshan-tangyu_round bzd:hasVariant bzd:round .
+bzd:jinshan-tangyu_round bzd:belongsToElement bzd:土 .
+bzd:jinshan-tangyu_round bzd:hasDiameter 6 .
+bzd:jinshan-tangyu_round bzd:hasDiameter 8 .
+bzd:jinshan-tangyu_round bzd:hasDiameter 10 .
+bzd:jinshan-tangyu_round bzd:hasDiameter 12 .
+bzd:jinshan-tangyu_round bzd:hasColor "#A1887F" .
+bzd:jinshan-tangyu_round bzd:hasImage "/beads/trimmed/jinshan-tangyu_round.png" .
+bzd:jinshan-tangyu_round bzd:hasImageW 96 .
+bzd:jinshan-tangyu_round bzd:hasImageH 96 .
+bzd:jinyao-shi_round a bzd:Bead .
+bzd:jinyao-shi_round bzd:label "金曜石" .
+bzd:jinyao-shi_round bzd:hasBeadId "jinyao-shi" .
+bzd:jinyao-shi_round bzd:hasVariant bzd:round .
+bzd:jinyao-shi_round bzd:belongsToElement bzd:金 .
+bzd:jinyao-shi_round bzd:hasDiameter 6 .
+bzd:jinyao-shi_round bzd:hasDiameter 8 .
+bzd:jinyao-shi_round bzd:hasDiameter 10 .
+bzd:jinyao-shi_round bzd:hasDiameter 12 .
+bzd:jinyao-shi_round bzd:hasColor "#263238" .
+bzd:jinyao-shi_round bzd:hasImage "/beads/trimmed/jinyao-shi_round.png" .
+bzd:jinyao-shi_round bzd:hasImageW 96 .
+bzd:jinyao-shi_round bzd:hasImageH 96 .
+bzd:baiyin_round a bzd:Bead .
+bzd:baiyin_round bzd:label "白银" .
+bzd:baiyin_round bzd:hasBeadId "baiyin" .
+bzd:baiyin_round bzd:hasVariant bzd:round .
+bzd:baiyin_round bzd:belongsToElement bzd:金 .
+bzd:baiyin_round bzd:hasDiameter 6 .
+bzd:baiyin_round bzd:hasDiameter 8 .
+bzd:baiyin_round bzd:hasDiameter 10 .
+bzd:baiyin_round bzd:hasDiameter 12 .
+bzd:baiyin_round bzd:hasColor "#D1D5DB" .
+bzd:baiyin_round bzd:hasImage "/beads/trimmed/baiyin_round.png" .
+bzd:baiyin_round bzd:hasImageW 96 .
+bzd:baiyin_round bzd:hasImageH 96 .
+bzd:jinggong-huangtong_round a bzd:Bead .
+bzd:jinggong-huangtong_round bzd:label "精工黄铜珠" .
+bzd:jinggong-huangtong_round bzd:hasBeadId "jinggong-huangtong" .
+bzd:jinggong-huangtong_round bzd:hasVariant bzd:round .
+bzd:jinggong-huangtong_round bzd:belongsToElement bzd:金 .
+bzd:jinggong-huangtong_round bzd:hasDiameter 6 .
+bzd:jinggong-huangtong_round bzd:hasDiameter 8 .
+bzd:jinggong-huangtong_round bzd:hasDiameter 10 .
+bzd:jinggong-huangtong_round bzd:hasDiameter 12 .
+bzd:jinggong-huangtong_round bzd:hasColor "#D4A574" .
+bzd:jinggong-huangtong_round bzd:hasImage "/beads/trimmed/jinggong-huangtong_round.png" .
+bzd:jinggong-huangtong_round bzd:hasImageW 96 .
+bzd:jinggong-huangtong_round bzd:hasImageH 96 .
+bzd:jinggong-yinzhu_round a bzd:Bead .
+bzd:jinggong-yinzhu_round bzd:label "精工银珠" .
+bzd:jinggong-yinzhu_round bzd:hasBeadId "jinggong-yinzhu" .
+bzd:jinggong-yinzhu_round bzd:hasVariant bzd:round .
+bzd:jinggong-yinzhu_round bzd:belongsToElement bzd:金 .
+bzd:jinggong-yinzhu_round bzd:hasDiameter 6 .
+bzd:jinggong-yinzhu_round bzd:hasDiameter 8 .
+bzd:jinggong-yinzhu_round bzd:hasDiameter 10 .
+bzd:jinggong-yinzhu_round bzd:hasDiameter 12 .
+bzd:jinggong-yinzhu_round bzd:hasColor "#CFD8DC" .
+bzd:jinggong-yinzhu_round bzd:hasImage "/beads/trimmed/jinggong-yinzhu_round.png" .
+bzd:jinggong-yinzhu_round bzd:hasImageW 96 .
+bzd:jinggong-yinzhu_round bzd:hasImageH 96 .
+bzd:jinggong-zuojiutong_round a bzd:Bead .
+bzd:jinggong-zuojiutong_round bzd:label "精工做旧铜珠" .
+bzd:jinggong-zuojiutong_round bzd:hasBeadId "jinggong-zuojiutong" .
+bzd:jinggong-zuojiutong_round bzd:hasVariant bzd:round .
+bzd:jinggong-zuojiutong_round bzd:belongsToElement bzd:金 .
+bzd:jinggong-zuojiutong_round bzd:hasDiameter 6 .
+bzd:jinggong-zuojiutong_round bzd:hasDiameter 8 .
+bzd:jinggong-zuojiutong_round bzd:hasDiameter 10 .
+bzd:jinggong-zuojiutong_round bzd:hasDiameter 12 .
+bzd:jinggong-zuojiutong_round bzd:hasColor "#8D6E63" .
+bzd:jinggong-zuojiutong_round bzd:hasImage "/beads/trimmed/jinggong-zuojiutong_round.png" .
+bzd:jinggong-zuojiutong_round bzd:hasImageW 96 .
+bzd:jinggong-zuojiutong_round bzd:hasImageH 96 .
+bzd:baiyin_spacer a bzd:Bead .
+bzd:baiyin_spacer bzd:label "白银" .
+bzd:baiyin_spacer bzd:hasBeadId "baiyin" .
+bzd:baiyin_spacer bzd:hasVariant bzd:spacer .
+bzd:baiyin_spacer bzd:belongsToElement bzd:金 .
+bzd:baiyin_spacer bzd:hasDiameter 4 .
+bzd:baiyin_spacer bzd:hasDiameter 5 .
+bzd:baiyin_spacer bzd:hasDiameter 6 .
+bzd:baiyin_spacer bzd:hasColor "#D1D5DB" .
+bzd:baiyin_spacer bzd:hasImage "/beads/trimmed/baiyin_spacer.png" .
+bzd:baiyin_spacer bzd:hasImageW 31 .
+bzd:baiyin_spacer bzd:hasImageH 96 .
+bzd:suiyinzi_spacer a bzd:Bead .
+bzd:suiyinzi_spacer bzd:label "碎银子" .
+bzd:suiyinzi_spacer bzd:hasBeadId "suiyinzi" .
+bzd:suiyinzi_spacer bzd:hasVariant bzd:spacer .
+bzd:suiyinzi_spacer bzd:belongsToElement bzd:金 .
+bzd:suiyinzi_spacer bzd:hasDiameter 4 .
+bzd:suiyinzi_spacer bzd:hasDiameter 5 .
+bzd:suiyinzi_spacer bzd:hasDiameter 6 .
+bzd:suiyinzi_spacer bzd:hasColor "#A8A8A8" .
+bzd:suiyinzi_spacer bzd:hasImage "/beads/trimmed/suiyinzi_spacer.png" .
+bzd:suiyinzi_spacer bzd:hasImageW 96 .
+bzd:suiyinzi_spacer bzd:hasImageH 96 .
+bzd:qingjinji_round a bzd:Bead .
+bzd:qingjinji_round bzd:label "青金石" .
+bzd:qingjinji_round bzd:hasBeadId "qingjinji" .
+bzd:qingjinji_round bzd:hasVariant bzd:round .
+bzd:qingjinji_round bzd:belongsToElement bzd:水 .
+bzd:qingjinji_round bzd:hasDiameter 6 .
+bzd:qingjinji_round bzd:hasDiameter 8 .
+bzd:qingjinji_round bzd:hasDiameter 10 .
+bzd:qingjinji_round bzd:hasDiameter 12 .
+bzd:qingjinji_round bzd:hasColor "#1A237E" .
+bzd:qingjinji_round bzd:hasImage "/beads/trimmed/qingjinji_round.png" .
+bzd:qingjinji_round bzd:hasImageW 96 .
+bzd:qingjinji_round bzd:hasImageH 96 .
+bzd:hei-yao-shi_round a bzd:Bead .
+bzd:hei-yao-shi_round bzd:label "黑曜石" .
+bzd:hei-yao-shi_round bzd:hasBeadId "hei-yao-shi" .
+bzd:hei-yao-shi_round bzd:hasVariant bzd:round .
+bzd:hei-yao-shi_round bzd:belongsToElement bzd:水 .
+bzd:hei-yao-shi_round bzd:hasDiameter 6 .
+bzd:hei-yao-shi_round bzd:hasDiameter 8 .
+bzd:hei-yao-shi_round bzd:hasDiameter 10 .
+bzd:hei-yao-shi_round bzd:hasDiameter 12 .
+bzd:hei-yao-shi_round bzd:hasColor "#212121" .
+bzd:hei-yao-shi_round bzd:hasImage "/beads/trimmed/hei-yao-shi_round.png" .
+bzd:hei-yao-shi_round bzd:hasImageW 96 .
+bzd:hei-yao-shi_round bzd:hasImageH 96 .
+bzd:tanquanshi_round a bzd:Bead .
+bzd:tanquanshi_round bzd:label "坦桑石" .
+bzd:tanquanshi_round bzd:hasBeadId "tanquanshi" .
+bzd:tanquanshi_round bzd:hasVariant bzd:round .
+bzd:tanquanshi_round bzd:belongsToElement bzd:水 .
+bzd:tanquanshi_round bzd:hasDiameter 6 .
+bzd:tanquanshi_round bzd:hasDiameter 8 .
+bzd:tanquanshi_round bzd:hasDiameter 10 .
+bzd:tanquanshi_round bzd:hasDiameter 12 .
+bzd:tanquanshi_round bzd:hasColor "#37474F" .
+bzd:tanquanshi_round bzd:hasImage "/beads/trimmed/tanquanshi_round.png" .
+bzd:tanquanshi_round bzd:hasImageW 96 .
+bzd:tanquanshi_round bzd:hasImageH 96 .
+bzd:hailan-bao_round a bzd:Bead .
+bzd:hailan-bao_round bzd:label "海蓝宝" .
+bzd:hailan-bao_round bzd:hasBeadId "hailan-bao" .
+bzd:hailan-bao_round bzd:hasVariant bzd:round .
+bzd:hailan-bao_round bzd:belongsToElement bzd:水 .
+bzd:hailan-bao_round bzd:hasDiameter 6 .
+bzd:hailan-bao_round bzd:hasDiameter 8 .
+bzd:hailan-bao_round bzd:hasDiameter 10 .
+bzd:hailan-bao_round bzd:hasDiameter 12 .
+bzd:hailan-bao_round bzd:hasColor "#0288D1" .
+bzd:hailan-bao_round bzd:hasImage "/beads/trimmed/hailan-bao_round.png" .
+bzd:hailan-bao_round bzd:hasImageW 96 .
+bzd:hailan-bao_round bzd:hasImageH 96 .
+bzd:chequ_round a bzd:Bead .
+bzd:chequ_round bzd:label "砗磲" .
+bzd:chequ_round bzd:hasBeadId "chequ" .
+bzd:chequ_round bzd:hasVariant bzd:round .
+bzd:chequ_round bzd:belongsToElement bzd:水 .
+bzd:chequ_round bzd:hasDiameter 6 .
+bzd:chequ_round bzd:hasDiameter 8 .
+bzd:chequ_round bzd:hasDiameter 10 .
+bzd:chequ_round bzd:hasDiameter 12 .
+bzd:chequ_round bzd:hasColor "#FAFAFA" .
+bzd:chequ_round bzd:hasImage "/beads/trimmed/chequ_round.png" .
+bzd:chequ_round bzd:hasImageW 96 .
+bzd:chequ_round bzd:hasImageH 96 .
+bzd:zhenzhu_round a bzd:Bead .
+bzd:zhenzhu_round bzd:label "珍珠" .
+bzd:zhenzhu_round bzd:hasBeadId "zhenzhu" .
+bzd:zhenzhu_round bzd:hasVariant bzd:round .
+bzd:zhenzhu_round bzd:belongsToElement bzd:水 .
+bzd:zhenzhu_round bzd:hasDiameter 6 .
+bzd:zhenzhu_round bzd:hasDiameter 8 .
+bzd:zhenzhu_round bzd:hasDiameter 10 .
+bzd:zhenzhu_round bzd:hasDiameter 12 .
+bzd:zhenzhu_round bzd:hasColor "#FCE4EC" .
+bzd:zhenzhu_round bzd:hasImage "/beads/trimmed/zhenzhu_round.png" .
+bzd:zhenzhu_round bzd:hasImageW 96 .
+bzd:zhenzhu_round bzd:hasImageH 96 .
