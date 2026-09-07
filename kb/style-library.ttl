@@ -1,0 +1,104 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix bzd:  <https://bazidiy.example/ontology#> .
+
+# =====================================================================
+# BaziDIY 样式库本体（草案）
+# 内容：款式/槽位/角色类；B-01~B-10 款实例与槽位约束（允许变体/直径范围/同珠）；
+#       隔片-体珠径映射约束数据。
+# 单一事实源（C1）；转录自 `packages/ontology/src/data/styles.ts`。
+# =====================================================================
+
+bzd:StyleLibraryOntology a owl:Ontology ;
+    rdfs:label "BaziDIY 样式库本体"@zh ;
+    rdfs:comment "手串款式结构：槽位、角色、变体/直径约束与隔片径映射。"@zh .
+
+# ---------------------------------------------------------------- 类
+bzd:Style         a owl:Class ; rdfs:label "款式"@zh .
+bzd:Slot          a owl:Class ; rdfs:label "槽位"@zh .
+bzd:SlotRole      a owl:Class ; rdfs:label "槽位角色"@zh .
+bzd:StyleConstraint a owl:Class ; rdfs:label "款式约束"@zh .
+
+# ------------------------------------------------------------- 对象属性
+bzd:hasSlot a owl:ObjectProperty ;
+    rdfs:label "含槽位"@zh ;
+    rdfs:domain bzd:Style ; rdfs:range bzd:Slot .
+bzd:hasRole a owl:ObjectProperty ;
+    rdfs:label "槽位角色"@zh ;
+    rdfs:domain bzd:Slot ; rdfs:range bzd:SlotRole .
+# 槽位允许的变体（引用珠子库本体的变体个体 round/buddha/spacer/barrel）
+bzd:slotAllowsVariant a owl:ObjectProperty ;
+    rdfs:label "允许变体"@zh ;
+    rdfs:domain bzd:Slot ; rdfs:range bzd:BeadVariant .
+bzd:hasConstraint a owl:ObjectProperty ;
+    rdfs:label "带约束"@zh ;
+    rdfs:domain bzd:Style ; rdfs:range bzd:StyleConstraint .
+
+# ------------------------------------------------------------- 数据属性
+bzd:minDiameter a owl:DatatypeProperty ; rdfs:label "最小直径(mm)"@zh ; rdfs:range xsd:integer .
+bzd:maxDiameter a owl:DatatypeProperty ; rdfs:label "最大直径(mm)"@zh ; rdfs:range xsd:integer .
+bzd:slotIndex a owl:DatatypeProperty ; rdfs:label "槽位号"@zh ; rdfs:range xsd:integer .
+bzd:constraintType a owl:DatatypeProperty ; rdfs:label "约束类型"@zh ; rdfs:range xsd:string .
+bzd:constraintParams a owl:DatatypeProperty ; rdfs:label "约束参数"@zh ; rdfs:range xsd:string .
+bzd:bodyDiameter a owl:DatatypeProperty ; rdfs:label "体珠直径(mm)"@zh ; rdfs:range xsd:integer .
+bzd:spacerDiameter a owl:DatatypeProperty ; rdfs:label "隔片直径(mm)"@zh ; rdfs:range xsd:integer .
+
+# -------------------------------------------------------------- 角色个体
+bzd:main   a bzd:SlotRole ; rdfs:label "主珠"@zh .
+bzd:body   a bzd:SlotRole ; rdfs:label "体珠"@zh .
+bzd:spacer a bzd:SlotRole ; rdfs:label "隔片"@zh .
+bzd:wuxing a bzd:SlotRole ; rdfs:label "五行位"@zh .
+
+# ----------------------------------------------------------- 款式实例
+bzd:B-01 a bzd:Style ; rdfs:label "素圈单圈手串"@zh ;
+    bzd:hasSlot bzd:slot_B01_0 ; bzd:hasConstraint bzd:constraint_B01_none .
+bzd:slot_B01_0 a bzd:Slot ; rdfs:label "B-01 主槽"@zh ; bzd:slotIndex 0 ;
+    bzd:hasRole bzd:main ;
+    bzd:slotAllowsVariant bzd:round, bzd:buddha, bzd:barrel .
+bzd:constraint_B01_none a bzd:StyleConstraint ; bzd:constraintType "none" .
+
+bzd:B-02 a bzd:Style ; rdfs:label "主珠款单圈手串"@zh ;
+    bzd:hasSlot bzd:slot_B02_0, bzd:slot_B02_1, bzd:slot_B02_2, bzd:slot_B02_neg1 ;
+    bzd:hasConstraint bzd:constraint_B02_diameter, bzd:constraint_B02_spacer .
+bzd:slot_B02_0 a bzd:Slot ; bzd:slotIndex 0 ; bzd:hasRole bzd:main ;
+    bzd:minDiameter 10 ; bzd:slotAllowsVariant bzd:round, bzd:buddha .
+bzd:slot_B02_1 a bzd:Slot ; bzd:slotIndex 1 ; bzd:hasRole bzd:spacer ;
+    bzd:slotAllowsVariant bzd:spacer .
+bzd:slot_B02_2 a bzd:Slot ; bzd:slotIndex 2 ; bzd:hasRole bzd:body ;
+    bzd:minDiameter 6 ; bzd:maxDiameter 8 ;
+    bzd:slotAllowsVariant bzd:round, bzd:buddha .
+bzd:slot_B02_neg1 a bzd:Slot ; bzd:slotIndex -1 ; bzd:hasRole bzd:spacer ;
+    bzd:slotAllowsVariant bzd:spacer .
+bzd:constraint_B02_diameter a bzd:StyleConstraint ;
+    bzd:constraintType "diameter" ;
+    bzd:constraintParams "{\"main_min\":10,\"body\":[6,8]}" .
+bzd:constraint_B02_spacer a bzd:StyleConstraint ;
+    bzd:constraintType "spacer_map" ;
+    bzd:constraintParams "{}" .
+
+bzd:B-03 a bzd:Style ; rdfs:label "隔片款单圈手串"@zh ;
+    bzd:hasSlot bzd:slot_B03_0, bzd:slot_B03_1, bzd:slot_B03_2 ;
+    bzd:hasConstraint bzd:constraint_B03_same .
+bzd:slot_B03_0 a bzd:Slot ; bzd:slotIndex 0 ; bzd:hasRole bzd:main ;
+    bzd:slotAllowsVariant bzd:round, bzd:buddha .
+bzd:slot_B03_1 a bzd:Slot ; bzd:slotIndex 1 ; bzd:hasRole bzd:main ;
+    bzd:slotAllowsVariant bzd:round, bzd:buddha .
+bzd:slot_B03_2 a bzd:Slot ; bzd:slotIndex 2 ; bzd:hasRole bzd:spacer ;
+    bzd:slotAllowsVariant bzd:spacer .
+bzd:constraint_B03_same a bzd:StyleConstraint ;
+    bzd:constraintType "same_bead" ;
+    bzd:constraintParams "{\"variables\":[\"v0\",\"v1\"]}" .
+
+bzd:B-10 a bzd:Style ; rdfs:label "五行拼色单圈手串"@zh ;
+    bzd:hasSlot bzd:slot_B10_0 ; bzd:hasConstraint bzd:constraint_B10_none .
+bzd:slot_B10_0 a bzd:Slot ; bzd:slotIndex 0 ; bzd:hasRole bzd:wuxing ;
+    bzd:slotAllowsVariant bzd:round, bzd:buddha .
+bzd:constraint_B10_none a bzd:StyleConstraint ; bzd:constraintType "none" .
+
+# --------------------------------------------------- 隔片-体珠径映射
+bzd:spacerMap_6  a bzd:StyleConstraint ; bzd:bodyDiameter 6  ; bzd:spacerDiameter 4 .
+bzd:spacerMap_8  a bzd:StyleConstraint ; bzd:bodyDiameter 8  ; bzd:spacerDiameter 4 .
+bzd:spacerMap_10 a bzd:StyleConstraint ; bzd:bodyDiameter 10 ; bzd:spacerDiameter 5 .
+bzd:spacerMap_12 a bzd:StyleConstraint ; bzd:bodyDiameter 12 ; bzd:spacerDiameter 6 .

@@ -1,0 +1,107 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix bzd:  <https://bazidiy.example/ontology#> .
+
+# =====================================================================
+# BaziDIY 珠子库本体（草案）
+# 内容：珠料/变体类、33 珠实例；对象属性 属五行(→ 词库)/是变体；数据属性 直径/颜色/图/宽高比。
+# 单一事实源（C1）；完整实例集 1:1 转录自 `packages/ontology/src/data/beads.ts`。
+# 草案仅列代表个体；落地时由生成脚本按 data/beads.ts 全量产出（33 行）。
+# =====================================================================
+
+bzd:BeadCatalogOntology a owl:Ontology ;
+    rdfs:label "BaziDIY 珠子库本体"@zh ;
+    rdfs:comment "手串珠子实例库：珠料、变体、五行归属、直径、颜色与图资源。"@zh .
+
+# ---------------------------------------------------------------- 类
+bzd:Bead         a owl:Class ; rdfs:label "珠实例"@zh .
+bzd:BeadVariant  a owl:Class ; rdfs:label "变体"@zh .
+bzd:BeadMaterial a owl:Class ; rdfs:label "珠料"@zh .
+
+# ------------------------------------------------------------- 对象属性
+bzd:hasVariant a owl:ObjectProperty ;
+    rdfs:label "是变体"@zh ;
+    rdfs:domain bzd:Bead ; rdfs:range bzd:BeadVariant .
+# 引用词库本体的五行个体（bzd:木/火/土/金/水），保证术语全系统唯一。
+bzd:belongsToElement a owl:ObjectProperty ;
+    rdfs:label "属五行"@zh ;
+    rdfs:domain bzd:Bead ; rdfs:range bzd:WuxingElement .
+bzd:isMaterialOf a owl:ObjectProperty ;
+    rdfs:label "材质"@zh ;
+    rdfs:domain bzd:Bead ; rdfs:range bzd:BeadMaterial .
+
+# ------------------------------------------------------------- 数据属性
+bzd:hasDiameter  a owl:DatatypeProperty ; rdfs:label "直径(mm)"@zh ; rdfs:range xsd:integer .
+bzd:hasColor     a owl:DatatypeProperty ; rdfs:label "颜色"@zh ; rdfs:range xsd:string .
+bzd:hasImage     a owl:DatatypeProperty ; rdfs:label "图片"@zh ; rdfs:range xsd:string .
+bzd:hasAspect    a owl:DatatypeProperty ; rdfs:label "宽高比"@zh ; rdfs:range xsd:decimal .
+bzd:hasBeadId    a owl:DatatypeProperty ; rdfs:label "珠id"@zh ; rdfs:range xsd:string .
+
+# -------------------------------------------------------------- 变体个体
+bzd:round  a bzd:BeadVariant ; rdfs:label "圆珠"@zh .
+bzd:buddha a bzd:BeadVariant ; rdfs:label "佛珠/桶珠"@zh .
+bzd:barrel a bzd:BeadVariant ; rdfs:label "桶珠"@zh .
+bzd:spacer a bzd:BeadVariant ; rdfs:label "隔片"@zh .
+bzd:pixiu  a bzd:BeadVariant ; rdfs:label "貔貅"@zh .
+
+# -------------------------------------------------------------- 珠料个体
+bzd:material_xiaoye-zitan a bzd:BeadMaterial ; rdfs:label "小叶紫檀"@zh .
+bzd:material_nanhong     a bzd:BeadMaterial ; rdfs:label "南红"@zh .
+bzd:material_baiyin      a bzd:BeadMaterial ; rdfs:label "白银"@zh .
+bzd:material_taishan-yu  a bzd:BeadMaterial ; rdfs:label "泰山玉"@zh .
+# …（其余珠料由 data/beads.ts 生成）
+
+# -------------------------------------------------------------- 珠实例（代表）
+# 木
+bzd:xiaoye-zitan_round a bzd:Bead ;
+    rdfs:label "小叶紫檀"@zh ;
+    bzd:hasBeadId "xiaoye-zitan" ; bzd:hasVariant bzd:round ;
+    bzd:isMaterialOf bzd:material_xiaoye-zitan ;
+    bzd:belongsToElement bzd:木 ;
+    bzd:hasDiameter 6, 8, 10, 12 ; bzd:hasColor "#5B2333" ;
+    bzd:hasImage "/beads/trimmed/xiaoye-zitan_round.png" ; bzd:hasAspect 1.0 .
+# 火
+bzd:nanhong_round a bzd:Bead ;
+    rdfs:label "南红"@zh ;
+    bzd:hasBeadId "nanhong" ; bzd:hasVariant bzd:round ;
+    bzd:belongsToElement bzd:火 ;
+    bzd:hasDiameter 6, 8, 10, 12 ; bzd:hasColor "#D89575" ;
+    bzd:hasImage "/beads/trimmed/nanhong_round.png" ; bzd:hasAspect 1.0 .
+# 土
+bzd:taishan-yu_round a bzd:Bead ;
+    rdfs:label "泰山玉"@zh ;
+    bzd:hasBeadId "taishan-yu" ; bzd:hasVariant bzd:round ;
+    bzd:isMaterialOf bzd:material_taishan-yu ;
+    bzd:belongsToElement bzd:土 ;
+    bzd:hasDiameter 6, 8, 10, 12 ; bzd:hasColor "#33691E" ;
+    bzd:hasImage "/beads/trimmed/taishan-yu_round.png" ; bzd:hasAspect 1.0 .
+# 金（含隔片变体）
+bzd:baiyin_round a bzd:Bead ;
+    rdfs:label "白银"@zh ;
+    bzd:hasBeadId "baiyin" ; bzd:hasVariant bzd:round ;
+    bzd:isMaterialOf bzd:material_baiyin ;
+    bzd:belongsToElement bzd:金 ;
+    bzd:hasDiameter 6, 8, 10, 12 ; bzd:hasColor "#D1D5DB" ;
+    bzd:hasImage "/beads/trimmed/baiyin_round.png" ; bzd:hasAspect 1.0 .
+bzd:baiyin_spacer a bzd:Bead ;
+    rdfs:label "白银"@zh ;
+    bzd:hasBeadId "baiyin" ; bzd:hasVariant bzd:spacer ;
+    bzd:isMaterialOf bzd:material_baiyin ;
+    bzd:belongsToElement bzd:金 ;
+    bzd:hasDiameter 4, 5, 6 ; bzd:hasColor "#D1D5DB" ;
+    bzd:hasImage "/beads/trimmed/baiyin_spacer.png" ; bzd:hasAspect 0.3229 .
+bzd:suiyinzi_spacer a bzd:Bead ;
+    rdfs:label "碎银子"@zh ;
+    bzd:hasBeadId "suiyinzi" ; bzd:hasVariant bzd:spacer ;
+    bzd:belongsToElement bzd:金 ;
+    bzd:hasDiameter 4, 5, 6 ; bzd:hasColor "#A8A8A8" ;
+    bzd:hasImage "/beads/trimmed/suiyinzi_spacer.png" ; bzd:hasAspect 1.0 .
+# 水
+bzd:qingjinji_round a bzd:Bead ;
+    rdfs:label "青金石"@zh ;
+    bzd:hasBeadId "qingjinji" ; bzd:hasVariant bzd:round ;
+    bzd:belongsToElement bzd:水 ;
+    bzd:hasDiameter 6, 8, 10, 12 ; bzd:hasColor "#1A237E" ;
+    bzd:hasImage "/beads/trimmed/qingjinji_round.png" ; bzd:hasAspect 1.0 .
