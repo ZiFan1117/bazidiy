@@ -9,7 +9,7 @@ import { wuxing as wuxingData } from './data/wuxing.ts'
 import { inferWuxing } from './wuxing.ts'
 import { isSpacer, solveStyles, loadStyles } from './solver.ts'
 import { selectBeads } from './atoms/selectBeads.ts'
-import type { Bead, DesignProposal } from './types.ts'
+import type { Bead, DesignProposal } from './atoms/bazidiy.framework/contracts.ts'
 
 /** 从数据构建珠对象（去只读 as const 类型）。 */
 export function loadBeads(): Bead[] {
