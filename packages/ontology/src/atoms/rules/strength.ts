@@ -4,7 +4,7 @@
  * @module @bazidiy/ontology/atoms/rules/strength
  */
 import { wuxing as wuxingData } from '../../data/wuxing.ts'
-import { loadRelations } from './relations.ts'
+import { loadRelations } from '../rules.relations/index.ts'
 
 export interface StrengthVerdict {
   strength: 'strong' | 'weak'
