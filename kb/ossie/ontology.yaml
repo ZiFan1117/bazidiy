@@ -1,0 +1,92 @@
+# BaziDIY 领域本体（合并篇）· Apache Ossie ontology 规范 (v0.2.0.dev0)
+# 涵盖：五行/干支/节气 + 珠料×变体=珠子。实例数据见 data/*.sql（SQLite）。
+# 说明：Ossie 不支持跨文档引用概念，故合并为单篇自包含 ontology，避免 WuxingElement 重复声明。
+version: 0.2.0.dev0
+name: BazidiyOntology
+description: 八字手串领域本体：五行/干支/节气、珠料×变体=珠实例，直径/颜色值类型约束。
+
+ontology:
+  # ---------------- 五行 · 干支 · 节气 ----------------
+  - concept: WuxingElement
+    type: EntityType
+    description: 五行元素（木/火/土/金/水）
+    relationships:
+      - name: generates
+        description: 相生：源五行生目标五行
+        roles:
+          - concept: WuxingElement
+            name: target
+        multiplicity: ManyToOne
+        verbalizes:
+          - "{WuxingElement} 生 {WuxingElement:target}"
+      - name: restricts
+        description: 相克：源五行克目标五行
+        roles:
+          - concept: WuxingElement
+            name: target
+        multiplicity: ManyToOne
+        verbalizes:
+          - "{WuxingElement} 克 {WuxingElement:target}"
+
+  - concept: HeavenlyStem
+    type: EntityType
+    description: 天干（甲…癸）；其五行归属见数据行 element 列
+  - concept: EarthlyBranch
+    type: EntityType
+    description: 地支（子…亥）；其五行归属见数据行 element 列
+  - concept: SeasonNode
+    type: EntityType
+    description: 节气月分界节点（立春…小寒）；月/日见数据行
+
+  # ---------------- 珠子 ----------------
+  - concept: BeadMaterial
+    type: EntityType
+    description: 珠料（如 白银、南红、小叶紫檀）；材料与变体共同决定一颗珠实例
+
+  - concept: BeadVariant
+    type: EntityType
+    description: 珠的形态变体（round / buddha / spacer / barrel / pixiu）
+
+  - concept: Bead
+    type: EntityType
+    description: 一颗手串珠实例 = 珠料 × 变体，唯一标识由 made_of + has_variant 决定
+    identify_by:
+      - "made_of"
+      - "has_variant"
+    relationships:
+      - name: made_of
+        description: 该珠由哪种珠料制成
+        roles:
+          - concept: BeadMaterial
+        multiplicity: ManyToOne
+        verbalizes:
+          - "{Bead} 由 {BeadMaterial} 制成"
+      - name: belongs_to
+        description: 该珠属哪种五行
+        roles:
+          - concept: WuxingElement
+        multiplicity: ManyToOne
+        verbalizes:
+          - "{Bead} 属 {WuxingElement}"
+      - name: has_variant
+        description: 该珠是哪种形态变体
+        roles:
+          - concept: BeadVariant
+        multiplicity: ManyToOne
+        verbalizes:
+          - "{Bead} 是 {BeadVariant} 形态"
+
+  - concept: DiameterMm
+    type: ValueType
+    extends:
+      - Integer
+    description: 珠直径（毫米），全局允许 4~15
+    requires:
+      - "DiameterMm >= 4"
+      - "DiameterMm <= 15"
+
+  - concept: ColorHex
+    type: ValueType
+    extends:
+      - String
+    description: 展示颜色，十六进制形如 #RRGGBB
