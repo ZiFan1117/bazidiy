@@ -5,4 +5,4 @@
  * `node tools/gen-ossie-db.mjs && node tools/gen-bindings.mjs`。
  * @module @bazidiy/ontology/data/beads
  */
-export { beads } from '../kb/beadCatalog.ts'
+export { beads } from '../atoms/kb/beadCatalog.ts'

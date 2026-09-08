@@ -10,7 +10,7 @@ import { readFileSync } from 'node:fs'
 
 const here = dirname(fileURLToPath(import.meta.url))
 const ROOT = join(here, '..')
-const KB_TS = join(ROOT, 'packages', 'ontology', 'src', 'kb')
+const KB_TS = join(ROOT, 'packages', 'ontology', 'src', 'atoms', 'kb')
 mkdirSync(KB_TS, { recursive: true })
 
 const esc = (s) => JSON.stringify(String(s))

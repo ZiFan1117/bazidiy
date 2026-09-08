@@ -8,7 +8,7 @@ const here = dirname(fileURLToPath(import.meta.url))
 const OUT = join(here, '..', 'kb', 'ossie', 'data')
 mkdirSync(OUT, { recursive: true })
 
-const beads = (await import('file:///' + join(here, '..', 'packages', 'ontology', 'src', 'kb', 'beadCatalog.ts').replace(/\\/g, '/'))).beads
+const beads = (await import('file:///' + join(here, '..', 'packages', 'ontology', 'src', 'atoms', 'kb', 'beadCatalog.ts').replace(/\\/g, '/'))).beads
 
 const esc = (s) => "'" + String(s).replace(/'/g, "''") + "'"
 const q = (v) => (v === null || v === undefined ? 'NULL' : esc(v))

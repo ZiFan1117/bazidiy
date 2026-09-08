@@ -6,7 +6,7 @@
  * @module @bazidiy/ontology/data/wuxing
  */
 /* oxlint-disable -- rule data literal */
-import { elementOrder, generates as kbGenerates, restricts as kbRestricts } from '../kb/vocab.ts'
+import { elementOrder, generates as kbGenerates, restricts as kbRestricts } from '../atoms/kb/vocab.ts'
 
 export const wuxing = {
   schema_version: 3,

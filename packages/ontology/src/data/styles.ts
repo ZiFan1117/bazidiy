@@ -5,4 +5,4 @@
  * `node tools/gen-ossie-db.mjs && node tools/gen-bindings.mjs`。
  * @module @bazidiy/ontology/data/styles
  */
-export { styles } from '../kb/styleLibrary.ts'
+export { styles } from '../atoms/kb/styleLibrary.ts'
