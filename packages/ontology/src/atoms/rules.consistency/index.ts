@@ -5,8 +5,8 @@
  */
 import { wuxing as wuxingData } from '../../data/wuxing.ts'
 import { loadRelations } from '../rules.relations/index.ts'
-import { judgeStrength } from './strength.ts'
-import { chooseVerdict } from './verdictChoice.ts'
+import { judgeStrength } from '../rules.strength/index.ts'
+import { chooseVerdict } from '../rules.verdict_choice/index.ts'
 
 /** 全组合自检：返回冲突列表（空 = 一致）。 */
 export function checkConsistency(): string[] {

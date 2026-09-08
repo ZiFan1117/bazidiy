@@ -3,7 +3,7 @@
  * 解析并全称校验珠序，产出可渲染 design_result；非法珠名 → 带 note 的拒绝结果。
  * @module @bazidiy/ontology/atoms/generateDesign
  */
-import { parseSlots, type DesignSlot } from './parseSlots.ts'
+import { parseSlots, type DesignSlot } from '../parse_slots/index.ts'
 
 export interface GenerateInput {
   style_name: string

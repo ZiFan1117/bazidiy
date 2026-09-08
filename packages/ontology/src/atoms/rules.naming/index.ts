@@ -3,7 +3,7 @@
  * 独立纯模块：珠子全称集合 + 同名变体消歧（直径匹配 → 非隔片 round 优先）。
  * @module @bazidiy/ontology/atoms/naming
  */
-import { beads } from '../kb/beadCatalog.ts'
+import { beads } from '../../kb/beadCatalog.ts'
 
 export type BeadRow = (typeof beads)[number]
 

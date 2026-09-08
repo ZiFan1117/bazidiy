@@ -3,7 +3,7 @@
  * 把 "南红:8,碎银子:4,南红:8" 解析/消歧为槽位序列；含未知名/缩写 → 整体 null。
  * @module @bazidiy/ontology/atoms/parseSlots
  */
-import { resolveVariant, isCanonicalName } from './naming.ts'
+import { resolveVariant, isCanonicalName } from '../rules.naming/index.ts'
 
 /** 一颗最终珠子槽位。`image` 是图片 key（= bead 的 id），`ratio` 是图片宽高比（前端据此渲染）。 */
 export interface DesignSlot {
