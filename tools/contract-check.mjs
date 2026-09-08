@@ -1,10 +1,10 @@
 // contract-check.mjs — 原子契约测试：真跑核心能力/规则原子，失败即非零退出（verified 依据）。
 const B = 'file:///D:/Ontology/bazidiy/packages/ontology/src/'
-const bazi = await import(B + 'bazi.ts')
-const wux = await import(B + 'wuxing.ts')
-const prop = await import(B + 'propose.ts')
-const solver = await import(B + 'solver.ts')
-const stylesEng = await import(B + 'styles.ts')
+const bazi = await import(B + 'atoms/calculate_chart/index.ts')
+const wux = await import(B + 'atoms/infer_verdict/index.ts')
+const prop = await import(B + 'atoms/propose_designs/index.ts')
+const solver = await import(B + 'atoms/solve_styles/index.ts')
+const stylesEng = await import(B + 'atoms/solve_styles/styles.ts')
 const parseSlotsM = await import(B + 'atoms/parseSlots.ts')
 const genM = await import(B + 'atoms/generateDesign.ts')
 const namingM = await import(B + 'atoms/naming.ts')
