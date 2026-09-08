@@ -13,7 +13,7 @@ author: ZiFan1117
 verified: true
 tests: [{"input":{"strength":"strong","day_master_element":"金"},"expect":{"favorable":["木","水"]}}]
 implementation_ref: "bazidiy @bazidiy/ontology: src/atoms/rules/verdictChoice.ts（数据 data/wuxing.ts favorable/unfavorable_rules）"
-deps: ["bazidiy.kb.wuxing_ganzhi"]
+deps: ["bazidiy.kb.wuxing_ganzhi","bazidiy.rules.relations"]
 input: {"type":"object","required":["strength","day_master_element"],"properties":{"strength":{"type":"string","enum":["strong","weak"]},"day_master_element":{"type":"string"}}}
 output: {"type":"object","properties":{"favorable":{"type":"array","items":{"type":"string"}},"unfavorable":{"type":"array","items":{"type":"string"}},"reasons":{"type":"array","items":{"type":"string"}}}}
 ---
