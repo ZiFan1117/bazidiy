@@ -1,7 +1,8 @@
 /**
  * BaziDIY ontology data — beads catalog.
- * 单一事实源：repo 根 kb/bead-catalog.ttl（OWL/Turtle）。
- * 本文件只是把它生成的只读绑定再导出，勿手改；改数据请改 .ttl 后跑 `node tools/gen-kb.mjs`。
+ * 珠子库权威源：kb/ossie（Apache Ossie：bead.ontology.yaml + bead_catalog.semantic.yaml + data/*.sql）。
+ * 本文件只是把由 SQLite 生成的只读绑定（../kb/beadCatalog.ts）再导出；改数据请改 kb/ossie/data/*.sql 后跑
+ * `node tools/gen-ossie-db.mjs && node tools/gen-bindings.mjs`。
  * @module @bazidiy/ontology/data/beads
  */
 export { beads } from '../kb/beadCatalog.ts'
