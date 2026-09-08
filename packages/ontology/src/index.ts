@@ -6,60 +6,14 @@
 
 import type { Context } from '@deepseek-ai/cordis'
 import { defineTool } from '@deepseek-ai/dsh-tools'
-import { beads as beadsData } from './data/beads.ts'
 import { calculateBazi } from './bazi.ts'
 import { propose } from './propose.ts'
+import { generateDesign } from './atoms/generateDesign.ts'
 import { mountBeadAssets } from './assets.ts'
 import { loadDesign, saveDesign, type SavedDesign } from './designs.ts'
 
 export const name = 'bazidiy-ontology'
 export const inject = ['tools']
-
-const VALID_NAMES: ReadonlySet<string> = new Set(beadsData.map(b => b.name))
-
-/** 一颗最终珠子槽位。`image` 是图片 key（= bead 的 id），`ratio` 是图片宽高比（前端据此渲染）。 */
-interface DesignSlot {
-  name: string
-  diameter: number
-  slot: number
-  image: string
-  ratio: number
-}
-
-/**
- * 按珠子全称 + 直径 消歧到唯一珠子（bead）。
- * 同名多变体（小叶紫檀 round/buddha、白银 round/spacer）时：
- * 优先选直径匹配的变体；仍多个时非隔片（round）优先。
- */
-function resolveBead(name: string, diameter: number): (typeof beadsData)[number] | undefined {
-  const byName = beadsData.filter(b => b.name === name)
-  if (byName.length === 0) return undefined
-  const byDiameter = byName.filter(b => (b.diameters as readonly number[]).includes(diameter))
-  const pool = byDiameter.length > 0 ? byDiameter : byName
-  const nonSpacer = pool.find(b => b.variant !== 'spacer')
-  return nonSpacer ?? pool[0]
-}
-
-/** 把 "南红:8,碎银子:4" 解析为 slots；名字非全称返回 null。 */
-function parseSlots(beads: string): DesignSlot[] | null {
-  const slots: DesignSlot[] = []
-  if (!beads) return slots
-  const items = beads.split(',').map(s => s.trim()).filter(s => s.length > 0)
-  for (let i = 0; i < items.length; i++) {
-    const item = items[i]
-    if (item === undefined || !item.includes(':')) continue
-    const colon = item.indexOf(':')
-    const beadName = item.slice(0, colon).trim()
-    const diaStr = item.slice(colon + 1).trim()
-    if (!VALID_NAMES.has(beadName)) return null
-    const diameter = Number.parseInt(diaStr, 10)
-    const bead = resolveBead(beadName, diameter)
-    if (bead === undefined) return null
-    const ratio = bead.image_w / bead.image_h
-    slots.push({ name: beadName, diameter, slot: i, image: bead.id, ratio })
-  }
-  return slots
-}
 
 /**
  * Register the ontology tools on ctx.tools.
@@ -253,26 +207,13 @@ export function apply(ctx: Context): void {
       }),
     },
     execute(args) {
-      const slots = parseSlots(args.beads)
-      if (slots === null) {
-        return Promise.resolve({
-          type: 'design_result',
-          style_name: args.style_name,
-          slots: [],
-          wrist_size: args.wrist_size ?? '',
-          summary: args.summary,
-          rationale: args.rationale,
-          note: '珠子名未识别，请使用全称（如"小叶紫檀"，不要缩写）',
-        })
-      }
-      return Promise.resolve({
-        type: 'design_result',
+      return Promise.resolve(generateDesign({
         style_name: args.style_name,
-        slots,
-        wrist_size: args.wrist_size ?? '',
+        beads: args.beads,
+        wrist_size: args.wrist_size,
         summary: args.summary,
         rationale: args.rationale,
-      })
+      }))
     },
   }))
 
