@@ -12,7 +12,7 @@ lang: typescript
 author: ZiFan1117
 verified: false
 implementation_ref: "bazidiy @bazidiy/ontology: src/atoms/rules.relations/index.ts（loadRelations/follows/deriveElements）"
-deps: ["bazidiy.kb.wuxing_ganzhi"]
+deps: ["bazidiy.kb"]
 input: {"type":"object","properties":{"element":{"type":"string","description":"五行（木/火/土/金/水）"},"relation":{"type":"string","enum":["self","generates","restricts","generated_by","restricted_by"]}}}
 output: {"type":"object","properties":{"elements":{"type":"array","items":{"type":"string"}},"generates":{"type":"object"},"restricts":{"type":"object"},"next":{"type":"string"}}}
 ---
