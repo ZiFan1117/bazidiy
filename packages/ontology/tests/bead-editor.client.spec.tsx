@@ -5,7 +5,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import type { ToolResultNode } from '@deepseek-ai/dsh-client-runtime/client'
-import { BeadEditor, type CatalogBead } from '../src/client/BeadEditor.tsx'
+import { BeadEditor, type CatalogBead } from '../src/atoms/ui.bead_editor/BeadEditor.tsx'
 
 afterEach(cleanup)
 
