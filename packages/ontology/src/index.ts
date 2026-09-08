@@ -6,11 +6,11 @@
 
 import type { Context } from '@deepseek-ai/cordis'
 import { defineTool } from '@deepseek-ai/dsh-tools'
-import { calculateBazi } from './bazi.ts'
-import { propose } from './propose.ts'
+import { calculateBazi } from './atoms/calculate_chart/index.ts'
+import { propose } from './atoms/propose_designs/index.ts'
 import { generateDesign } from './atoms/generateDesign.ts'
 import { mountBeadAssets } from './assets.ts'
-import { loadDesign, saveDesign, type SavedDesign } from './designs.ts'
+import { loadDesign, saveDesign, type SavedDesign } from './atoms/design_memory/index.ts'
 
 export const name = 'bazidiy-ontology'
 export const inject = ['tools']
