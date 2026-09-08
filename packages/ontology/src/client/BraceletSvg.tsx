@@ -2,19 +2,17 @@
  * Bracelet SVG view for a settled generate_design result. Pure presentation:
  * reads the slots from the tool result's `meta` (projected by the ontology
  * tool's presentationMeta) and draws the bead circle. No session reads, no I/O.
+ * (编辑/查看切换在 DesignResultView，本模块不依赖 BeadEditor——避免循环依赖。)
  * @module @bazidiy/ontology/BraceletSvg
  */
 
 import type { ReactNode } from 'react'
-import { useState } from 'react'
 import type { ToolResultNode } from '@deepseek-ai/dsh-client-runtime/client'
-import type { ToolCallOwnerProps } from '@deepseek-ai/dsh-client-ui-tool/client'
 import {
   CIRCLE_CX, CIRCLE_CY, CIRCLE_H, CIRCLE_W, PX_PER_MM, amplifySize,
   circlePositions, computeRadius, isSpacerImage, rotationOffset,
 } from './geometry.ts'
 import type { RenderSlot } from './geometry.ts'
-import { BeadEditor } from './BeadEditor.tsx'
 import css from './BraceletSvg.module.css'
 
 /** One persisted slot from the tool's presentationMeta projection. */
@@ -91,26 +89,6 @@ export function BraceletSvg({ block }: { block: ToolResultNode }): ReactNode {
           return <BeadImage key={`${slot.image}-${i}`} slot={slot} pos={pos} />
         })}
       </svg>
-    </div>
-  )
-}
-
-/**
- * The generate_design result card: view mode shows the SVG, edit mode shows
- * the bead editor. A toggle switches between the two. Nothing while running.
- * @param props - the tool-view owner props (block is the frozen call/result node).
- * @returns the card, or null while the call is still running.
- */
-export function DesignResultView({ block }: ToolCallOwnerProps): ReactNode {
-  const [editing, setEditing] = useState(false)
-  if (!('kind' in block)) return null
-  return (
-    <div className={css.viewRoot}>
-      <BraceletSvg block={block} />
-      <button type="button" className={css.editToggle} onClick={() => { setEditing(v => !v) }}>
-        {editing ? '完成' : '换珠子'}
-      </button>
-      {editing && <BeadEditor block={block} />}
     </div>
   )
 }

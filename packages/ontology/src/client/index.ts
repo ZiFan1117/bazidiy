@@ -9,7 +9,7 @@
 import type { ClientContext } from '@deepseek-ai/dsh-client-runtime/client'
 // Type-only: merges the 'tool.call.toolview' SlotMap entry owned by ui-tool.
 import type {} from '@deepseek-ai/dsh-client-ui-tool/client'
-import { DesignResultView } from './BraceletSvg.tsx'
+import { DesignResultView } from './DesignResultView.tsx'
 
 /** Required services: the slot registry. */
 export const inject = ['slots']
