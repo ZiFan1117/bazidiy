@@ -7,10 +7,10 @@
 import { judgeStrength } from './atoms/rules/strength.ts'
 import { chooseVerdict } from './atoms/rules/verdictChoice.ts'
 import { checkConsistency } from './atoms/rules/consistency.ts'
-import { loadRelations } from './atoms/rules/relations.ts'
+import { loadRelations } from './atoms/rules.relations/index.ts'
 import type { WuxingVerdict } from './types.ts'
 
-export { loadRelations } from './atoms/rules/relations.ts'
+export { loadRelations } from './atoms/rules.relations/index.ts'
 export { checkConsistency }
 /** 一致性自检（兼容导出名）。 */
 export const validateConsistency = checkConsistency
