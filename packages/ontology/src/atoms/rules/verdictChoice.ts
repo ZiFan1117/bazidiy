@@ -4,7 +4,7 @@
  * @module @bazidiy/ontology/atoms/rules/verdictChoice
  */
 import { wuxing as wuxingData } from '../../data/wuxing.ts'
-import { loadRelations, deriveElements, type RelationName } from './relations.ts'
+import { loadRelations, deriveElements, type RelationName } from '../rules.relations/index.ts'
 
 export interface VerdictChoice {
   favorable: string[]
