@@ -9,8 +9,8 @@
 
 import { useEffect, useState } from 'react'
 import type { ReactNode } from 'react'
-import type { RenderSlot } from './geometry.ts'
-import { BraceletSvg } from './BraceletSvg.tsx'
+import type { RenderSlot } from '../ui.svg_render/geometry.ts'
+import { BraceletSvg } from '../ui.svg_render/BraceletSvg.tsx'
 import type { ToolResultNode } from '@deepseek-ai/dsh-client-runtime/client'
 import css from './BeadEditor.module.css'
 

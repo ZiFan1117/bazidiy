@@ -67,7 +67,7 @@ tools/
   ossie-validate.mjs         # Apache Ossie 官方 validator（4 文档闸）
   contract-check.mjs         # 原子契约测试（verified 依据）
 atoms/                       # 18 份原子文档（software-atom-market v0.3 .atom.md）
-presets/bazidiy/
+atoms/assistant_preset/
 ```
 
 ## 五个工具
@@ -84,7 +84,7 @@ presets/bazidiy/
 
 ## 角色（preset）
 
-`presets/bazidiy/agent.cordis.yml` 定义了一个「手串定制助手」角色（persona），通过 system prompt 约束 AI：
+`atoms/assistant_preset/agent.cordis.yml` 定义了一个「手串定制助手」角色（persona），通过 system prompt 约束 AI：
 
 - **严格流程**：缺信息先问 → 算八字 → 提方案 → 出图 → 用户想换则换款（不重算八字）
 - **硬约束**：禁止 AI 自己算旺衰/编造珠子名/展示八字内部细节/每次回复超过 150 字
@@ -96,7 +96,7 @@ presets/bazidiy/
 
 1. 将 `packages/ontology` 作为 dsh 的 workspace 包（或 npm 依赖）加入
 2. 在 dsh 的 `packages/bundle/web-app/cordis.patch.yml` 挂载 client 半区（`name: '@bazidiy/ontology'`）
-3. 将 `presets/bazidiy` 放进 dsh 的 preset 扫描目录（`apps/cli/config/agent-presets/`），并设 `default: bazidiy`
+3. 将 `atoms/assistant_preset` 放进 dsh 的 preset 扫描目录（`apps/cli/config/agent-presets/`），并设 `default: bazidiy`
 
 依赖的 dsh 包（peerDependencies）：`@deepseek-ai/dsh-tools`、`dsh-host-webserver`、`dsh-storage-domain`、`dsh-client-ui-tool`、`dsh-client-ui-slots`、`dsh-client-runtime` 等（对应 dsh 0.1.1-rc.x）。
 

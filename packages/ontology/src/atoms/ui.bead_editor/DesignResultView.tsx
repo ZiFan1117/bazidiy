@@ -6,9 +6,9 @@
 
 import { useState } from 'react'
 import type { ToolCallOwnerProps } from '@deepseek-ai/dsh-client-ui-tool/client'
-import { BraceletSvg } from './BraceletSvg.tsx'
+import { BraceletSvg } from '../ui.svg_render/BraceletSvg.tsx'
 import { BeadEditor } from './BeadEditor.tsx'
-import css from './BraceletSvg.module.css'
+import css from '../ui.svg_render/BraceletSvg.module.css'
 
 /**
  * The generate_design result card: view mode shows the SVG, edit mode shows
