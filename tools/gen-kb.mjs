@@ -67,23 +67,52 @@ function vocabTTL() {
 }
 
 function beadTTL() {
-  const L = ['@prefix bzd: <https://bazidiy.example/ontology#> .', '', 'bzd:BeadCatalogOntology a owl:Ontology .', '', 'bzd:Bead a owl:Class .', 'bzd:BeadVariant a owl:Class .', 'bzd:hasVariant a owl:ObjectProperty .', 'bzd:belongsToElement a owl:ObjectProperty .', 'bzd:hasBeadId a owl:DatatypeProperty .', 'bzd:hasDiameter a owl:DatatypeProperty .', 'bzd:hasColor a owl:DatatypeProperty .', 'bzd:hasImage a owl:DatatypeProperty .', 'bzd:hasImageW a owl:DatatypeProperty .', 'bzd:hasImageH a owl:DatatypeProperty .', 'bzd:label a owl:DatatypeProperty .', '']
+  const L = ['@prefix bzd: <https://bazidiy.example/ontology#> .', '', 'bzd:BeadCatalogOntology a owl:Ontology .', '',
+    'bzd:Bead a owl:Class .',
+    'bzd:BeadVariant a owl:Class .',
+    'bzd:BeadMaterial a owl:Class .',
+    'bzd:globalDiameterDomain a owl:Class .',
+    'bzd:hasVariant a owl:ObjectProperty .', 'bzd:hasVariant a owl:FunctionalProperty .',
+    'bzd:belongsToElement a owl:ObjectProperty .', 'bzd:belongsToElement a owl:FunctionalProperty .',
+    'bzd:materialOf a owl:ObjectProperty .', 'bzd:materialOf a owl:FunctionalProperty .',
+    'bzd:hasDiameter a owl:DatatypeProperty .',
+    'bzd:hasColor a owl:DatatypeProperty .',
+    'bzd:hasImage a owl:DatatypeProperty .',
+    'bzd:hasImageW a owl:DatatypeProperty .',
+    'bzd:hasImageH a owl:DatatypeProperty .',
+    'bzd:label a owl:DatatypeProperty .',
+    'bzd:contains a owl:DatatypeProperty .', '']
   const variants = [...new Set(beadsSrc.map((b) => b.variant))]
   for (const v of variants) L.push(`bzd:${v} a bzd:BeadVariant .`)
+  L.push('')
+  // 材料层：珠实例 = 材料(bead_id，唯一) × 变体；同一材料可有多个变体（白银 round/spacer 共属 material 白银）
+  const seen = new Set()
+  const materials = []
+  for (const b of beadsSrc) {
+    if (!seen.has(b.bead_id)) { seen.add(b.bead_id); materials.push({ slug: b.bead_id, name: b.name }) }
+  }
+  for (const m of materials) {
+    L.push(`bzd:mat_${m.slug} a bzd:BeadMaterial .`)
+    L.push(`bzd:mat_${m.slug} bzd:label ${esc(m.name)} .`)
+  }
   L.push('')
   for (const b of beadsSrc) {
     const id = b.id
     L.push(`bzd:${id} a bzd:Bead .`)
     L.push(`bzd:${id} bzd:label ${esc(b.name)} .`)
-    L.push(`bzd:${id} bzd:hasBeadId ${esc(b.bead_id)} .`)
     L.push(`bzd:${id} bzd:hasVariant bzd:${b.variant} .`)
     L.push(`bzd:${id} bzd:belongsToElement bzd:${b.wuxing} .`)
+    L.push(`bzd:${id} bzd:materialOf bzd:mat_${b.bead_id} .`)
     for (const d of b.diameters) L.push(`bzd:${id} bzd:hasDiameter ${d} .`)
     L.push(`bzd:${id} bzd:hasColor ${esc(b.color)} .`)
     L.push(`bzd:${id} bzd:hasImage ${esc(b.image)} .`)
     L.push(`bzd:${id} bzd:hasImageW ${b.image_w} .`)
     L.push(`bzd:${id} bzd:hasImageH ${b.image_h} .`)
   }
+  L.push('')
+  // 全局允许直径集（约束/校验用，示例珠不得超出该集）
+  const diaSet = [...new Set(beadsSrc.flatMap((b) => b.diameters))].sort((a, b) => a - b)
+  for (const d of diaSet) L.push(`bzd:globalDiameterDomain bzd:contains ${d} .`)
   return w(L)
 }
 
@@ -180,8 +209,9 @@ writeFileSync(join(KB, 'style-library.ttl'), styleTTL(), 'utf8')
 
 // 自检：解析刚写出的 ttl，数量应与数据一致
 const beadCount = parseTTL(beadTTL()).filter((t) => t.p === 'a' && t.o === 'bzd:Bead').length
+const materialCount = parseTTL(beadTTL()).filter((t) => t.p === 'a' && t.o === 'bzd:BeadMaterial').length
 const styleCount = parseTTL(styleTTL()).filter((t) => t.p === 'a' && t.o === 'bzd:Style').length
-console.log('ttl written: beads=' + beadCount + ' styles=' + styleCount + ' vocab ok=' + parseTTL(vocabTTL()).length + ' triples')
+console.log('ttl written: beads=' + beadCount + ' materials=' + materialCount + ' styles=' + styleCount + ' vocab ok=' + parseTTL(vocabTTL()).length + ' triples')
 
 writeFileSync(join(KB_TS, 'vocab.ts'), tsVocab(), 'utf8')
 writeFileSync(join(KB_TS, 'beadCatalog.ts'), tsBeads(), 'utf8')
