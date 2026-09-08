@@ -8,7 +8,7 @@ import { beads as beadsData } from '../../data/beads.ts'
 import { wuxing as wuxingData } from '../../data/wuxing.ts'
 import { inferWuxing } from '../infer_verdict/index.ts'
 import { isSpacer, solveStyles, loadStyles } from '../solve_styles/index.ts'
-import { selectBeads } from '../selectBeads.ts'
+import { selectBeads } from '../select_beads/index.ts'
 import type { Bead, DesignProposal } from './atoms/bazidiy.framework/contracts.ts'
 
 /** 从数据构建珠对象（去只读 as const 类型）。 */
