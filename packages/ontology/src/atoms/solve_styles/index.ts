@@ -5,7 +5,7 @@
  */
 
 import type { Bead, DesignOption } from './atoms/bazidiy.framework/contracts.ts'
-import { wuxing as wuxingData } from './data/wuxing.ts'
+import { wuxing as wuxingData } from '../../data/wuxing.ts'
 import { SPACER_MAP, candidatesFor, checkConstraint, loadStyles } from './styles.ts'
 import type { Position, Style } from './styles.ts'
 

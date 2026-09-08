@@ -2,7 +2,7 @@
  * 娆惧紡瑙勫垯 鈥?浠?data/styles.ts 鏋勫缓 Style/Position/Constraint銆? * 绾︽潫鐢辩被鍨嬪寲澹版槑椹卞姩锛坉iameter/spacer_map/same_bead锛夛紝鏃?hardness銆? * @module @bazidiy/ontology/styles
  */
 
-import { styles as stylesData } from './data/styles.ts'
+import { styles as stylesData } from '../../data/styles.ts'
 import type { Bead } from './atoms/bazidiy.framework/contracts.ts'
 
 /** 隔片直径映射。单一事实源：kb/style-library.ttl 的 spacerMap 个体 → styleLibrary 绑定的 spacer_diameter_map。 */

@@ -1,8 +1,8 @@
 import { describe, expect, test } from 'vitest'
-import { inferWuxing, validateConsistency, loadRelations } from '../src/wuxing.ts'
-import { beadCount, loadStyles, wuxingOrder } from '../src/solver.ts'
-import { propose } from '../src/propose.ts'
-import { calculateBazi } from '../src/bazi.ts'
+import { inferWuxing, validateConsistency, loadRelations } from '../src/atoms/infer_verdict/index.ts'
+import { beadCount, loadStyles, wuxingOrder } from '../src/atoms/solve_styles/index.ts'
+import { propose } from '../src/atoms/propose_designs/index.ts'
+import { calculateBazi } from '../src/atoms/calculate_chart/index.ts'
 
 describe('wuxing rules', () => {
   test('generates cycle', () => {

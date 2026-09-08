@@ -4,13 +4,13 @@
  * @module @bazidiy/ontology/wuxing
  */
 
-import { judgeStrength } from './atoms/rules/strength.ts'
-import { chooseVerdict } from './atoms/rules/verdictChoice.ts'
-import { checkConsistency } from './atoms/rules/consistency.ts'
-import { loadRelations } from './atoms/rules.relations/index.ts'
-import type { WuxingVerdict } from './atoms/bazidiy.framework/contracts.ts'
+import { judgeStrength } from '../rules/strength.ts'
+import { chooseVerdict } from '../rules/verdictChoice.ts'
+import { checkConsistency } from '../rules/consistency.ts'
+import { loadRelations } from '../rules.relations/index.ts'
+import type { WuxingVerdict } from '../bazidiy.framework/contracts.ts'
 
-export { loadRelations } from './atoms/rules.relations/index.ts'
+export { loadRelations } from '../rules.relations/index.ts'
 export { checkConsistency }
 /** 一致性自检（兼容导出名）。 */
 export const validateConsistency = checkConsistency

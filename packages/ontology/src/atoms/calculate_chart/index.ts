@@ -4,7 +4,7 @@
  * @module @bazidiy/ontology/bazi
  */
 
-import { STEM_NAMES, BRANCH_NAMES, STEM_ELEMENT, BRANCH_ELEMENT, seasons as JIE_QI } from './kb/vocab.ts'
+import { STEM_NAMES, BRANCH_NAMES, STEM_ELEMENT, BRANCH_ELEMENT, seasons as JIE_QI } from '../../kb/vocab.ts'
 
 /** 运算表（属本操作内部算法，非词库）：时辰→时支、年上起月、日上起时。 */
 const HOUR_DZ: Array<[number, number, number]> = [
