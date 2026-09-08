@@ -4,6 +4,9 @@
 version: 0.2.0.dev0
 name: BazidiyOntology
 description: 八字手串领域本体：五行/干支/节气、珠料×变体=珠实例，直径/颜色值类型约束。
+# 说明：requires/derived_by 按 Apache Ossie 草案书写——官方 validator 仅校验"是字符串/结构"，不执行；
+#       实际数据约束由 tools/gen-ossie-db.mjs 自检与引擎 checkConstraint 承担（草案表达式语言待 Ossie 定稿）。
+
 
 ontology:
   # ---------------- 五行 · 干支 · 节气 ----------------

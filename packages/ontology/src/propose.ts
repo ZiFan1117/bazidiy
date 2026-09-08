@@ -1,16 +1,19 @@
 /**
- * propose 鈥?鏈綋涓€閾炬帹鐞嗭細鏃鸿“ 鈫?鍠滅敤绁?鈫?鐝犲瓙鍒嗙被 鈫?娆惧紡鏂规銆? * @module @bazidiy/ontology/propose
+ * propose — 一链推理：旺衰 → 喜用神 → 筛珠 → 款式方案（bazidiy.propose_designs）。
+ * 判据取自规则模块；筛珠走 atoms/selectBeads；款式求解走 solver。
+ * @module @bazidiy/ontology/propose
  */
 
 import { beads as beadsData } from './data/beads.ts'
 import { wuxing as wuxingData } from './data/wuxing.ts'
 import { inferWuxing } from './wuxing.ts'
 import { isSpacer, solveStyles, loadStyles } from './solver.ts'
-import type { Bead, BeadInfo, DesignProposal } from './types.ts'
+import { selectBeads } from './atoms/selectBeads.ts'
+import type { Bead, DesignProposal } from './types.ts'
 
-/** 浠庢暟鎹瀯寤虹彔瀛愬璞★紙鍘?as const 鍙鎬э級銆?*/
+/** 从数据构建珠对象（去只读 as const 类型）。 */
 export function loadBeads(): Bead[] {
-  return beadsData.map(b => ({
+  return beadsData.map((b) => ({
     id: b.id,
     bead_id: b.bead_id,
     name: b.name,
@@ -22,21 +25,9 @@ export function loadBeads(): Bead[] {
   }))
 }
 
-function toInfo(b: Bead): BeadInfo {
-  return {
-    id: b.id,
-    bead_id: b.bead_id,
-    name: b.name,
-    wuxing: b.wuxing,
-    variant: b.variant,
-    diameters: b.diameters,
-    color: b.color,
-    icon: '',
-  }
-}
-
 /**
- * 涓€閾炬帹鐞嗐€俤ay_master_element 涓嶅湪浜斿厓绱犲唴鏃惰繑鍥炵┖缁撴灉銆? */
+ * 一链推理。day_master_element 不在五元素内时返回空结果。
+ */
 export function propose(
   beadIds: string[],
   wristSize: number,
@@ -63,27 +54,9 @@ export function propose(
 
   const beads = loadBeads()
   const selectedIds = new Set(beadIds)
-
-  const suitable: BeadInfo[] = []
-  const unsuitable: DesignProposal['unsuitable'] = []
+  const { suitable, unsuitable } = selectBeads(beads, avoid, selectedIds)
 
   const isSuitable = (b: Bead): boolean => isSpacer(b) || !avoid.has(b.wuxing)
-
-  for (const b of beads) {
-    if (selectedIds.size > 0 && ![b.id, b.bead_id, b.name].some(t => selectedIds.has(t))) {
-      continue
-    }
-    const base = toInfo(b)
-    if (isSuitable(b)) {
-      suitable.push(base)
-    } else {
-      unsuitable.push({
-        ...base,
-        reason: `${b.wuxing} 为忌神`,
-      })
-    }
-  }
-
   const matchBeads = beads.filter(isSuitable)
   const { proposals, unavailable } = solveStyles(loadStyles(), matchBeads, wristSize)
 
