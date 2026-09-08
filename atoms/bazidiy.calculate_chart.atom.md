@@ -12,7 +12,7 @@ lang: typescript
 author: ZiFan1117
 verified: true
 implementation_ref: "bazidiy @bazidiy/ontology: src/bazi.ts calculateBazi + src/index.ts calculate_bazi 工具壳"
-deps: ["bazidiy.kb.wuxing_ganzhi"]
+deps: ["bazidiy.kb"]
 input: {"type":"object","required":["birth_date","birth_hour","gender"],"properties":{"birth_date":{"type":"string","description":"公历生日 YYYY-MM-DD"},"birth_hour":{"type":"string","description":"时辰名如 午时，或 0-23 数字字符串"},"gender":{"type":"string","enum":["男","女"]}}}
 output: {"type":"object","required":["type","four_pillars","day_master","day_master_element","wuxing_count","wuxing_details","month_branch","month_branch_wuxing"],"properties":{"type":{"type":"string","const":"bazi_result"},"four_pillars":{"type":"string"},"day_master":{"type":"string"},"day_master_element":{"type":"string"},"wuxing_count":{"type":"object"},"wuxing_details":{"type":"array"},"month_branch":{"type":"string"},"month_branch_wuxing":{"type":"string"}}}
 tests: [{"input":{"birth_date":"1990-05-15","birth_hour":"午时","gender":"女"},"expect":{"type":"bazi_result"}}]
