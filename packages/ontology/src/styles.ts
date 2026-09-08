@@ -3,7 +3,7 @@
  */
 
 import { styles as stylesData } from './data/styles.ts'
-import type { Bead } from './types.ts'
+import type { Bead } from './atoms/bazidiy.framework/contracts.ts'
 
 /** 隔片直径映射。单一事实源：kb/style-library.ttl 的 spacerMap 个体 → styleLibrary 绑定的 spacer_diameter_map。 */
 const spacerMapRaw = (stylesData as { spacer_diameter_map?: Record<string, number> }).spacer_diameter_map ?? {}

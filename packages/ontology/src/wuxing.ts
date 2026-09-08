@@ -8,7 +8,7 @@ import { judgeStrength } from './atoms/rules/strength.ts'
 import { chooseVerdict } from './atoms/rules/verdictChoice.ts'
 import { checkConsistency } from './atoms/rules/consistency.ts'
 import { loadRelations } from './atoms/rules.relations/index.ts'
-import type { WuxingVerdict } from './types.ts'
+import type { WuxingVerdict } from './atoms/bazidiy.framework/contracts.ts'
 
 export { loadRelations } from './atoms/rules.relations/index.ts'
 export { checkConsistency }

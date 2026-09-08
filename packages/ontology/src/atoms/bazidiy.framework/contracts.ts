@@ -1,6 +1,7 @@
 /**
- * Pure types of the BaziDIY ontology domain. No runtime imports here.
- * @module @bazidiy/ontology/types
+ * 框架原子（bazidiy.framework）· 共享契约层
+ * BaziDIY 领域纯类型契约（无运行时逻辑）。其它原子经相对路径引用本模块，保证单一定义。
+ * @module @bazidiy/ontology/framework/contracts
  */
 
 /** A bead record from the catalog. */
