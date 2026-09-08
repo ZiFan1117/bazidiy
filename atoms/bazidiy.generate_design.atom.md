@@ -10,7 +10,8 @@ category: other
 side_effects: none
 lang: typescript
 author: ZiFan1117
-verified: false
+verified: true
+tests: [{"input":{"style_name":"B-02","beads":"南红:8,碎银子:4,南红:8","summary":"x","rationale":"r"},"expect":{"type":"design_result"}}]
 implementation_ref: "bazidiy @bazidiy/ontology: src/atoms/generateDesign.ts（parse+naming 定稿）"
 deps: ["bazidiy.parse_slots","bazidiy.rules.naming","bazidiy.kb.bead_catalog"]
 input: {"type":"object","required":["style_name","beads","summary"],"properties":{"style_name":{"type":"string","description":"款式编号 B-01/02/03/10"},"beads":{"type":"string"},"wrist_size":{"type":"string"},"summary":{"type":"string","description":"≤50 字"},"rationale":{"type":"string"}}}

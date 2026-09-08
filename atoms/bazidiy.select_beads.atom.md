@@ -10,7 +10,8 @@ category: other
 side_effects: none
 lang: typescript
 author: ZiFan1117
-verified: false
+verified: true
+tests: [{"input":{"unfavorable":["火","木"]},"expect":{"suitable":[{"id":"baiyin_round"}],"unsuitable":[{"id":"nanhong_round"}]}}]
 implementation_ref: "bazidiy @bazidiy/ontology: src/atoms/selectBeads.ts"
 deps: ["bazidiy.kb.bead_catalog","bazidiy.rules.verdict_choice"]
 input: {"type":"object","required":["unfavorable"],"properties":{"bead_ids":{"type":"string","description":"逗号分隔限定，空=全部"},"unfavorable":{"type":"array","items":{"type":"string"}}}}

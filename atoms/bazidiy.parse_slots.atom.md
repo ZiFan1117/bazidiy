@@ -10,7 +10,7 @@ category: other
 side_effects: none
 lang: typescript
 author: ZiFan1117
-verified: false
+verified: true
 implementation_ref: "bazidiy @bazidiy/ontology: src/atoms/parseSlots.ts（解析/消歧，底层 src/atoms/naming.ts）"
 deps: ["bazidiy.kb.bead_catalog","bazidiy.rules.naming"]
 input: {"type":"object","required":["beads"],"properties":{"beads":{"type":"string","description":"珠名:直径,珠名:直径"}}}

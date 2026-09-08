@@ -10,7 +10,7 @@ category: other
 side_effects: none
 lang: "rule-data + evaluator"
 author: ZiFan1117
-verified: false
+verified: true
 implementation_ref: "bazidiy @bazidiy/ontology: src/atoms/rules/consistency.ts（组合 strength+verdictChoice 全组合自检）"
 deps: ["bazidiy.rules.verdict_choice"]
 input: {"type":"object","properties":{"verbose":{"type":"boolean","description":"是否输出全部组合结果"}}}

@@ -10,7 +10,8 @@ category: other
 side_effects: none
 lang: typescript
 author: ZiFan1117
-verified: false
+verified: true
+tests: [{"input":{"day_master_element":"金","month_branch_wuxing":"金"},"expect":{"strength":"strong","favorable":["木","水"]}}]
 implementation_ref: "bazidiy @bazidiy/ontology: src/wuxing.ts（组合 atoms/rules/{strength,verdictChoice}）"
 deps: ["bazidiy.rules.strength","bazidiy.rules.verdict_choice","bazidiy.kb.wuxing_ganzhi"]
 input: {"type":"object","required":["day_master_element","month_branch_wuxing"],"properties":{"day_master_element":{"type":"string"},"month_branch_wuxing":{"type":"string"}}}

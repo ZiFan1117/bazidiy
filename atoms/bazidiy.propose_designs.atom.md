@@ -10,7 +10,8 @@ category: other
 side_effects: none
 lang: typescript
 author: ZiFan1117
-verified: false
+verified: true
+tests: [{"input":{"bead_ids":"","wrist_size":17,"day_master_element":"金","month_branch_wuxing":"金"},"expect":{"type":"design_proposal"}}]
 implementation_ref: "bazidiy @bazidiy/ontology: src/propose.ts propose + src/index.ts propose_designs 工具壳"
 deps: ["bazidiy.infer_verdict","bazidiy.select_beads","bazidiy.solve_styles"]
 input: {"type":"object","required":["day_master_element","month_branch_wuxing"],"properties":{"bead_ids":{"type":"string","description":"逗号分隔限定，空串=全部"},"wrist_size":{"type":"integer","default":17},"day_master_element":{"type":"string"},"month_branch_wuxing":{"type":"string"}}}

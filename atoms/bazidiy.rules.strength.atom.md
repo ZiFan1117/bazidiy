@@ -10,7 +10,7 @@ category: other
 side_effects: none
 lang: "rule-data + evaluator"
 author: ZiFan1117
-verified: false
+verified: true
 implementation_ref: "bazidiy @bazidiy/ontology: src/atoms/rules/strength.ts（数据 data/wuxing.ts strength_rules）"
 deps: ["bazidiy.kb.wuxing_ganzhi"]
 input: {"type":"object","required":["day_master_element","month_branch_wuxing"],"properties":{"day_master_element":{"type":"string","description":"单字五行：金/木/水/火/土"},"month_branch_wuxing":{"type":"string","description":"单字五行"}}}

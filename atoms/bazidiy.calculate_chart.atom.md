@@ -10,7 +10,7 @@ category: other
 side_effects: none
 lang: typescript
 author: ZiFan1117
-verified: false
+verified: true
 implementation_ref: "bazidiy @bazidiy/ontology: src/bazi.ts calculateBazi + src/index.ts calculate_bazi 工具壳"
 deps: ["bazidiy.kb.wuxing_ganzhi"]
 input: {"type":"object","required":["birth_date","birth_hour","gender"],"properties":{"birth_date":{"type":"string","description":"公历生日 YYYY-MM-DD"},"birth_hour":{"type":"string","description":"时辰名如 午时，或 0-23 数字字符串"},"gender":{"type":"string","enum":["男","女"]}}}

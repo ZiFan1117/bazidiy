@@ -10,7 +10,8 @@ category: other
 side_effects: none
 lang: "rule-data + evaluator"
 author: ZiFan1117
-verified: false
+verified: true
+tests: [{"input":{"strength":"strong","day_master_element":"金"},"expect":{"favorable":["木","水"]}}]
 implementation_ref: "bazidiy @bazidiy/ontology: src/atoms/rules/verdictChoice.ts（数据 data/wuxing.ts favorable/unfavorable_rules）"
 deps: ["bazidiy.kb.wuxing_ganzhi"]
 input: {"type":"object","required":["strength","day_master_element"],"properties":{"strength":{"type":"string","enum":["strong","weak"]},"day_master_element":{"type":"string"}}}
