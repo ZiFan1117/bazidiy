@@ -39,9 +39,9 @@
 
 | id | 一句话 | 本体内容（类/个体/属性） |
 |---|---|---|
-| `bazidiy.kb.wuxing_ganzhi` | 五行/干支/节气基础词汇是什么 | 类：五行元素/天干/地支/时节；个体：木火土金水、甲…癸、子…亥；对象属性：生(generates)、克(restricts)（OWL/Turtle） |
+| `bazidiy.kb.wuxing_ganzhi` | 五行/干支/节气基础词汇是什么 | Ossie 合并篇：ontology.yaml + wuxing_catalog.semantic.yaml + data/wuxing_*.sql(SQLite)；生克关系/词表由 DB 生成 vocab |
 | `bazidiy.kb.bead_catalog` | 珠子库里有哪些珠子、各自什么样 | Apache Ossie：概念/关系/requires 在 ontology.yaml（合并篇），dataset/字段在 bead_catalog.semantic.yaml，33 珠实例在 SQLite(data/*.sql)；引擎绑定由 DB 生成 |
-| `bazidiy.kb.style_library` | 款式结构是什么 | 类：款式/槽位/角色；个体：B-01…B-10；约束属性：允许变体、直径范围、隔片径映射（OWL/Turtle） |
+| `bazidiy.kb.style_library` | 款式结构是什么 | Apache Ossie：Style/Slot 概念在 ontology.yaml（合并篇），款式/槽位/约束/隔片径在 style_catalog.semantic.yaml + data/style_*.sql；引擎 Style[] 由 DB 生成 |
 
 ### 规则（primitive · 带 IRI 判据数据 + 轻量求值）
 
@@ -96,9 +96,9 @@ rules.* / kb.bead_catalog / kb.style_library → kb.wuxing_ganzhi（术语引用
 
 | kb | 载体 | 现状 |
 |---|---|---|
-| wuxing-ganzhi | OWL/Turtle（kb/wuxing-ganzhi.ttl）→ src/kb/vocab.ts | 词库（生克/干支/节气） |
-| bead-catalog | **Apache Ossie**：kb/ossie/ontology.yaml（合并篇） + bead_catalog.semantic.yaml + data/*.sql(SQLite 实例) → src/kb/beadCatalog.ts；kb/bead-catalog.ttl 为可选导出 | 已迁移（v0.2.0.dev0，官方 validator 双闸 PASS） |
-| style-library | OWL/Turtle（kb/style-library.ttl）→ src/kb/styleLibrary.ts | 款式/隔片映射 |
+| wuxing-ganzhi | Apache Ossie：ontology.yaml（合并篇） + wuxing_catalog.semantic.yaml + data/wuxing_*.sql → src/kb/vocab.ts；kb/wuxing-ganzhi.ttl 为可选导出 | 已迁移（官方 validator PASS） |
+| bead-catalog | Apache Ossie：ontology.yaml（合并篇） + bead_catalog.semantic.yaml + data/bead_*.sql → src/kb/beadCatalog.ts；kb/bead-catalog.ttl 为可选导出 | 已迁移（官方 validator PASS） |
+| style-library | Apache Ossie：ontology.yaml（Style/Slot） + style_catalog.semantic.yaml + data/style_*.sql → src/kb/styleLibrary.ts；kb/style-library.ttl 为可选导出 | 已迁移（官方 validator PASS；引擎 Style[] 还原全等） |
 
 ## 6. 对软件原子市场的对接
 
@@ -113,14 +113,14 @@ rules.* / kb.bead_catalog / kb.style_library → kb.wuxing_ganzhi（术语引用
 bazidiy-split-drafts/
 ├─ SPLIT.md                       本文件
 ├─ build-atoms.mjs                生成器（改一处可整体重出）
-├─ kb/wuxing-ganzhi.ttl           OWL/Turtle 词库本体
-├─ kb/style-library.ttl           OWL/Turtle 样式库本体
-├─ kb/ossie/ontology.yaml（合并篇）    Apache Ossie：珠子本体（概念/关系/requires）
+├─ kb/ossie/ontology.yaml（合并篇）    Apache Ossie：五行/干支/节气 + 珠 + 款式（概念/关系/requires）
 ├─ kb/ossie/bead_catalog.semantic.yaml  Apache Ossie：珠子数据契约（dataset/字段/ai_context）
 ├─ kb/ossie/data/bead_schema.sql + bead_seed.sql  珠子实例（SQLite 种子，33 珠/31 珠料）
 ├─ kb/ossie/wuxing_catalog.semantic.yaml  Apache Ossie：五行/干支/节气 数据契约
 ├─ kb/ossie/data/wuxing_schema.sql + wuxing_seed.sql  干支/节气实例（SQLite 种子）
-├─ kb/bead-catalog.ttl            珠子库 OWL 导出物（非权威）
+├─ kb/ossie/style_catalog.semantic.yaml Apache Ossie：款式/槽位/约束/隔片径 数据契约
+├─ kb/ossie/data/style_schema.sql + style_seed.sql  款式实例（SQLite 种子，4 款式/9 槽位/3 约束）
+├─ kb/*-catalog.ttl / wuxing-ganzhi.ttl  OWL 导出物（非权威）
 ├─ atoms/<id>.atom.md ×18        原子文档（v0.3 整份式：YAML frontmatter 元数据 + 正文四节四图；verified:false）
 └─ details/<id>.detail.json ×18  结构化 JSON 边车（language/intent/when_to_use/deps/io/diagrams/when/example）
 ```
