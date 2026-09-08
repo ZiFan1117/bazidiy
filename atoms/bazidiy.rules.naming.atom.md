@@ -10,7 +10,8 @@ category: other
 side_effects: none
 lang: "rule-data + evaluator"
 author: ZiFan1117
-verified: false
+verified: true
+tests: [{"input":{"name":"玛瑙"},"expect":{"ok":false}},{"input":{"name":"白银","diameter":10},"expect":{"variant":"round"}}]
 implementation_ref: "bazidiy @bazidiy/ontology: src/atoms/naming.ts（VALID_NAMES + resolveVariant 消歧）"
 deps: ["bazidiy.kb.bead_catalog"]
 input: {"type":"object","properties":{"name":{"type":"string","description":"珠子名（须全称）"},"diameter":{"type":"integer"}}}
