@@ -4,7 +4,7 @@
  * @module @bazidiy/ontology/atoms/rules/consistency
  */
 import { wuxing as wuxingData } from '../../data/wuxing.ts'
-import { loadRelations } from './relations.ts'
+import { loadRelations } from '../rules.relations/index.ts'
 import { judgeStrength } from './strength.ts'
 import { chooseVerdict } from './verdictChoice.ts'
 
