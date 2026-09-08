@@ -1,5 +1,7 @@
 @prefix bzd: <https://bazidiy.example/ontology#> .
 
+# 款式 ttl = 由 kb/ossie(SQLite) 导出的 OWL 视图（非权威）
+
 bzd:StyleLibraryOntology a owl:Ontology .
 
 bzd:Style a owl:Class .
