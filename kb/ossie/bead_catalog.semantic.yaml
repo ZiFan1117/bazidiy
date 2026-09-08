@@ -1,0 +1,154 @@
+# BaziDIY 珠子库 · Apache Ossie semantic model（数据接口契约）
+# 只声明 dataset/字段语义/关系/ai_context；实例数据在 data/*.sql（SQLite）。
+version: 0.2.0.dev0
+semantic_model:
+  - name: BazidiyBeadCatalog
+    description: 珠子手串领域数据模型：珠料、变体、珠子实例（含五行/直径/颜色/图）
+    ai_context:
+      instructions: 该模型描述 BaziDIY 手串珠子库；查询按数据集 beads/materials/variants 走。
+      synonyms:
+        - 珠子
+        - 手串
+        - 珠料
+        - bracelet
+        - bead
+      examples:
+        - 按五行统计有多少颗珠
+        - 列出所有隔片珠
+    datasets:
+      - name: materials
+        source: bazidiy.db.materials
+        description: 珠料（材料键唯一；如 白银/南红/小叶紫檀）
+        primary_key:
+          - id
+        fields:
+          - name: id
+            expression:
+              dialects:
+                - dialect: ANSI_SQL
+                  expression: id
+            datatype: String
+            description: 材料键（唯一，如 baiyin）
+          - name: name
+            expression:
+              dialects:
+                - dialect: ANSI_SQL
+                  expression: name
+            datatype: String
+            description: 材料名
+      - name: variants
+        source: bazidiy.db.variants
+        description: 珠的形态变体
+        primary_key:
+          - id
+        fields:
+          - name: id
+            expression:
+              dialects:
+                - dialect: ANSI_SQL
+                  expression: id
+            datatype: String
+            description: 变体（round/buddha/spacer/barrel/pixiu）
+      - name: beads
+        source: bazidiy.db.beads
+        description: 33 颗珠实例 = 珠料 × 变体
+        primary_key:
+          - id
+        fields:
+          - name: id
+            expression:
+              dialects:
+                - dialect: ANSI_SQL
+                  expression: id
+            datatype: String
+            description: 珠实例唯一标识（如 nanhong_round）
+          - name: bead_id
+            expression:
+              dialects:
+                - dialect: ANSI_SQL
+                  expression: bead_id
+            datatype: String
+            description: 材料键（同 materials.id）
+          - name: material
+            expression:
+              dialects:
+                - dialect: ANSI_SQL
+                  expression: material
+            datatype: String
+            description: 材料引用
+          - name: variant
+            expression:
+              dialects:
+                - dialect: ANSI_SQL
+                  expression: variant
+            datatype: String
+            description: 变体引用
+          - name: name
+            expression:
+              dialects:
+                - dialect: ANSI_SQL
+                  expression: name
+            datatype: String
+            description: 展示名（如 南红）
+          - name: wuxing
+            expression:
+              dialects:
+                - dialect: ANSI_SQL
+                  expression: wuxing
+            datatype: String
+            description: 属五行（木/火/土/金/水）
+            ai_context:
+              synonyms:
+                - 五行
+                - element
+                - wuxing
+          - name: diameters
+            expression:
+              dialects:
+                - dialect: ANSI_SQL
+                  expression: diameters
+            datatype: String
+            description: 可用直径(mm) JSON 数组，如 [6,8,10,12]
+          - name: color
+            expression:
+              dialects:
+                - dialect: ANSI_SQL
+                  expression: color
+            datatype: String
+            description: 主题色 #RRGGBB
+          - name: image
+            expression:
+              dialects:
+                - dialect: ANSI_SQL
+                  expression: image
+            datatype: String
+            description: 珠图地址（/beads 前缀相对路径）
+          - name: image_w
+            expression:
+              dialects:
+                - dialect: ANSI_SQL
+                  expression: image_w
+            datatype: Integer
+          - name: image_h
+            expression:
+              dialects:
+                - dialect: ANSI_SQL
+                  expression: image_h
+            datatype: Integer
+    relationships:
+      - name: beads_material
+        from: beads
+        to: materials
+        from_columns:
+          - material
+        to_columns:
+          - id
+      - name: beads_variant
+        from: beads
+        to: variants
+        from_columns:
+          - variant
+        to_columns:
+          - id
+    metrics: []
+    custom_extensions: []

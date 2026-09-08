@@ -1,5 +1,7 @@
 @prefix bzd: <https://bazidiy.example/ontology#> .
 
+# 珠子库 ttl = 由 kb/ossie(SQLite) 导出的 OWL 视图（非权威；权威见 kb/ossie/ontology+semantic_model+data）
+
 bzd:BeadCatalogOntology a owl:Ontology .
 
 bzd:Bead a owl:Class .
