@@ -8,8 +8,9 @@ const ROOT = join(here, '..')
 const py = process.env.PYTHON ?? (process.platform === 'win32' ? 'D:/dsh/Python312/python.exe' : 'python3')
 const validate = join('D:/Ontology/ossie', 'validation', 'validate.py') // Apache ossie 本地检出
 const checks = [
-  { doc: join(ROOT, 'kb', 'ossie', 'bead.ontology.yaml'), schema: join('D:/Ontology/ossie', 'ontology', 'ontology.json') },
+  { doc: join(ROOT, 'kb', 'ossie', 'ontology.yaml'), schema: join('D:/Ontology/ossie', 'ontology', 'ontology.json') },
   { doc: join(ROOT, 'kb', 'ossie', 'bead_catalog.semantic.yaml'), schema: join('D:/Ontology/ossie', 'core-spec', 'ossie-schema.json') },
+  { doc: join(ROOT, 'kb', 'ossie', 'wuxing_catalog.semantic.yaml'), schema: join('D:/Ontology/ossie', 'core-spec', 'ossie-schema.json') },
 ]
 let ok = true
 for (const c of checks) {

@@ -1,10 +1,12 @@
-# BaziDIY 珠子领域本体 · Apache Ossie ontology 规范 (v0.2.0.dev0)
-# 只声明"概念/关系/约束"（TBox），不含实例；实例数据见 data/*.sql（SQLite source）。
+# BaziDIY 领域本体（合并篇）· Apache Ossie ontology 规范 (v0.2.0.dev0)
+# 涵盖：五行/干支/节气 + 珠料×变体=珠子。实例数据见 data/*.sql（SQLite）。
+# 说明：Ossie 不支持跨文档引用概念，故合并为单篇自包含 ontology，避免 WuxingElement 重复声明。
 version: 0.2.0.dev0
-name: BazidiyBeadOntology
-description: 八字手串珠子领域本体：珠料×变体=珠实例，属五行，直径/颜色值类型约束。
+name: BazidiyOntology
+description: 八字手串领域本体：五行/干支/节气、珠料×变体=珠实例，直径/颜色值类型约束。
 
 ontology:
+  # ---------------- 五行 · 干支 · 节气 ----------------
   - concept: WuxingElement
     type: EntityType
     description: 五行元素（木/火/土/金/水）
@@ -26,6 +28,17 @@ ontology:
         verbalizes:
           - "{WuxingElement} 克 {WuxingElement:target}"
 
+  - concept: HeavenlyStem
+    type: EntityType
+    description: 天干（甲…癸）；其五行归属见数据行 element 列
+  - concept: EarthlyBranch
+    type: EntityType
+    description: 地支（子…亥）；其五行归属见数据行 element 列
+  - concept: SeasonNode
+    type: EntityType
+    description: 节气月分界节点（立春…小寒）；月/日见数据行
+
+  # ---------------- 珠子 ----------------
   - concept: BeadMaterial
     type: EntityType
     description: 珠料（如 白银、南红、小叶紫檀）；材料与变体共同决定一颗珠实例

@@ -8,10 +8,17 @@ const here = dirname(fileURLToPath(import.meta.url))
 export const DATA_DIR = join(here, '..', 'kb', 'ossie', 'data')
 export const DB_PATH = join(DATA_DIR, 'bazidiy.db')
 
+const SQL_FILES = [
+  ['bead_schema.sql', 'bead_seed.sql'],
+  ['wuxing_schema.sql', 'wuxing_seed.sql'],
+]
+
 export function openBeadDb() {
   const db = new DatabaseSync(DB_PATH)
-  db.exec(readFileSync(join(DATA_DIR, 'bead_schema.sql'), 'utf8'))
-  db.exec(readFileSync(join(DATA_DIR, 'bead_seed.sql'), 'utf8'))
+  for (const [schema, seed] of SQL_FILES) {
+    db.exec(readFileSync(join(DATA_DIR, schema), 'utf8'))
+    db.exec(readFileSync(join(DATA_DIR, seed), 'utf8'))
+  }
   return db
 }
 

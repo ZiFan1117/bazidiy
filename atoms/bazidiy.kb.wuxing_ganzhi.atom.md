@@ -5,13 +5,13 @@ version: 0.1.0
 intent: "提供五行、天干、地支、节气的概念与个体及生克关系本体"
 when_to_use: "适用：任何需要唯一引用 五行/干支/节气 术语的规则、引擎或外部系统；获取 生/克 邻接以推喜忌。"
 language: zh-CN
-tags: ["ontology","bazi","wuxing","ganzhi","rdf"]
+tags: ["ontology","bazi","wuxing","ganzhi","ossie"]
 category: data
 side_effects: none
-lang: "turtle (owl)"
+lang: "ossie yaml + sqlite"
 author: ZiFan1117
 verified: false
-implementation_ref: "bazidiy @bazidiy/ontology: src/bazi.ts 词表 + src/data/wuxing.ts elements/generates/restricts；草案 kb/wuxing-ganzhi.ttl"
+implementation_ref: "bazidiy @bazidiy/ontology: kb/ossie/ontology.yaml（五行/干支/节气概念）+ wuxing_catalog.semantic.yaml + data/wuxing_*.sql（Apache Ossie v0.2）→ tools/gen-bindings.mjs 生成 src/kb/vocab.ts"
 input: {"type":"object","properties":{"term":{"type":"string","description":"可选：术语名或 IRI，如 木 或 bzd:木；缺省返回全量词表"}}}
 output: {"type":"object","properties":{"elements":{"type":"array","items":{"type":"string"}},"stems":{"type":"array","items":{"type":"string"}},"branches":{"type":"array","items":{"type":"string"}},"season_nodes":{"type":"array","items":{"type":"object"}},"generates":{"type":"object"},"restricts":{"type":"object"}}}
 ---
@@ -19,17 +19,17 @@ output: {"type":"object","properties":{"elements":{"type":"array","items":{"type
 
 提供五行、天干、地支、节气的概念与个体及生克关系本体。确定性实现：不调用 LLM、不依赖网络、可重复可测试（CPU 上“算账”）。
 
-词库本体是全系统唯一事实源：五行/天干/地支/时节以 RDF 个体存在；生/克建模为 WuxingElement 上的对象属性（含逆关系），供旺衰/喜忌规则与排盘以 IRI 引用，杜绝字符串重复。
+词库遵循 Apache Ossie（合并篇 ontology.yaml）：五行元素关系（生/克）与天干/地支/节气作为概念+实例行存于 SQLite，经 gen-bindings 生成只读绑定供排盘与旺衰/喜忌引用，杜绝字符串重复。
 
 ## 怎么实现
 
 **1) 数据流转（flowchart：一份数据从输入到输出怎么走）**
 ```mermaid
 flowchart LR
-S[turtle: wuxing-ganzhi.ttl] --> L[load .ttl 解析]
-L --> M[materialize: IRI 索引 + 逆关系 generatedBy/restrictedBy]
-Q[term 查询] --> M
-M --> O[个体 + generates/restricts 子图 JSON]
+S[kb/ossie ontology.yaml + data/wuxing_*.sql] --> L[gen-ossie-db: SQLite 建库+自检]
+L --> B[gen-bindings: 查询→src/kb/vocab.ts]
+Q[term 查询] --> B
+B --> O[元素/干支/节气 + 生克]
 ```
 
 **2) 模块分解（classDiagram：代码/类怎么划分与归属）**

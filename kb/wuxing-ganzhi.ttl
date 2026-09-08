@@ -1,5 +1,7 @@
 @prefix bzd: <https://bazidiy.example/ontology#> .
 
+# 五行/干支/节气 ttl = 由 kb/ossie(SQLite) 导出的 OWL 视图（非权威）
+
 bzd:WuxingGanzhiOntology a owl:Ontology .
 
 bzd:WuxingElement a owl:Class .
