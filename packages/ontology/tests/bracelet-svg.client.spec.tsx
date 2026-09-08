@@ -4,7 +4,7 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { cleanup, render } from '@testing-library/react'
 import type { ToolResultNode } from '@deepseek-ai/dsh-client-runtime/client'
-import { BraceletSvg } from '../src/client/BraceletSvg.tsx'
+import { BraceletSvg } from '../src/atoms/ui.svg_render/BraceletSvg.tsx'
 
 afterEach(cleanup)
 
