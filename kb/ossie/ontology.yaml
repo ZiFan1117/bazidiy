@@ -98,10 +98,44 @@ ontology:
       - String
     description: 款式编号（B-01…B-10）
 
+  - concept: SlotRole
+    type: ValueType
+    extends:
+      - String
+    description: 槽位角色（main/body/spacer/wuxing）
+    requires:
+      - "SlotRole == 'main' OR SlotRole == 'body' OR SlotRole == 'spacer' OR SlotRole == 'wuxing'"
+
   - concept: Slot
     type: EntityType
-    description: 款式内的一个槽位（角色 main/body/spacer/wuxing，槽位号含负号如 -1）
+    description: 款式内的一个槽位（含允许的变体与直径上/下限）
+    requires:
+      - "has_min_dia <= has_max_dia"
+      - "has_min_dia >= 4"
+      - "has_max_dia <= 15"
+      - "has_role"
     relationships:
+      - name: has_role
+        description: 槽位角色
+        roles:
+          - concept: SlotRole
+        multiplicity: ManyToOne
+        verbalizes:
+          - "{Slot} 的角色是 {SlotRole}"
+      - name: has_min_dia
+        description: 允许最小直径（下限）
+        roles:
+          - concept: DiameterMm
+        multiplicity: ManyToOne
+        verbalizes:
+          - "{Slot} 直径下限 {DiameterMm}mm"
+      - name: has_max_dia
+        description: 允许最大直径（上限）
+        roles:
+          - concept: DiameterMm
+        multiplicity: ManyToOne
+        verbalizes:
+          - "{Slot} 直径上限 {DiameterMm}mm"
       - name: allows
         description: 该槽位允许的变体
         roles:
