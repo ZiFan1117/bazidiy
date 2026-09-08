@@ -11,7 +11,7 @@ side_effects: none
 lang: typescript
 author: ZiFan1117
 verified: false
-implementation_ref: "bazidiy @bazidiy/ontology: src/index.ts generate_design 工具壳"
+implementation_ref: "bazidiy @bazidiy/ontology: src/atoms/generateDesign.ts（parse+naming 定稿）"
 deps: ["bazidiy.parse_slots","bazidiy.rules.naming","bazidiy.kb.bead_catalog"]
 input: {"type":"object","required":["style_name","beads","summary"],"properties":{"style_name":{"type":"string","description":"款式编号 B-01/02/03/10"},"beads":{"type":"string"},"wrist_size":{"type":"string"},"summary":{"type":"string","description":"≤50 字"},"rationale":{"type":"string"}}}
 output: {"type":"object","properties":{"type":{"type":"string","const":"design_result"},"style_name":{"type":"string"},"slots":{"type":"array","items":{"type":"object"}},"wrist_size":{"type":"string"},"summary":{"type":"string"},"rationale":{"type":"string"},"note":{"type":"string"}}}
