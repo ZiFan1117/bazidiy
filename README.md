@@ -36,23 +36,38 @@ dsh 内核（agent-loop + session-log + tools 注册表 + LLM 适配 + Web UI）
 
 ```
 packages/
-  ontology/                  # 本体插件（单包，含 host 半区 + client 半区）
-    src/                     # host 半区：工具、规则引擎、数据
-      index.ts               # 注册 5 个工具
-      bazi.ts                # 八字排盘（纯日历数学）
-      wuxing.ts              # 旺衰 / 喜用神推理
-      solver.ts              # 款式求解（珠子组合枚举）
-      propose.ts             # 本体一链推理
-      designs.ts             # 保存/恢复方案（storage domain）
+  ontology/                  # 本体插件（单包，host+client 半区）
+    src/
+      index.ts               # 注册 5 个 dsh 工具（薄壳，逻辑在 atoms）
+      bazi.ts                # 八字排盘（calculate_chart 引擎）
+      solver.ts              # 款式求解（solve_styles）
+      propose.ts             # 一链推理（propose_designs 组合）
+      wuxing.ts              # infer_verdict（组合 rules 原子）
+      designs.ts             # 方案存取（design_memory，storage domain）
       assets.ts              # /beads 静态路由 + catalog
-      data/                  # 珠子库 / 五行规则 / 款式模板（schema v3）
-      client/                # client 半区：SVG 渲染 + 换珠子编辑器
+      atoms/                 # 原子真模块（与商店原子 1:1，可独立 import）
+        naming.ts            # 命名/消歧（rules.naming）
+        parseSlots.ts        # 珠序解析（parse_slots）
+        selectBeads.ts       # 筛珠（select_beads）
+        generateDesign.ts    # 定稿（generate_design）
+        rules/               # relations/strength/verdictChoice/consistency
+      kb/                    # 由 kb/ossie(SQLite) 生成的只读绑定（beadCatalog/vocab/styleLibrary）
+      client/                # SVG 渲染 + 换珠编辑器（ui 原子）
     assets/beads/            # 35 张珠子图片
-    tests/                   # 7 个测试文件
-  presets/
-    bazidiy/                 # preset：手串定制助手角色
-      agent.cordis.yml       # persona + 工具集 + 严格流程
-      preset.yml             # 显示元数据
+    tests/
+kb/                          # 本体单一事实源（Apache Ossie v0.2）
+  ossie/
+    ontology.yaml            # 合并篇：概念/关系/requires（五行+干支节气+珠+款式）
+    *_catalog.semantic.yaml  # bead / wuxing / style 数据契约（dataset+ai_context）
+    data/*.sql               # 实例种子（SQLite：33 珠/干支节气/款式槽位）
+  *.ttl                      # OWL 导出物（非权威；由 gen-bindings 生成）
+tools/
+  gen-ossie-db.mjs           # 建库 + 数据自检（直径/基数/唯一/引用）
+  gen-bindings.mjs           # DB → src/kb/*.ts 绑定 + ttl 导出
+  ossie-validate.mjs         # Apache Ossie 官方 validator（4 文档闸）
+  contract-check.mjs         # 原子契约测试（verified 依据）
+atoms/                       # 18 份原子文档（software-atom-market v0.3 .atom.md）
+presets/bazidiy/
 ```
 
 ## 五个工具
