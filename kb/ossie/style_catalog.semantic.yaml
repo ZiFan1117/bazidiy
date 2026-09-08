@@ -1,0 +1,154 @@
+# BaziDIY 款式库 · Apache Ossie semantic model（数据接口契约）
+# 款式/槽位/约束/隔片径 拆为行存 SQLite；gen-bindings 据此还原引擎 Style[]（行为全等）。
+version: 0.2.0.dev0
+semantic_model:
+  - name: BazidiyStyleCatalog
+    description: 手串款式解空间：款式、槽位（角色/直径范围/允许变体）、款式约束、隔片径映射
+    ai_context:
+      instructions: 款式求解的声明来源；读取 styles/slots/style_constraints/spacer_map 数据集即可还原每款结构。
+      synonyms:
+        - 款式
+        - 槽位
+        - 隔片
+        - style
+      examples:
+        - B-02 有哪些槽位、主珠直径下限
+        - 体珠 8mm 用多大隔片
+    datasets:
+      - name: styles
+        source: bazidiy.db.styles
+        description: 款式
+        primary_key:
+          - id
+        fields:
+          - name: id
+            expression:
+              dialects:
+                - dialect: ANSI_SQL
+                  expression: id
+            datatype: String
+            description: 款式编号（B-01…B-10）
+          - name: name
+            expression:
+              dialects:
+                - dialect: ANSI_SQL
+                  expression: name
+            datatype: String
+      - name: slots
+        source: bazidiy.db.slots
+        description: 款式槽位
+        primary_key:
+          - style_id
+          - slot
+        fields:
+          - name: style_id
+            expression:
+              dialects:
+                - dialect: ANSI_SQL
+                  expression: style_id
+            datatype: String
+          - name: slot
+            expression:
+              dialects:
+                - dialect: ANSI_SQL
+                  expression: slot
+            datatype: Integer
+          - name: role
+            expression:
+              dialects:
+                - dialect: ANSI_SQL
+                  expression: role
+            datatype: String
+          - name: min_dia
+            expression:
+              dialects:
+                - dialect: ANSI_SQL
+                  expression: min_dia
+            datatype: Integer
+          - name: max_dia
+            expression:
+              dialects:
+                - dialect: ANSI_SQL
+                  expression: max_dia
+            datatype: Integer
+          - name: allowed_variants
+            expression:
+              dialects:
+                - dialect: ANSI_SQL
+                  expression: allowed_variants
+            datatype: String
+            description: 允许变体 JSON 数组
+      - name: style_constraints
+        source: bazidiy.db.style_constraints
+        description: 款式约束声明
+        primary_key:
+          - style_id
+          - name
+        fields:
+          - name: style_id
+            expression:
+              dialects:
+                - dialect: ANSI_SQL
+                  expression: style_id
+            datatype: String
+          - name: name
+            expression:
+              dialects:
+                - dialect: ANSI_SQL
+                  expression: name
+            datatype: String
+          - name: type
+            expression:
+              dialects:
+                - dialect: ANSI_SQL
+                  expression: type
+            datatype: String
+            description: diameter/spacer_map/same_bead…
+          - name: variables
+            expression:
+              dialects:
+                - dialect: ANSI_SQL
+                  expression: variables
+            datatype: String
+            description: 涉及变量 JSON 数组
+          - name: params
+            expression:
+              dialects:
+                - dialect: ANSI_SQL
+                  expression: params
+            datatype: String
+            description: 参数 JSON 对象
+          - name: reason
+            expression:
+              dialects:
+                - dialect: ANSI_SQL
+                  expression: reason
+            datatype: String
+      - name: spacer_map
+        source: bazidiy.db.spacer_map
+        description: 隔片-体珠径映射
+        primary_key:
+          - body
+        fields:
+          - name: body
+            expression:
+              dialects:
+                - dialect: ANSI_SQL
+                  expression: body
+            datatype: Integer
+          - name: spacer
+            expression:
+              dialects:
+                - dialect: ANSI_SQL
+                  expression: spacer
+            datatype: Integer
+    relationships:
+      - name: style_slots
+        from: styles
+        to: slots
+        from_columns:
+          - id
+        to_columns:
+          - style_id
+    metrics: []
+    custom_extensions: []
