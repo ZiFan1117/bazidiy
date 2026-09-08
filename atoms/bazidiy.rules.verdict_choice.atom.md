@@ -11,7 +11,7 @@ side_effects: none
 lang: "rule-data + evaluator"
 author: ZiFan1117
 verified: false
-implementation_ref: "bazidiy @bazidiy/ontology: src/data/wuxing.ts favorable_rules/unfavorable_rules"
+implementation_ref: "bazidiy @bazidiy/ontology: src/atoms/rules/verdictChoice.ts（数据 data/wuxing.ts favorable/unfavorable_rules）"
 deps: ["bazidiy.kb.wuxing_ganzhi"]
 input: {"type":"object","required":["strength","day_master_element"],"properties":{"strength":{"type":"string","enum":["strong","weak"]},"day_master_element":{"type":"string"}}}
 output: {"type":"object","properties":{"favorable":{"type":"array","items":{"type":"string"}},"unfavorable":{"type":"array","items":{"type":"string"}},"reasons":{"type":"array","items":{"type":"string"}}}}
