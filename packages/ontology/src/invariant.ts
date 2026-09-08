@@ -2,7 +2,7 @@
 
 import type { Context } from '@deepseek-ai/cordis'
 import type { InvariantFailure, InvariantInstaller } from '@deepseek-ai/dsh-invariants'
-import { validateConsistency } from './wuxing.ts'
+import { validateConsistency } from './atoms/infer_verdict/index.ts'
 
 const PACKAGE_NAME = '@bazidiy/ontology'
 
