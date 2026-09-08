@@ -4,9 +4,9 @@
  * @module @bazidiy/ontology/wuxing
  */
 
-import { judgeStrength } from '../rules/strength.ts'
-import { chooseVerdict } from '../rules/verdictChoice.ts'
-import { checkConsistency } from '../rules/consistency.ts'
+import { judgeStrength } from '../rules.strength/index.ts'
+import { chooseVerdict } from '../rules.verdict_choice/index.ts'
+import { checkConsistency } from '../rules.consistency/index.ts'
 import { loadRelations } from '../rules.relations/index.ts'
 import type { WuxingVerdict } from '../bazidiy.framework/contracts.ts'
 
