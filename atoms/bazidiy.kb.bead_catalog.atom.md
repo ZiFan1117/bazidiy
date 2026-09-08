@@ -11,7 +11,7 @@ side_effects: none
 lang: "ossie yaml + sqlite"
 author: ZiFan1117
 verified: false
-implementation_ref: "bazidiy @bazidiy/ontology: kb/ossie/bead.ontology.yaml + bead_catalog.semantic.yaml + data/*.sql（Apache Ossie v0.2）→ tools/gen-ossie-db.mjs/gen-bindings.mjs 生成绑定；资源 assets/beads/*.png"
+implementation_ref: "bazidiy @bazidiy/ontology: kb/ossie/ontology.yaml（合并篇）+ bead_catalog.semantic.yaml + data/*.sql（Apache Ossie v0.2）→ tools/gen-ossie-db.mjs/gen-bindings.mjs 生成绑定；资源 assets/beads/*.png"
 deps: ["bazidiy.kb.wuxing_ganzhi"]
 input: {"type":"object","properties":{"bead_id":{"type":"string","description":"可选：珠 id，如 xiaoye-zitan_round"},"wuxing":{"type":"string","description":"可选：五行筛选"}}}
 output: {"type":"object","properties":{"beads":{"type":"array","items":{"type":"object","properties":{"id":{"type":"string"},"name":{"type":"string"},"wuxing":{"type":"string"},"variant":{"type":"string"},"diameters":{"type":"array","items":{"type":"integer"}},"color":{"type":"string"},"image":{"type":"string"}}}}}}
