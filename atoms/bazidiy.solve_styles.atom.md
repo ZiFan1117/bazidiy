@@ -10,7 +10,8 @@ category: other
 side_effects: none
 lang: typescript
 author: ZiFan1117
-verified: false
+verified: true
+tests: [{"input":{"wrist_size":17},"expect":{"proposals":true}}]
 implementation_ref: "bazidiy @bazidiy/ontology: src/solver.ts（beadCount + 约束枚举）"
 deps: ["bazidiy.kb.style_library","bazidiy.kb.bead_catalog"]
 input: {"type":"object","required":["suitable_beads","wrist_size"],"properties":{"suitable_beads":{"type":"array","items":{"type":"object"}},"wrist_size":{"type":"integer","description":"腕围 cm"},"max_proposals":{"type":"integer"}}}
