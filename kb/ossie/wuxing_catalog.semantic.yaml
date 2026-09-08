@@ -1,0 +1,121 @@
+# BaziDIY 五行/干支/节气 · Apache Ossie semantic model（数据接口契约）
+# 实例在 data/wuxing_*.sql（SQLite）；供排盘/旺衰引用。
+version: 0.2.0.dev0
+semantic_model:
+  - name: BazidiyWuxingGanzhi
+    description: 五行/干支/节气 词库：元素生克、天干地支的五行归属与序、节气月分界
+    ai_context:
+      instructions: 五行排盘与旺衰喜忌的基础词库；查询按 elements/stems/branches/seasons 数据集。
+      synonyms:
+        - 五行
+        - 天干
+        - 地支
+        - 节气
+        - wuxing
+      examples:
+        - 木生什么克什么
+        - 庚的五行是什么
+        - 某月是否已过立春
+    datasets:
+      - name: elements
+        source: bazidiy.db.elements
+        description: 五行元素及生/克
+        primary_key:
+          - name
+        fields:
+          - name: name
+            expression:
+              dialects:
+                - dialect: ANSI_SQL
+                  expression: name
+            datatype: String
+            description: 元素（木/火/土/金/水）
+          - name: generates
+            expression:
+              dialects:
+                - dialect: ANSI_SQL
+                  expression: generates
+            datatype: String
+            description: 生（我生谁）
+          - name: restricts
+            expression:
+              dialects:
+                - dialect: ANSI_SQL
+                  expression: restricts
+            datatype: String
+            description: 克（我克谁）
+      - name: stems
+        source: bazidiy.db.stems
+        description: 十天干及其五行归属
+        primary_key:
+          - name
+        fields:
+          - name: name
+            expression:
+              dialects:
+                - dialect: ANSI_SQL
+                  expression: name
+            datatype: String
+          - name: ord
+            expression:
+              dialects:
+                - dialect: ANSI_SQL
+                  expression: ord
+            datatype: Integer
+          - name: element
+            expression:
+              dialects:
+                - dialect: ANSI_SQL
+                  expression: element
+            datatype: String
+      - name: branches
+        source: bazidiy.db.branches
+        description: 十二地支及其五行归属
+        primary_key:
+          - name
+        fields:
+          - name: name
+            expression:
+              dialects:
+                - dialect: ANSI_SQL
+                  expression: name
+            datatype: String
+          - name: ord
+            expression:
+              dialects:
+                - dialect: ANSI_SQL
+                  expression: ord
+            datatype: Integer
+          - name: element
+            expression:
+              dialects:
+                - dialect: ANSI_SQL
+                  expression: element
+            datatype: String
+      - name: seasons
+        source: bazidiy.db.seasons
+        description: 节气月分界（月份边界）
+        primary_key:
+          - name
+        fields:
+          - name: name
+            expression:
+              dialects:
+                - dialect: ANSI_SQL
+                  expression: name
+            datatype: String
+          - name: month
+            expression:
+              dialects:
+                - dialect: ANSI_SQL
+                  expression: month
+            datatype: Integer
+          - name: day
+            expression:
+              dialects:
+                - dialect: ANSI_SQL
+                  expression: day
+            datatype: Integer
+    relationships: []
+    metrics: []
+    custom_extensions: []
