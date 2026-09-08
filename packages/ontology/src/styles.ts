@@ -5,8 +5,9 @@
 import { styles as stylesData } from './data/styles.ts'
 import type { Bead } from './types.ts'
 
-/** 闅旂墖鐩村緞鏄犲皠锛堟墜涓查€氱敤锛夈€?*/
-export const SPACER_MAP: Record<string, number> = { '6': 4, '8': 4, '10': 5, '12': 6 }
+/** 隔片直径映射。单一事实源：kb/style-library.ttl 的 spacerMap 个体 → styleLibrary 绑定的 spacer_diameter_map。 */
+const spacerMapRaw = (stylesData as { spacer_diameter_map?: Record<string, number> }).spacer_diameter_map ?? {}
+export const SPACER_MAP: Record<string, number> = spacerMapRaw
 
 export interface Position {
   slot: number
