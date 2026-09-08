@@ -35,40 +35,23 @@ dsh 内核（agent-loop + session-log + tools 注册表 + LLM 适配 + Web UI）
 ## 目录结构
 
 ```
-packages/
-  ontology/                  # 本体插件（单包，host+client 半区）
-    src/
-      index.ts               # 注册 5 个 dsh 工具（薄壳，逻辑在 atoms）
-      bazi.ts                # 八字排盘（calculate_chart 引擎）
-      solver.ts              # 款式求解（solve_styles）
-      propose.ts             # 一链推理（propose_designs 组合）
-      wuxing.ts              # infer_verdict（组合 rules 原子）
-      designs.ts             # 方案存取（design_memory，storage domain）
-      assets.ts              # /beads 静态路由 + catalog
-      atoms/                 # 原子真模块（与商店原子 1:1，可独立 import）
-        naming.ts            # 命名/消歧（rules.naming）
-        parseSlots.ts        # 珠序解析（parse_slots）
-        selectBeads.ts       # 筛珠（select_beads）
-        generateDesign.ts    # 定稿（generate_design）
-        rules/               # relations/strength/verdictChoice/consistency
-      kb/                    # 由 kb/ossie(SQLite) 生成的只读绑定（beadCatalog/vocab/styleLibrary）
-      client/                # SVG 渲染 + 换珠编辑器（ui 原子）
-    assets/beads/            # 35 张珠子图片
-    tests/
-kb/                          # 本体单一事实源（Apache Ossie v0.2）
-  ossie/
-    ontology.yaml            # 合并篇：概念/关系/requires（五行+干支节气+珠+款式）
-    *_catalog.semantic.yaml  # bead / wuxing / style 数据契约（dataset+ai_context）
-    data/*.sql               # 实例种子（SQLite：33 珠/干支节气/款式槽位）
-  *.ttl                      # OWL 导出物（非权威；由 gen-bindings 生成）
+atoms/                       # 【唯一真源】每个原子一个文件夹：文档+代码+测试+资源 同夹
+  bazidiy.kb/                # 知识本体原子：atom.md · impl/(绑定) · tests/ · assets/beads(35图)
+  bazidiy.calculate_chart/   #   · tools/
+  bazidiy.infer_verdict/     #  （…其余每个原子同构：atom.md · detail.json · impl/ · tests/）
+  …（共 17 个 bazidiy.* 原子）＋ bazidiy.plugin/   # 插件装配原子：impl/(壳代码) · pkg/(打包配置)
+  __shared/                  # 跨原子共享（bazidiy.framework 契约/判据 + 集成测试）
 tools/
-  gen-ossie-db.mjs           # 建库 + 数据自检（直径/基数/唯一/引用）
-  gen-bindings.mjs           # DB → src/kb/*.ts 绑定 + ttl 导出
+  sync-atoms.mjs             # 原子真源 → 组装 .build/ontology（src/_atoms + tests + assets + persona）
+  gen-ossie-db.mjs           # 建库+自检（源在 atoms/bazidiy.kb/kb/ossie/data）
+  gen-bindings.mjs           # DB → atoms/bazidiy.kb/impl 绑定 + kb/*.ttl
   ossie-validate.mjs         # Apache Ossie 官方 validator（4 文档闸）
-  contract-check.mjs         # 原子契约测试（verified 依据）
-atoms/                       # 18 份原子文档（software-atom-market v0.3 .atom.md）
-atoms/assistant_preset/
+  contract-check.mjs         # 原子契约回归（先跑 sync 组装 .build）
+.build/ontology              # 组装视图（gitignore；发布/打包输入）
+dist/                        # 产物（tgz）
 ```
+
+> 规则：**改代码/测试/资源只动 `atoms/<id>/…`**；发布/回归前 `node tools/sync-atoms.mjs`。桌面插件由组装视图打包，桌面端安装为快照不受重构影响。
 
 ## 五个工具
 
@@ -84,7 +67,7 @@ atoms/assistant_preset/
 
 ## 角色（preset）
 
-`atoms/assistant_preset/agent.cordis.yml` 定义了一个「手串定制助手」角色（persona），通过 system prompt 约束 AI：
+`atoms/bazidiy.assistant_preset/impl/agent.cordis.yml` 定义了一个「手串定制助手」角色（persona），通过 system prompt 约束 AI：
 
 - **严格流程**：缺信息先问 → 算八字 → 提方案 → 出图 → 用户想换则换款（不重算八字）
 - **硬约束**：禁止 AI 自己算旺衰/编造珠子名/展示八字内部细节/每次回复超过 150 字
@@ -96,7 +79,7 @@ atoms/assistant_preset/
 
 1. 将 `packages/ontology` 作为 dsh 的 workspace 包（或 npm 依赖）加入
 2. 在 dsh 的 `packages/bundle/web-app/cordis.patch.yml` 挂载 client 半区（`name: '@bazidiy/ontology'`）
-3. 将 `atoms/assistant_preset` 放进 dsh 的 preset 扫描目录（`apps/cli/config/agent-presets/`），并设 `default: bazidiy`
+3. 将 `atoms/bazidiy.assistant_preset/impl`（agent.cordis.yml + preset.yml）放进 dsh 的 preset 扫描目录（如桌面端 `~/.dsh/.agent-presets/bazidiy/`），新会话即可选「八字手串定制」persona。
 
 依赖的 dsh 包（peerDependencies）：`@deepseek-ai/dsh-tools`、`dsh-host-webserver`、`dsh-storage-domain`、`dsh-client-ui-tool`、`dsh-client-ui-slots`、`dsh-client-runtime` 等（对应 dsh 0.1.1-rc.x）。
 

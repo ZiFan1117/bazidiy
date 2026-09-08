@@ -1,17 +1,18 @@
 // contract-check.mjs — 原子契约测试：真跑核心能力/规则原子，失败即非零退出（verified 依据）。
-const B = 'file:///D:/Ontology/bazidiy/packages/ontology/src/'
-const bazi = await import(B + 'atoms/calculate_chart/index.ts')
-const wux = await import(B + 'atoms/infer_verdict/index.ts')
-const prop = await import(B + 'atoms/propose_designs/index.ts')
-const solver = await import(B + 'atoms/solve_styles/index.ts')
-const stylesEng = await import(B + 'atoms/solve_styles/styles.ts')
-const parseSlotsM = await import(B + 'atoms/parse_slots/index.ts')
-const genM = await import(B + 'atoms/generate_design/index.ts')
-const namingM = await import(B + 'atoms/rules.naming/index.ts')
-const strengthM = await import(B + 'atoms/rules.strength/index.ts')
-const verdictM = await import(B + 'atoms/rules.verdict_choice/index.ts')
-const consM = await import(B + 'atoms/rules.consistency/index.ts')
-const selectM = await import(B + 'atoms/select_beads/index.ts')
+// 运行前先执行 tools/sync-atoms.mjs 组装 .build/ontology（含 src/_atoms）。
+const B = 'file:///D:/Ontology/bazidiy/.build/ontology/src/'
+const bazi = await import(B + '_atoms/calculate_chart/index.ts')
+const wux = await import(B + '_atoms/infer_verdict/index.ts')
+const prop = await import(B + '_atoms/propose_designs/index.ts')
+const solver = await import(B + '_atoms/solve_styles/index.ts')
+const stylesEng = await import(B + '_atoms/solve_styles/styles.ts')
+const parseSlotsM = await import(B + '_atoms/parse_slots/index.ts')
+const genM = await import(B + '_atoms/generate_design/index.ts')
+const namingM = await import(B + '_atoms/rules.naming/index.ts')
+const strengthM = await import(B + '_atoms/rules.strength/index.ts')
+const verdictM = await import(B + '_atoms/rules.verdict_choice/index.ts')
+const consM = await import(B + '_atoms/rules.consistency/index.ts')
+const selectM = await import(B + '_atoms/select_beads/index.ts')
 
 let fail = 0
 const run = (id, fn) => {

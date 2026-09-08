@@ -1,0 +1,104 @@
+{
+  "schema": "bazidiy-atom-detail",
+  "atom": "bazidiy.select_beads",
+  "file": "bazidiy.select_beads.atom.md",
+  "language": {
+    "content": "zh-CN",
+    "identifiers": "en"
+  },
+  "layer": "capability",
+  "category": "other",
+  "side_effects": "none",
+  "lang": "typescript",
+  "intent": "按喜忌从珠子库筛出 suitable 与 unsuitable（隔片豁免）",
+  "when_to_use": "适用：得到喜忌后给出可/不可用珠清单；作为求解的输入。",
+  "tags_en": [
+    "bead",
+    "select",
+    "favorable",
+    "bracelet"
+  ],
+  "deps": [
+    "bazidiy.kb.bead_catalog",
+    "bazidiy.rules.verdict_choice"
+  ],
+  "implementation_ref": "bazidiy @bazidiy/ontology: src/propose.ts 筛选段",
+  "io": {
+    "input": {
+      "type": "object",
+      "required": [
+        "unfavorable"
+      ],
+      "properties": {
+        "bead_ids": {
+          "type": "string",
+          "description": "逗号分隔限定，空=全部"
+        },
+        "unfavorable": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "suitable": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "unsuitable": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "reason": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "tests": []
+  },
+  "disclosure": {
+    "list": "frontmatter id+intent(+when_to_use)",
+    "detail": "body (four ## sections + four mermaid)",
+    "machine": "atoms/bazidiy.select_beads/detail.json"
+  },
+  "diagrams": {
+    "flow": [
+      "IN[beads, unfavorable[], bead_ids] --> F{五行 ∈ unfavorable?}",
+      "F -- 是且非隔片 --> OUT[unsuitable + reason]",
+      "F -- 否 --> OUT2[suitable]",
+      "note 隔片(spacer) 始终 suitable"
+    ],
+    "classDiagram": [
+      "class BeadSelector { +select(beads, avoid) }",
+      "BeadSelector --> BeadCatalog",
+      "BeadSelector : isSpacer(bead)"
+    ],
+    "sequence": [
+      "participant U as propose_designs",
+      "participant S as BeadSelector",
+      "U->>S: select(全库, [火])",
+      "S->>S: 南红(火)→unsuitable；隔片→suitable",
+      "S-->>U: suitable[] + unsuitable[](带 reason)"
+    ],
+    "callGraph": [
+      "select --> avoidSet",
+      "select --> classify",
+      "classify --> isSpacer"
+    ]
+  },
+  "when": [
+    "适用：得到喜忌后给出可/不可用珠清单；作为求解的输入。",
+    "不适用：不判喜忌、不解款式。"
+  ],
+  "example": "输入 { unfavorable:[\"火\"] } → 南红/紫金砂/珊瑚 进 unsuitable；白银/碎银子(spacer) 与木土金水系 进 suitable。"
+}

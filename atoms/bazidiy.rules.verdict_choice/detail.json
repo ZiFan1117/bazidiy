@@ -1,0 +1,109 @@
+{
+  "schema": "bazidiy-atom-detail",
+  "atom": "bazidiy.rules.verdict_choice",
+  "file": "bazidiy.rules.verdict_choice.atom.md",
+  "language": {
+    "content": "zh-CN",
+    "identifiers": "en"
+  },
+  "layer": "primitive",
+  "category": "other",
+  "side_effects": "none",
+  "lang": "rule-data + evaluator",
+  "intent": "依据旺衰给出喜用神与忌神选择规则",
+  "when_to_use": "适用：给出喜用/忌神五行集合供筛珠。",
+  "tags_en": [
+    "rule",
+    "wuxing",
+    "favorable",
+    "unfavorable"
+  ],
+  "deps": [
+    "bazidiy.kb.wuxing_ganzhi"
+  ],
+  "implementation_ref": "bazidiy @bazidiy/ontology: src/data/wuxing.ts favorable_rules/unfavorable_rules",
+  "io": {
+    "input": {
+      "type": "object",
+      "required": [
+        "strength",
+        "day_master_element"
+      ],
+      "properties": {
+        "strength": {
+          "type": "string",
+          "enum": [
+            "strong",
+            "weak"
+          ]
+        },
+        "day_master_element": {
+          "type": "string"
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "favorable": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "unfavorable": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "reasons": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "tests": []
+  },
+  "disclosure": {
+    "list": "frontmatter id+intent(+when_to_use)",
+    "detail": "body (four ## sections + four mermaid)",
+    "machine": "atoms/bazidiy.rules.verdict_choice/detail.json"
+  },
+  "diagrams": {
+    "flow": [
+      "IN[strength, day_master_element] --> F{按 strength 选规则族}",
+      "F -- strong --> R1[favorable: restricts+generates 邻接]",
+      "F -- weak --> R2[favorable: generated_by + include_self]",
+      "R1 --> O[favorable[] + unfavorable[] + reasons]",
+      "R2 --> O"
+    ],
+    "classDiagram": [
+      "class FavorableRule { +condition.strength +favorable_from[] +include_self }",
+      "class UnfavorableRule { +condition.strength +unfavorable_from[] }",
+      "class VerdictChoice { +pick(strength, dayMaster) }",
+      "VerdictChoice --> FavorableRule",
+      "VerdictChoice --> UnfavorableRule",
+      "VerdictChoice --> WuxingElement : 沿关系取后继"
+    ],
+    "sequence": [
+      "participant U as infer_verdict",
+      "participant V as VerdictChoice",
+      "U->>V: pick(strong, 金)",
+      "V->>V: favorable_from=[restricts,generates]",
+      "V-->>U: { favorable:[火,水], unfavorable:[金,土] }"
+    ],
+    "callGraph": [
+      "pick --> selectFav",
+      "pick --> selectUnfav",
+      "selectFav --> relationTraverse"
+    ]
+  },
+  "when": [
+    "适用：给出喜用/忌神五行集合供筛珠。",
+    "不适用：不做旺衰判定（那是 strength）。"
+  ],
+  "example": "输入 { strength: \"strong\", day_master_element: \"金\" } → { favorable: [\"火\",\"水\"], unfavorable: [\"金\",\"土\"] }。"
+}

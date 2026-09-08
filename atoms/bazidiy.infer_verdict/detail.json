@@ -1,0 +1,119 @@
+{
+  "schema": "bazidiy-atom-detail",
+  "atom": "bazidiy.infer_verdict",
+  "file": "bazidiy.infer_verdict.atom.md",
+  "language": {
+    "content": "zh-CN",
+    "identifiers": "en"
+  },
+  "layer": "capability",
+  "category": "other",
+  "side_effects": "none",
+  "lang": "typescript",
+  "intent": "判定日主旺衰并推导喜用神与忌神",
+  "when_to_use": "适用：一切需要喜忌判定的调用（propose_designs 主路径）。",
+  "tags_en": [
+    "wuxing",
+    "strength",
+    "favorable",
+    "verdict"
+  ],
+  "deps": [
+    "bazidiy.rules.strength",
+    "bazidiy.rules.verdict_choice",
+    "bazidiy.kb.wuxing_ganzhi"
+  ],
+  "implementation_ref": "bazidiy @bazidiy/ontology: src/wuxing.ts inferWuxing",
+  "io": {
+    "input": {
+      "type": "object",
+      "required": [
+        "day_master_element",
+        "month_branch_wuxing"
+      ],
+      "properties": {
+        "day_master_element": {
+          "type": "string"
+        },
+        "month_branch_wuxing": {
+          "type": "string"
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "day_master": {
+          "type": "string"
+        },
+        "strength": {
+          "type": "string",
+          "enum": [
+            "strong",
+            "weak"
+          ]
+        },
+        "favorable": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "unfavorable": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "reasons": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "tests": []
+  },
+  "disclosure": {
+    "list": "frontmatter id+intent(+when_to_use)",
+    "detail": "body (four ## sections + four mermaid)",
+    "machine": "atoms/bazidiy.infer_verdict/detail.json"
+  },
+  "diagrams": {
+    "flow": [
+      "IN[day_master_element, month_branch_wuxing] --> S[Evaluator(rules.strength)]",
+      "S --> STR[strong|weak]",
+      "STR --> V[VerdictChoice(rules.verdict_choice)]",
+      "V --> OUT[favorable[]+unfavorable[]+reasons[]]"
+    ],
+    "classDiagram": [
+      "class inferWuxing { +run(dm, mb) }",
+      "inferWuxing --> StrengthEvaluator",
+      "inferWuxing --> VerdictChooser",
+      "StrengthEvaluator ..> strength 规则数据",
+      "VerdictChooser ..> verdict_choice 规则数据",
+      "StrengthEvaluator --> WuxingKB"
+    ],
+    "sequence": [
+      "participant U as propose_designs",
+      "participant I as infer_verdict",
+      "U->>I: run(金, 金)",
+      "I->>I: strength=strong",
+      "I->>I: favorable=[火,水] unfavorable=[金,土]",
+      "I-->>U: verdict(带理由)"
+    ],
+    "callGraph": [
+      "run --> strengthEval",
+      "strengthEval --> ruleStrength",
+      "run --> verdictEval",
+      "verdictEval --> ruleVerdict",
+      "ruleStrength --> kb"
+    ]
+  },
+  "when": [
+    "适用：一切需要喜忌判定的调用（propose_designs 主路径）。",
+    "不适用：不排盘；日主/月支须由 calculate_chart 给出。"
+  ],
+  "example": "输入 { day_master_element:\"金\", month_branch_wuxing:\"金\" } → { strength:\"strong\", favorable:[\"火\",\"水\"], unfavorable:[\"金\",\"土\"], strength_reasons:[…], reasons:[…] }。"
+}

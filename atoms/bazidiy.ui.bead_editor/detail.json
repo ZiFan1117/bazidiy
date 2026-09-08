@@ -1,0 +1,89 @@
+{
+  "schema": "bazidiy-atom-detail",
+  "atom": "bazidiy.ui.bead_editor",
+  "file": "bazidiy.ui.bead_editor.atom.md",
+  "language": {
+    "content": "zh-CN",
+    "identifiers": "en"
+  },
+  "layer": "capability",
+  "category": "web",
+  "side_effects": "none",
+  "lang": "tsx (react)",
+  "intent": "可视化逐颗换珠与调直径的编辑器",
+  "when_to_use": "适用：用户想换某颗珠/调直径时给出可点选编辑。",
+  "tags_en": [
+    "ui",
+    "editor",
+    "bead",
+    "interactive"
+  ],
+  "deps": [
+    "bazidiy.ui.svg_render",
+    "bazidiy.kb.bead_catalog"
+  ],
+  "implementation_ref": "bazidiy @bazidiy/ontology: src/client/BeadEditor.tsx",
+  "io": {
+    "input": {
+      "type": "object",
+      "required": [
+        "slots"
+      ],
+      "properties": {
+        "slots": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "beads": {
+          "type": "string",
+          "description": "替换后的珠序串（供 generate_design 回填）"
+        }
+      }
+    },
+    "tests": []
+  },
+  "disclosure": {
+    "list": "frontmatter id+intent(+when_to_use)",
+    "detail": "body (four ## sections + four mermaid)",
+    "machine": "atoms/bazidiy.ui.bead_editor/detail.json"
+  },
+  "diagrams": {
+    "flow": [
+      "IN[slots[] + catalog] --> ED[逐槽候选(按角色/直径)]",
+      "ED --> PICK[用户替换/调直径]",
+      "PICK --> NEW[新珠序串]",
+      "NEW --> OUT[beads 回填 generate_design]"
+    ],
+    "classDiagram": [
+      "class BeadEditor { +candidates(slot) +replace(i, bead) }",
+      "class BeadEditorView",
+      "BeadEditorView --> BraceletSvg",
+      "BeadEditor --> BeadCatalog"
+    ],
+    "sequence": [
+      "participant U as 用户",
+      "participant E as BeadEditor",
+      "U->>E: 点击第 2 颗",
+      "E->>E: 列出可换珠",
+      "U->>E: 选 南红8",
+      "E-->>U: 新珠序串"
+    ],
+    "callGraph": [
+      "onSlotClick --> candidates",
+      "candidates --> byRole",
+      "onSelect --> rebuild"
+    ]
+  },
+  "when": [
+    "适用：用户想换某颗珠/调直径时给出可点选编辑。",
+    "不适用：不生成方案、不判喜忌。"
+  ],
+  "example": "输入 { slots:[…3 槽] } → 用户把第 2 颗换成 南红:8 → 输出 { beads:\"南红:8,南红:8,南红:8\" }。"
+}

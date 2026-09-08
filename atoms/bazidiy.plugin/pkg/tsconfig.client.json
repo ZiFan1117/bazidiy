@@ -1,0 +1,29 @@
+{
+  "extends": "../../../tsconfig.base.client.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "lib/types"
+  },
+  "files": [
+    "src/client/index.ts",
+    "src/_atoms/ui.bead_editor/DesignResultView.tsx",
+    "src/_atoms/ui.bead_editor/BeadEditor.tsx",
+    "src/_atoms/ui.svg_render/BraceletSvg.tsx",
+    "src/_atoms/ui.svg_render/geometry.ts",
+    "src/css-modules.d.ts"
+  ],
+  "references": [
+    {
+      "path": "../../../vendor/cordis"
+    },
+    {
+      "path": "../../client/runtime"
+    },
+    {
+      "path": "../../client/ui-slots"
+    },
+    {
+      "path": "../../client/ui-tool"
+    }
+  ]
+}

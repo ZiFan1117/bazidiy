@@ -1,0 +1,93 @@
+{
+  "schema": "bazidiy-atom-detail",
+  "atom": "bazidiy.design_memory",
+  "file": "bazidiy.design_memory.atom.md",
+  "language": {
+    "content": "zh-CN",
+    "identifiers": "en"
+  },
+  "layer": "capability",
+  "category": "storage",
+  "side_effects": "db",
+  "lang": "typescript",
+  "intent": "按会话保存/恢复一次最终设计方案（save/load 两方法）",
+  "when_to_use": "适用：保存定稿后免重推理即可恢复同会话方案。",
+  "tags_en": [
+    "storage",
+    "session",
+    "design",
+    "save",
+    "load"
+  ],
+  "deps": [],
+  "implementation_ref": "bazidiy @bazidiy/ontology: src/designs.ts（storage domain bazidiy_designs）",
+  "io": {
+    "input": {
+      "type": "object",
+      "description": "save 方法需要 style_name/slots/wrist_size/summary/rationale；load 方法无需参数"
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "design_saved",
+            "design_loaded"
+          ]
+        },
+        "saved": {
+          "type": "boolean"
+        },
+        "style_name": {
+          "type": "string"
+        },
+        "slots": {
+          "type": "array"
+        },
+        "count": {
+          "type": "integer"
+        }
+      }
+    },
+    "tests": []
+  },
+  "disclosure": {
+    "list": "frontmatter id+intent(+when_to_use)",
+    "detail": "body (four ## sections + four mermaid)",
+    "machine": "atoms/bazidiy.design_memory/detail.json"
+  },
+  "diagrams": {
+    "flow": [
+      "save: IN[design] --> OPEN[open domain] --> PUT[table saved.put(sessionId, design)] --> CLOSE --> OUT[saved]",
+      "load: R[read] --> GET[table saved.get(sessionId)] --> CLOSE2 --> OUT2[loaded|not-found]"
+    ],
+    "classDiagram": [
+      "class DesignDomain { +open(ctx) }",
+      "DesignDomain : table(saved)",
+      "class DesignStore { +save(sessionId, design) +load(sessionId) }",
+      "DesignStore --> DesignDomain",
+      "slot schema : name/diameter/image/ratio"
+    ],
+    "sequence": [
+      "participant U as Agent (save_design)",
+      "participant S as DesignStore",
+      "U->>S: save(session, {style_name:B-02,…})",
+      "S->>S: put(saved) ",
+      "S-->>U: {type:design_saved, count:3}",
+      "U->>S: load(session)",
+      "S-->>U: {type:design_loaded, saved:true,…}"
+    ],
+    "callGraph": [
+      "save --> openDomain",
+      "save --> put",
+      "load --> openDomain",
+      "load --> get"
+    ]
+  },
+  "when": [
+    "适用：保存定稿后免重推理即可恢复同会话方案。",
+    "不适用：无会话上下文时拒绝（需 exec.agent.session）。"
+  ],
+  "example": "save → { type:\"design_saved\", style_name:\"B-02\", count:3 }；load → { type:\"design_loaded\", saved:true, slots:[…] } 或 { saved:false }。"
+}

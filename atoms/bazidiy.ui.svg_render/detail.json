@@ -1,0 +1,97 @@
+{
+  "schema": "bazidiy-atom-detail",
+  "atom": "bazidiy.ui.svg_render",
+  "file": "bazidiy.ui.svg_render.atom.md",
+  "language": {
+    "content": "zh-CN",
+    "identifiers": "en"
+  },
+  "layer": "capability",
+  "category": "web",
+  "side_effects": "none",
+  "lang": "tsx (react)",
+  "intent": "把定稿槽位序列渲染成手串 SVG 卡片",
+  "when_to_use": "适用：向用户展示成品手串图；工具结果 render 阶段。",
+  "tags_en": [
+    "ui",
+    "svg",
+    "bracelet",
+    "render"
+  ],
+  "deps": [
+    "bazidiy.kb.bead_catalog"
+  ],
+  "implementation_ref": "bazidiy @bazidiy/ontology: src/client/BraceletSvg.tsx + geometry.ts",
+  "io": {
+    "input": {
+      "type": "object",
+      "required": [
+        "slots"
+      ],
+      "properties": {
+        "slots": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "image": {
+                "type": "string"
+              },
+              "ratio": {
+                "type": "number"
+              }
+            }
+          }
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "svg": {
+          "type": "string",
+          "description": "SVG markup"
+        }
+      }
+    },
+    "tests": []
+  },
+  "disclosure": {
+    "list": "frontmatter id+intent(+when_to_use)",
+    "detail": "body (four ## sections + four mermaid)",
+    "machine": "atoms/bazidiy.ui.svg_render/detail.json"
+  },
+  "diagrams": {
+    "flow": [
+      "IN[slots[]] --> G[geometry: 环形坐标 + 缩放]",
+      "G --> R[每槽: <image> + 布局]",
+      "R --> OUT[SVG 卡片]"
+    ],
+    "classDiagram": [
+      "class BraceletSvg { +render(slots) }",
+      "class geometry { +layout(count, dia) +point(angle) }",
+      "BraceletSvg --> geometry",
+      "BraceletSvg --> BeadCatalog : image key"
+    ],
+    "sequence": [
+      "participant U as UI 插槽",
+      "participant B as BraceletSvg",
+      "U->>B: render(slots×3)",
+      "B->>B: 计算环形位置",
+      "B-->>U: SVG"
+    ],
+    "callGraph": [
+      "render --> layout",
+      "layout --> point",
+      "render --> beadImage"
+    ]
+  },
+  "when": [
+    "适用：向用户展示成品手串图；工具结果 render 阶段。",
+    "不适用：不做换珠编辑。"
+  ],
+  "example": "输入 { slots:[{name:南红,image:nanhong_round,ratio:1},…] } → 输出 SVG markup（环形排列的珠图）。"
+}

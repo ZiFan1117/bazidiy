@@ -1,0 +1,121 @@
+{
+  "schema": "bazidiy-atom-detail",
+  "atom": "bazidiy.parse_slots",
+  "file": "bazidiy.parse_slots.atom.md",
+  "language": {
+    "content": "zh-CN",
+    "identifiers": "en"
+  },
+  "layer": "capability",
+  "category": "other",
+  "side_effects": "none",
+  "lang": "typescript",
+  "intent": "把“珠名:直径,珠名:直径”珠序串解析消歧为槽位序列",
+  "when_to_use": "适用：把 LLM 照抄的珠序转成可渲染/可保存槽位。",
+  "tags_en": [
+    "parse",
+    "slots",
+    "beads",
+    "disambiguate"
+  ],
+  "deps": [
+    "bazidiy.kb.bead_catalog",
+    "bazidiy.rules.naming"
+  ],
+  "implementation_ref": "bazidiy @bazidiy/ontology: src/index.ts parseSlots/resolveBead",
+  "io": {
+    "input": {
+      "type": "object",
+      "required": [
+        "beads"
+      ],
+      "properties": {
+        "beads": {
+          "type": "string",
+          "description": "珠名:直径,珠名:直径"
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "slots": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "diameter": {
+                "type": "integer"
+              },
+              "slot": {
+                "type": "integer"
+              },
+              "image": {
+                "type": "string"
+              },
+              "ratio": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        "valid": {
+          "type": "boolean"
+        }
+      }
+    },
+    "tests": [
+      {
+        "input": {
+          "beads": "南红:8,碎银子:4,南红:8"
+        },
+        "expect": {
+          "valid": true
+        }
+      }
+    ]
+  },
+  "disclosure": {
+    "list": "frontmatter id+intent(+when_to_use)",
+    "detail": "body (four ## sections + four mermaid)",
+    "machine": "atoms/bazidiy.parse_slots/detail.json"
+  },
+  "diagrams": {
+    "flow": [
+      "IN[beads 串] --> SP[split(,) 逐项]",
+      "SP --> C{含 : 且名字在全称集}",
+      "C -- 否 --> OUT[null]",
+      "C -- 是 --> R[resolveBead(name, dia)]",
+      "R --> D[record slot(image, ratio)]",
+      "D --> OUT2[slots[]]"
+    ],
+    "classDiagram": [
+      "class SlotParser { +parseSlots(beads) }",
+      "SlotParser : resolveBead(name,dia)",
+      "SlotParser --> NamingRule",
+      "SlotParser --> BeadCatalog"
+    ],
+    "sequence": [
+      "participant U as generate_design",
+      "participant P as SlotParser",
+      "U->>P: parseSlots(\"南红:8,碎银子:4,南红:8\")",
+      "P->>P: 全称校验+消歧",
+      "P-->>U: slots×3",
+      "U->>P: parseSlots(\"白玉:8\")",
+      "P-->>U: null"
+    ],
+    "callGraph": [
+      "parseSlots --> splitItems",
+      "splitItems --> isCanonical",
+      "splitItems --> resolveBead"
+    ]
+  },
+  "when": [
+    "适用：把 LLM 照抄的珠序转成可渲染/可保存槽位。",
+    "不适用：不排盘；不判喜忌。"
+  ],
+  "example": "输入 { beads:\"南红:8,碎银子:4,南红:8\" } → { valid:true, slots:[{name:南红,diameter:8,slot:0,image:nanhong_round,…},…] }；含“白玉”则 valid:false。"
+}

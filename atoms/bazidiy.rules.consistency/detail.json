@@ -1,0 +1,89 @@
+{
+  "schema": "bazidiy-atom-detail",
+  "atom": "bazidiy.rules.consistency",
+  "file": "bazidiy.rules.consistency.atom.md",
+  "language": {
+    "content": "zh-CN",
+    "identifiers": "en"
+  },
+  "layer": "primitive",
+  "category": "other",
+  "side_effects": "none",
+  "lang": "rule-data + evaluator",
+  "intent": "自检全部旺衰×喜忌组合不存在喜忌交集冲突",
+  "when_to_use": "适用：改喜忌/旺衰规则数据后回归；服务启动自检。",
+  "tags_en": [
+    "rule",
+    "consistency",
+    "invariant"
+  ],
+  "deps": [
+    "bazidiy.rules.verdict_choice"
+  ],
+  "implementation_ref": "bazidiy @bazidiy/ontology: src/wuxing.ts validateConsistency",
+  "io": {
+    "input": {
+      "type": "object",
+      "properties": {
+        "verbose": {
+          "type": "boolean",
+          "description": "是否输出全部组合结果"
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "conflicts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "tests": [
+      {
+        "input": {},
+        "expect": {
+          "conflicts": []
+        }
+      }
+    ]
+  },
+  "disclosure": {
+    "list": "frontmatter id+intent(+when_to_use)",
+    "detail": "body (four ## sections + four mermaid)",
+    "machine": "atoms/bazidiy.rules.consistency/detail.json"
+  },
+  "diagrams": {
+    "flow": [
+      "ALL[5x5 日主×月支 组合] --> R[infer strength + verdict]",
+      "R --> C{favorable ∩ unfavorable = ∅?}",
+      "C -- 有交集 --> O[conflicts: 描述]",
+      "C -- 空 --> OK[consistent]"
+    ],
+    "classDiagram": [
+      "class ConsistencyCheck { +run(): string[] }",
+      "ConsistencyCheck --> inferWuxing",
+      "ConsistencyCheck : overlap(fav, unfav)"
+    ],
+    "sequence": [
+      "participant U as CI/invariant",
+      "participant C as ConsistencyCheck",
+      "U->>C: run()",
+      "C->>C: 25 组合逐判",
+      "C-->>U: [] (或冲突列表)"
+    ],
+    "callGraph": [
+      "run --> loopCombos",
+      "loopCombos --> inferWuxing",
+      "loopCombos --> overlapCheck"
+    ]
+  },
+  "when": [
+    "适用：改喜忌/旺衰规则数据后回归；服务启动自检。",
+    "不适用：运行时单次推理。"
+  ],
+  "example": "输入 {} → 输出 { conflicts: [] }（当前规则数据一致）。"
+}

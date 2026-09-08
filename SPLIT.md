@@ -1,5 +1,6 @@
 # BaziDIY 本体 → 软件原子市场 拆分定稿（草稿 v1）
 
+> ⚠️ **状态：已废弃（superseded）** —— 本文是 18 原子草案（kb 拆三份、`implementation_ref` 指旧路径 `src/bazi.ts` 等）。现行结构 = 17 个原子，代码唯一真源在 `atoms/<id>/impl/`，商店版已推送 `ZiFan1117/software-atom-market`。本文仅作历史参考，勿再作为现行口径。
 > 状态：**草稿**（不落地、不提交、`verified:false`）。来源仓库 `ZiFan1117/bazidiy`（八字五行手串定制 dsh 插件）。
 > 目标：按 software-atom-market 判据把 `@bazidiy/ontology` 拆成可复用原子，知识层本体化（OWL/Turtle）。
 

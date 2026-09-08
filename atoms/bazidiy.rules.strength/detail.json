@@ -1,0 +1,109 @@
+{
+  "schema": "bazidiy-atom-detail",
+  "atom": "bazidiy.rules.strength",
+  "file": "bazidiy.rules.strength.atom.md",
+  "language": {
+    "content": "zh-CN",
+    "identifiers": "en"
+  },
+  "layer": "primitive",
+  "category": "other",
+  "side_effects": "none",
+  "lang": "rule-data + evaluator",
+  "intent": "依据月令与日主关系判定日主旺衰（得令/得生）",
+  "when_to_use": "适用：在喜忌选择之前判定日主强弱；判据变更只改规则数据。",
+  "tags_en": [
+    "rule",
+    "wuxing",
+    "strength",
+    "deterministic"
+  ],
+  "deps": [
+    "bazidiy.kb.wuxing_ganzhi"
+  ],
+  "implementation_ref": "bazidiy @bazidiy/ontology: src/data/wuxing.ts strength_rules",
+  "io": {
+    "input": {
+      "type": "object",
+      "required": [
+        "day_master_element",
+        "month_branch_wuxing"
+      ],
+      "properties": {
+        "day_master_element": {
+          "type": "string",
+          "description": "单字五行：金/木/水/火/土"
+        },
+        "month_branch_wuxing": {
+          "type": "string",
+          "description": "单字五行"
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "strength": {
+          "type": "string",
+          "enum": [
+            "strong",
+            "weak"
+          ]
+        },
+        "reasons": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "tests": [
+      {
+        "input": {
+          "day_master_element": "金",
+          "month_branch_wuxing": "金"
+        },
+        "expect": {
+          "strength": "strong"
+        }
+      }
+    ]
+  },
+  "disclosure": {
+    "list": "frontmatter id+intent(+when_to_use)",
+    "detail": "body (four ## sections + four mermaid)",
+    "machine": "atoms/bazidiy.rules.strength/detail.json"
+  },
+  "diagrams": {
+    "flow": [
+      "IN[day_master_element, month_branch_wuxing] --> R[match 规则]",
+      "R --> C{命中 strong 规则?}",
+      "C -- 是 --> O[strong + reason]",
+      "C -- 否 --> O2[weak + 未命中说明]"
+    ],
+    "classDiagram": [
+      "class StrengthRule { +type: same_as|generates +args +reason }",
+      "class Evaluator { +judge(dayMaster, monthBranch) }",
+      "Evaluator --> StrengthRule : 逐条 match",
+      "Evaluator --> WuxingElement : 按 IRI 比较"
+    ],
+    "sequence": [
+      "participant U as infer_verdict",
+      "participant E as Evaluator",
+      "U->>E: judge(金, 金)",
+      "E->>E: 月令同日主 → strong_same 命中",
+      "E-->>U: { strength: strong, reasons:[得令而旺…] }"
+    ],
+    "callGraph": [
+      "judge --> matchSameAs",
+      "judge --> matchGenerates",
+      "match --> kbIRI"
+    ]
+  },
+  "when": [
+    "适用：在喜忌选择之前判定日主强弱；判据变更只改规则数据。",
+    "不适用：不做喜忌组合；不排盘。"
+  ],
+  "example": "输入 { day_master_element: 金, month_branch_wuxing: 金 } → { strength: \"strong\", reasons: [\"月令与日主同五行，日主得令而旺\"] }。"
+}
