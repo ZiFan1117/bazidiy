@@ -12,7 +12,7 @@ lang: "tsx (react)"
 author: ZiFan1117
 verified: false
 implementation_ref: "bazidiy @bazidiy/ontology: src/client/BeadEditor.tsx"
-deps: ["bazidiy.ui.svg_render","bazidiy.kb.bead_catalog"]
+deps: ["bazidiy.ui.svg_render","bazidiy.kb"]
 input: {"type":"object","required":["slots"],"properties":{"slots":{"type":"array","items":{"type":"object"}}}}
 output: {"type":"object","properties":{"beads":{"type":"string","description":"替换后的珠序串（供 generate_design 回填）"}}}
 ---

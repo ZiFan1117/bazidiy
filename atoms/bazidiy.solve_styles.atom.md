@@ -13,7 +13,7 @@ author: ZiFan1117
 verified: true
 tests: [{"input":{"wrist_size":17},"expect":{"proposals":true}}]
 implementation_ref: "bazidiy @bazidiy/ontology: src/solver.ts（beadCount + 约束枚举）"
-deps: ["bazidiy.kb.style_library","bazidiy.kb.bead_catalog"]
+deps: ["bazidiy.kb","bazidiy.kb"]
 input: {"type":"object","required":["suitable_beads","wrist_size"],"properties":{"suitable_beads":{"type":"array","items":{"type":"object"}},"wrist_size":{"type":"integer","description":"腕围 cm"},"max_proposals":{"type":"integer"}}}
 output: {"type":"object","properties":{"proposals":{"type":"array","items":{"type":"object","properties":{"style":{"type":"string"},"style_name":{"type":"string"},"beads":{"type":"string"},"count":{"type":"integer"}}}},"unavailable":{"type":"array","items":{"type":"object","properties":{"style":{"type":"string"},"reason":{"type":"string"}}}}}}
 ---

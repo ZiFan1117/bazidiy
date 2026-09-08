@@ -12,7 +12,7 @@ lang: "tsx (react)"
 author: ZiFan1117
 verified: false
 implementation_ref: "bazidiy @bazidiy/ontology: src/client/BraceletSvg.tsx + geometry.ts"
-deps: ["bazidiy.kb.bead_catalog"]
+deps: ["bazidiy.kb"]
 input: {"type":"object","required":["slots"],"properties":{"slots":{"type":"array","items":{"type":"object","properties":{"name":{"type":"string"},"image":{"type":"string"},"ratio":{"type":"number"}}}}}}
 output: {"type":"object","properties":{"svg":{"type":"string","description":"SVG markup"}}}
 ---
