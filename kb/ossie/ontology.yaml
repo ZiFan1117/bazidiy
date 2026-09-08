@@ -90,3 +90,43 @@ ontology:
     extends:
       - String
     description: 展示颜色，十六进制形如 #RRGGBB
+
+  # ---------------- 款式 ----------------
+  - concept: StyleCode
+    type: ValueType
+    extends:
+      - String
+    description: 款式编号（B-01…B-10）
+
+  - concept: Slot
+    type: EntityType
+    description: 款式内的一个槽位（角色 main/body/spacer/wuxing，槽位号含负号如 -1）
+    relationships:
+      - name: allows
+        description: 该槽位允许的变体
+        roles:
+          - concept: BeadVariant
+        multiplicity: ManyToOne
+        verbalizes:
+          - "{Slot} 允许 {BeadVariant}"
+
+  - concept: Style
+    type: EntityType
+    description: 手串款式（B-01 素圈 / B-02 主珠 / B-03 隔片 / B-10 五行拼色）
+    identify_by:
+      - "style_code"
+    relationships:
+      - name: style_code
+        description: 款式编号（唯一）
+        roles:
+          - concept: StyleCode
+        multiplicity: OneToOne
+        verbalizes:
+          - "{Style} 编号为 {StyleCode}"
+      - name: contains_slot
+        description: 款式包含的槽位
+        roles:
+          - concept: Slot
+        multiplicity: ManyToOne
+        verbalizes:
+          - "{Style} 含槽位 {Slot}"
