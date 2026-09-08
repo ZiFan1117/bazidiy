@@ -3,7 +3,7 @@
  * 按忌神集合把珠子分成 suitable / unsuitable（隔片豁免，不受五行限制），支持选定子集。
  * @module @bazidiy/ontology/atoms/selectBeads
  */
-import type { Bead, BeadInfo, UnsuitableBead } from '../types.ts'
+import type { Bead, BeadInfo, UnsuitableBead } from '../bazidiy.framework/contracts.ts'
 
 /** 隔片恒定豁免：variant === 'spacer'。 */
 export function isSpacerBead(b: Pick<Bead, 'variant'>): boolean {
