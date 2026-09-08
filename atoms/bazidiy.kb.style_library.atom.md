@@ -5,13 +5,13 @@ version: 0.1.0
 intent: "提供手串款式库本体：款式结构、槽位、允许变体/直径约束与隔片径映射"
 when_to_use: "适用：求解引擎在给定款式下枚举组合前读取槽位与约束声明。"
 language: zh-CN
-tags: ["ontology","style","bracelet","slot","rdf"]
+tags: ["ontology","style","bracelet","slot","ossie"]
 category: data
 side_effects: none
-lang: "turtle (owl)"
+lang: "ossie yaml + sqlite"
 author: ZiFan1117
 verified: false
-implementation_ref: "bazidiy @bazidiy/ontology: src/data/styles.ts；草案 kb/style-library.ttl"
+implementation_ref: "bazidiy @bazidiy/ontology: kb/ossie/ontology.yaml（Style/Slot 概念）+ style_catalog.semantic.yaml + data/style_*.sql（Apache Ossie v0.2）→ tools/gen-ossie-db.mjs/gen-bindings.mjs 生成 src/kb/styleLibrary.ts"
 deps: ["bazidiy.kb.bead_catalog"]
 input: {"type":"object","properties":{"style_id":{"type":"string","description":"可选：款式 id，如 B-02"}}}
 output: {"type":"object","properties":{"styles":{"type":"array","items":{"type":"object","properties":{"style_id":{"type":"string"},"name":{"type":"string"},"positions":{"type":"array"},"constraints":{"type":"array"}}}},"spacer_diameter_map":{"type":"object"}}}
@@ -20,17 +20,17 @@ output: {"type":"object","properties":{"styles":{"type":"array","items":{"type":
 
 提供手串款式库本体：款式结构、槽位、允许变体/直径约束与隔片径映射。确定性实现：不调用 LLM、不依赖网络、可重复可测试（CPU 上“算账”）。
 
-样式库本体声明 B-01~B-10 的款式结构：每个款式含若干槽位（角色 main/body/spacer/wuxing）、槽位允许变体、最小/最大直径，以及约束（diameter/spacer_map/same_bead）与隔片-体珠径映射。求解引擎按此声明生成解空间。
+样式库遵循 Apache Ossie（ontology.yaml 的 Style/Slot 概念 + style_catalog.semantic.yaml）：款式/槽位/约束/隔片径拆为 SQLite 行，由 gen-bindings 还原引擎 Style[]，求解引擎按其生成解空间。
 
 ## 怎么实现
 
 **1) 数据流转（flowchart：一份数据从输入到输出怎么走）**
 ```mermaid
 flowchart LR
-S[turtle: style-library.ttl] --> L[load 解析]
-L --> M[materialize: styleId/slotIndex 索引]
-Q[款式 id 查询] --> M
-M --> O[款式+槽位+约束 子图]
+S[kb/ossie ontology.yaml + data/style_*.sql] --> L[gen-ossie-db: SQLite 建库+自检]
+L --> B[gen-bindings: 查询→src/kb/styleLibrary.ts]
+Q[款式 id 查询] --> B
+B --> O[款式+槽位+约束+隔片径]
 ```
 
 **2) 模块分解（classDiagram：代码/类怎么划分与归属）**
@@ -39,7 +39,7 @@ classDiagram
 class Style
 class Slot
 class SlotRole
-class StyleLibrary { +load(ttl) +byStyle(id) +spacerDia(bodyDia) }
+class StyleLibrary { +byStyle(id) +spacerDia(bodyDia) }
 Slot : +minDiameter
 Slot : +maxDiameter
 Style --> Slot : hasSlot

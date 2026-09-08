@@ -5,7 +5,7 @@ import { join } from 'node:path'
 import { DATA_DIR, DB_PATH } from './ossie-lib.mjs'
 
 const db = new DatabaseSync(DB_PATH)
-for (const [schema, seed] of [['bead_schema.sql', 'bead_seed.sql'], ['wuxing_schema.sql', 'wuxing_seed.sql']]) {
+for (const [schema, seed] of [['bead_schema.sql', 'bead_seed.sql'], ['wuxing_schema.sql', 'wuxing_seed.sql'], ['style_schema.sql', 'style_seed.sql']]) {
   db.exec(readFileSync(join(DATA_DIR, schema), 'utf8'))
   db.exec(readFileSync(join(DATA_DIR, seed), 'utf8'))
 }
@@ -48,10 +48,23 @@ for (const r of db.prepare('SELECT name, month, day FROM seasons').all()) {
   if (!Number.isInteger(r.month) || r.month < 1 || r.month > 12 || !Number.isInteger(r.day) || r.day < 1 || r.day > 31) errors.push(`season 值非法: ${JSON.stringify(r)}`)
 }
 
+// --- style ---
+const nStyle = count('styles'); const nSlot = count('slots'); const nCons = count('style_constraints'); const nSpacer = count('spacer_map')
+if (nStyle !== 4) errors.push(`styles=${nStyle} (期望 4)`)
+if (nSpacer !== 4) errors.push(`spacer_map=${nSpacer} (期望 4)`)
+if (nSlot < 1) errors.push('slots 为空')
+for (const r of db.prepare('SELECT style_id, slot, role, min_dia, max_dia, allowed_variants FROM slots').all()) {
+  try { JSON.parse(r.allowed_variants) } catch { errors.push(`slots 变体 JSON 非法 ${r.style_id}/${r.slot}`) }
+  if (!['main', 'body', 'spacer', 'wuxing'].includes(r.role)) errors.push(`slots 角色非法 ${r.style_id}/${r.slot}: ${r.role}`)
+  if (r.min_dia !== null && r.max_dia !== null && r.min_dia > r.max_dia) errors.push(`slots 直径区间倒置 ${r.style_id}/${r.slot}`)
+}
+if (db.prepare('SELECT COUNT(*) c FROM slots WHERE style_id NOT IN (SELECT id FROM styles)').get().c > 0) errors.push('slots 孤立样式')
+if (db.prepare('SELECT COUNT(*) c FROM style_constraints WHERE style_id NOT IN (SELECT id FROM styles)').get().c > 0) errors.push('constraints 孤立样式')
+
 db.close()
 if (errors.length) {
   console.log('DB SELF-CHECK FAIL')
   for (const e of errors) console.log('  - ' + e)
   process.exit(1)
 }
-console.log(`DB SELF-CHECK PASS: beads=${nBeads} materials=${nMats} variants=${nVar} | elements=${nEl} stems=${nStem} branches=${nBranch} seasons=${nSea}`)
+console.log(`DB SELF-CHECK PASS: beads=${nBeads} materials=${nMats} variants=${nVar} | elements=${nEl} stems=${nStem} branches=${nBranch} seasons=${nSea} | styles=${nStyle} slots=${nSlot} cons=${nCons} spacer=${nSpacer}`)

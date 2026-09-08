@@ -11,6 +11,7 @@ const checks = [
   { doc: join(ROOT, 'kb', 'ossie', 'ontology.yaml'), schema: join('D:/Ontology/ossie', 'ontology', 'ontology.json') },
   { doc: join(ROOT, 'kb', 'ossie', 'bead_catalog.semantic.yaml'), schema: join('D:/Ontology/ossie', 'core-spec', 'ossie-schema.json') },
   { doc: join(ROOT, 'kb', 'ossie', 'wuxing_catalog.semantic.yaml'), schema: join('D:/Ontology/ossie', 'core-spec', 'ossie-schema.json') },
+  { doc: join(ROOT, 'kb', 'ossie', 'style_catalog.semantic.yaml'), schema: join('D:/Ontology/ossie', 'core-spec', 'ossie-schema.json') },
 ]
 let ok = true
 for (const c of checks) {

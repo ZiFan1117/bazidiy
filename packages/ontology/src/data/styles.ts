@@ -1,7 +1,8 @@
 /**
  * BaziDIY ontology data — style library.
- * 单一事实源：repo 根 kb/style-library.ttl（OWL/Turtle）。
- * 本文件只是把它生成的只读绑定再导出，勿手改；改数据请改 .ttl 后跑 `node tools/gen-kb.mjs`。
+ * 款式权威源：kb/ossie（Apache Ossie：ontology.yaml + style_catalog.semantic.yaml + data/style_*.sql）。
+ * 本文件只是把由 SQLite 生成的只读绑定（../kb/styleLibrary.ts）再导出；改数据请改 kb/ossie/data/style_*.sql 后跑
+ * `node tools/gen-ossie-db.mjs && node tools/gen-bindings.mjs`。
  * @module @bazidiy/ontology/data/styles
  */
 export { styles } from '../kb/styleLibrary.ts'

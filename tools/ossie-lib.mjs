@@ -11,6 +11,7 @@ export const DB_PATH = join(DATA_DIR, 'bazidiy.db')
 const SQL_FILES = [
   ['bead_schema.sql', 'bead_seed.sql'],
   ['wuxing_schema.sql', 'wuxing_seed.sql'],
+  ['style_schema.sql', 'style_seed.sql'],
 ]
 
 export function openBeadDb() {
