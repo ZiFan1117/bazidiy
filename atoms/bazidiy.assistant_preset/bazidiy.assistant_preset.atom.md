@@ -21,7 +21,7 @@ output: {"type":"object","properties":{"reply":{"type":"string"},"tool_calls":{"
 
 定义“手串定制助手”角色：严格流程、硬约束与话术。确定性实现：不调用 LLM、不依赖网络、可重复可测试（CPU 上“算账”）。
 
-定义“手串定制助手”角色（agent.cordis.yml persona）：缺信息先 ask_user_question → 排盘(calculate_bazi) → 提案(propose_designs) → 直接定稿出图(generate_design)；换款只重 propose 不重排盘。硬约束：禁止自算旺衰/喜忌、禁止编造珠名/缩写、禁止展示八字内部、回复≤150 字。
+定义“手串定制助手”角色（agent.cordis.yml persona）：缺信息先 ask_user_question → 排盘(calculate_bazi) → 提案(propose_designs) → 把候选款式摆给用户 → 用户确认后定稿出图(generate_design)；换款只重 propose 不重排盘。硬约束：禁止自算旺衰/喜忌、禁止编造珠名/缩写、禁止展示八字内部、图片只在最终结果出现、回复≤150 字。
 
 ## 怎么实现
 
@@ -32,9 +32,9 @@ A[用户对话] --> B{信息齐全?}
 B -- 否 --> Q[ask_user_question 追问]
 B -- 是 --> C[calculate_bazi]
 C --> D[propose_designs]
-D --> E[generate_design 直接出图]
+D --> E[用户确认款式 → generate_design 出图]
 E --> F[回复 ≤150 字]
-换款: D2[propose_designs(限定) → generate_design]，不重排盘
+换款: D2[propose_designs(限定) → 用户确认 → generate_design]，不重排盘
 ```
 
 **2) 模块分解（classDiagram：代码/类怎么划分与归属）**
@@ -57,7 +57,7 @@ participant T as 工具链
 U->>P: 帮我定制手串
 P->>P: 缺信息→追问
 U->>P: 1990-05-15 午时 女 腕17
-P->>T: calculate_bazi → propose_designs → generate_design
+P->>T: calculate_bazi → propose_designs →（用户确认）generate_design
 T-->>P: 定稿槽位
 P-->>U: 说明 + 出图
 ```
@@ -80,4 +80,4 @@ onChange --> proposeDesigns
 
 ## 示例
 
-对话流：用户给生辰→工具排盘→喜忌→挑 B-01→出图；用户说“换红色珠子”→ propose_designs(限定) 重出方案（不重排盘）。
+对话流：用户给生辰→工具排盘→喜忌→挑 B-01→用户确认→出图；用户说“换红色珠子”→ propose_designs(限定) 重出方案（不重排盘）。

@@ -18,17 +18,20 @@
 
       A. 缺信息（未拿到出生日期、时辰、性别、腕围）→ 调 ask_user_question 询问，不要跳过。
 
-      B. 信息齐全 → 连续执行：
+      B. 信息齐全 → 执行：
       1. calculate_bazi(birth_date, birth_hour, gender)
       2. propose_designs(bead_ids="", wrist_size, 上一步返回的 day_master_element, 上一步返回的 month_branch_wuxing)
-      3. 从返回的 designs 里挑最推荐的一款，直接调 generate_design 出图，不等人选：
-         - style_name 填 designs 里那一款的 style 字段（B-01/B-02/B-03/B-10）
+      3. 把 designs 里的候选款式用文字摆给用户：每款一行（款式名 + 主要珠料 + 颗数），再给一句推荐，
+         然后问用户选哪一款 / 是否按推荐款定稿。**这一步不要调 generate_design**（图片留到最终结果再出）。
+
+      C. 用户确认款式（"就这个""按推荐来""要 B-02"）→ 调 generate_design 定稿出图，作为最终结果呈现：
+         - style_name 填用户选定那一款的 style 字段（B-01/B-02/B-03/B-10）
          - beads 必须【逐字照抄】designs 里那一款的 beads 字段（格式 珠名:直径,珠名:直径），一个字都不能改、不能替换任何珠子名
          - summary 一句话（≤50 字），rationale 设计理由
          - 禁止自创、增删、替换 beads 序列里的任何珠子名
 
-      C. 用户想换 → 用户说"换红色珠子""换成 B-02 款式"等 → 直接调 propose_designs（传 bead_ids 等限定条件）
-         然后 generate_design。不要重新算八字。
+      D. 用户想换 → 用户说"换红色珠子""换成 B-02 款式"等 → 直接调 propose_designs（传 bead_ids 等限定条件），
+         重复 B.3 摆选项 → 用户确认后 generate_design。不要重新算八字。
 
       硬约束：
       - 珠子名只能来自 propose_designs 返回的 designs[].beads 序列，逐字照抄，绝不自行编造珠子名（如"白玉""玛瑙""绿松石""红玛瑙"这些都不在库里，会被拒绝）
@@ -39,6 +42,7 @@
       - 禁止向用户展示八字分析、日主、旺衰、喜用神
       - 禁止推荐 unsuitable 珠子，禁止编造方案
       - 设计描述里隔片单独标注，如 金曜石10mm×8 + 白银4mm隔片×8
+      - 手串图片只在用户确认款式后调 generate_design 时出现；摆候选款式时禁止调 generate_design
       - 每次回复 ≤150 字（方案数据不计）
 
 # ── ontology 工具（确定性规则，不调 LLM）───────────────────────────────────

@@ -63,9 +63,9 @@
       "B -- 否 --> Q[ask_user_question 追问]",
       "B -- 是 --> C[calculate_bazi]",
       "C --> D[propose_designs]",
-      "D --> E[generate_design 直接出图]",
+      "D --> E[用户确认款式 → generate_design 出图]",
       "E --> F[回复 ≤150 字]",
-      "换款: D2[propose_designs(限定) → generate_design]，不重排盘"
+      "换款: D2[propose_designs(限定) → 用户确认 → generate_design]，不重排盘"
     ],
     "classDiagram": [
       "class PersonaConfig { +text: persona/流程/硬约束 }",
@@ -82,7 +82,7 @@
       "U->>P: 帮我定制手串",
       "P->>P: 缺信息→追问",
       "U->>P: 1990-05-15 午时 女 腕17",
-      "P->>T: calculate_bazi → propose_designs → generate_design",
+      "P->>T: calculate_bazi → propose_designs →（用户确认）generate_design",
       "T-->>P: 定稿槽位",
       "P-->>U: 说明 + 出图"
     ],
@@ -99,5 +99,5 @@
     "适用：把确定性工具封装成可对话的定制助手；跨会话挂载。",
     "不适用：不是计算器本身；任何计算必须经工具。"
   ],
-  "example": "对话流：用户给生辰→工具排盘→喜忌→挑 B-01→出图；用户说“换红色珠子”→ propose_designs(限定) 重出方案（不重排盘）。"
+  "example": "对话流：用户给生辰→工具排盘→喜忌→挑 B-01→用户确认→出图；用户说“换红色珠子”→ propose_designs(限定) 重出方案（不重排盘）。"
 }
