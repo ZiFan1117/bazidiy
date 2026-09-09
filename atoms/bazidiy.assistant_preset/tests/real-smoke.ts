@@ -75,7 +75,7 @@ async function main() {
   const agent = handle.agent
 
   agent.followup(createUserMessage({
-    content: [{ type: 'text', text: '甯垜璁捐涓€鏉℃墜涓诧紝鎴戠殑鐢熸棩鏄?1990 骞?5 鏈?15 鏃ュ崍鏃讹紝鎬у埆鐢凤紝鑵曞洿 17cm' }],
+    content: [{ type: 'text', text: '帮我设计一条手串，我的生日是 1990 年 5 月 15 日午时，性别男，腕围 17cm' }],
     source: { kind: 'user' },
   }))
   await waitForIdle(ctx, agent)

@@ -1,5 +1,7 @@
 /**
- * 娆惧紡瑙勫垯 鈥?浠?data/styles.ts 鏋勫缓 Style/Position/Constraint銆? * 绾︽潫鐢辩被鍨嬪寲澹版槑椹卞姩锛坉iameter/spacer_map/same_bead锛夛紝鏃?hardness銆? * @module @bazidiy/ontology/styles
+ * 款式规则 —— 从 data/styles.ts 构建 Style/Position/Constraint。
+ * 约束由类型化声明驱动（diameter/spacer_map/same_bead），无 hardness。
+ * @module @bazidiy/ontology/styles
  */
 
 import { styles as stylesData } from '../kb/styleLibrary.ts'
@@ -32,7 +34,7 @@ export interface Style {
   constraints: Constraint[]
 }
 
-/** 浠庢寮忓０鏄庢瀯寤?Position銆?*/
+/** 从款式声明构建 Position。 */
 function buildPosition(p: {
   slot: number
   role?: string
@@ -49,7 +51,7 @@ function buildPosition(p: {
   }
 }
 
-/** 浠庢寮忓０鏄庢瀯寤?Constraint銆?*/
+/** 从款式声明构建 Constraint。 */
 function buildConstraint(c: {
   name: string
   type: string
@@ -66,7 +68,7 @@ function buildConstraint(c: {
   }
 }
 
-/** 浠?data/styles.ts 鏋勫缓鍏ㄩ儴娆惧紡銆?*/
+/** 从 data/styles.ts 构建全部款式。 */
 export function loadStyles(): Style[] {
   const raw = stylesData.styles as unknown as Record<string, {
     name: string
@@ -81,7 +83,7 @@ export function loadStyles(): Style[] {
   }))
 }
 
-/** 鐝犲瓙鏄惁婊¤冻鏌愭Ы浣嶇殑鐩村緞/绫诲瀷杩囨护銆?*/
+/** 珠子是否满足某槽位的直径/类型过滤。 */
 export function candidatesFor(bead: Bead, pos: Position): boolean {
   if (pos.variant_filter && !pos.variant_filter.includes(bead.variant)) return false
   const minDia = pos.min_dia
@@ -91,7 +93,7 @@ export function candidatesFor(bead: Bead, pos: Position): boolean {
   return true
 }
 
-/** 绾︽潫绫诲瀷 鈫?鏍￠獙鍑芥暟銆?*/
+/** 约束类型 → 校验函数。 */
 const CHECKERS: Record<string, (beads: Bead[], params: Record<string, unknown>) => boolean> = {
   diameter(beads, params) {
     const main = beads[0]
@@ -113,7 +115,7 @@ const CHECKERS: Record<string, (beads: Bead[], params: Record<string, unknown>) 
   },
 }
 
-/** 瀵逛竴缁勬寜 variables 椤哄簭鍙栧嚭鐨勭彔瀛愶紝鎵ц绾︽潫鏍￠獙銆?*/
+/** 对一组按 variables 顺序取出的珠子，执行约束校验。 */
 export function checkConstraint(type: string, beads: Bead[], params: Record<string, unknown>): boolean {
   const checker = CHECKERS[type]
   if (checker === undefined) throw new Error(`unknown constraint type ${JSON.stringify(type)}`)

@@ -179,7 +179,8 @@ describe('bazidiy-ontology real Loader composition', () => {
     })
     expect(result.isError).toBe(false)
     const value = result.value as { type: string; slots: Array<{ name: string; image: string; diameter: number }> }
-    // 鐩村緞 4 鍙兘鍖归厤 spacer 鍙樹綋锛堢櫧閾?spacer 鐩村緞 [4,5,6]锛夛紝8 鍖归厤 round銆?    expect(value.slots.map(s => s.image)).toEqual(['baiyin_round', 'baiyin_spacer', 'baiyin_round'])
+    // 直径 4 只能匹配 spacer 变体（白银 spacer 直径 [4,5,6]），8 匹配 round。
+    expect(value.slots.map(s => s.image)).toEqual(['baiyin_round', 'baiyin_spacer', 'baiyin_round'])
   })
 
   it('save_design persists per-session and load_design restores it', async () => {
