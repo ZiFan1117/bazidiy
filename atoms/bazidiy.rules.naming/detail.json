@@ -21,7 +21,7 @@
   "deps": [
     "bazidiy.kb.bead_catalog"
   ],
-  "implementation_ref": "bazidiy @bazidiy/ontology: src/index.ts VALID_NAMES + resolveBead 消歧规则",
+  "implementation_ref": "bazidiy @bazidiy/ontology: atoms/bazidiy.rules.naming/impl/index.ts（VALID_NAMES + resolveVariant 消歧）",
   "io": {
     "input": {
       "type": "object",

@@ -10,8 +10,9 @@ category: storage
 side_effects: db
 lang: typescript
 author: ZiFan1117
-verified: false
-implementation_ref: "bazidiy @bazidiy/ontology: src/designs.ts（storage domain bazidiy_designs）"
+verified: true
+tests: [{"input":{"save":{"style_name":"B-01","slots":[],"wrist_size":"17","summary":"s","rationale":"r"}},"expect":{"load":"B-01"}}]
+implementation_ref: "bazidiy @bazidiy/ontology: atoms/bazidiy.design_memory/impl/index.ts（storage domain bazidiy_designs）"
 input: {"type":"object","description":"save 方法需要 style_name/slots/wrist_size/summary/rationale；load 方法无需参数"}
 output: {"type":"object","properties":{"type":{"type":"string","enum":["design_saved","design_loaded"]},"saved":{"type":"boolean"},"style_name":{"type":"string"},"slots":{"type":"array"},"count":{"type":"integer"}}}
 ---

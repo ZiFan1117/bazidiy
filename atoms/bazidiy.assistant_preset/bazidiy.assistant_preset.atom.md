@@ -10,8 +10,9 @@ category: ai
 side_effects: none
 lang: "yaml (dsh preset)"
 author: ZiFan1117
-verified: false
-implementation_ref: "bazidiy @bazidiy/ontology: packages/presets/bazidiy/agent.cordis.yml"
+verified: true
+tests: [{"input":{"preset":"bazidiy"},"expect":{"persona":"手串定制助手","tools":7}}]
+implementation_ref: "bazidiy @bazidiy/ontology: atoms/bazidiy.assistant_preset/impl/agent.cordis.yml"
 deps: ["bazidiy.calculate_chart","bazidiy.propose_designs","bazidiy.generate_design","bazidiy.design_memory"]
 input: {"type":"object","properties":{"user_message":{"type":"string"},"session_state":{"type":"object","description":"已收集的生辰/腕围等"}}}
 output: {"type":"object","properties":{"reply":{"type":"string"},"tool_calls":{"type":"array","description":"依次调用的工具与参数"}}}

@@ -21,7 +21,7 @@
   "deps": [
     "bazidiy.kb.wuxing_ganzhi"
   ],
-  "implementation_ref": "bazidiy @bazidiy/ontology: src/bazi.ts calculateBazi + src/index.ts calculate_bazi 工具壳",
+  "implementation_ref": "bazidiy @bazidiy/ontology: atoms/bazidiy.calculate_chart/impl/index.ts（calculateBazi）+ atoms/bazidiy.plugin/impl/tools/calculate-bazi.ts（工具壳）",
   "io": {
     "input": {
       "type": "object",

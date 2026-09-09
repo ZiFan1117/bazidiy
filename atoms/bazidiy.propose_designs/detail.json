@@ -20,10 +20,11 @@
   ],
   "deps": [
     "bazidiy.infer_verdict",
+    "bazidiy.kb",
     "bazidiy.select_beads",
     "bazidiy.solve_styles"
   ],
-  "implementation_ref": "bazidiy @bazidiy/ontology: src/propose.ts propose + src/index.ts propose_designs 工具壳",
+  "implementation_ref": "bazidiy @bazidiy/ontology: atoms/bazidiy.propose_designs/impl/index.ts（propose）+ atoms/bazidiy.plugin/impl/tools/propose-designs.ts（工具壳）",
   "io": {
     "input": {
       "type": "object",

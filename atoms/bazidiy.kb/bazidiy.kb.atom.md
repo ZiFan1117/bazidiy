@@ -10,7 +10,8 @@ category: data
 side_effects: none
 lang: "ossie yaml + sqlite"
 author: ZiFan1117
-verified: false
+verified: true
+tests: [{"input":{"domain":"bead","term":"nanhong_round"},"expect":{"name":"南红","wuxing":"火"}}]
 implementation_ref: "bazidiy @bazidiy/ontology: kb/ossie/ontology.yaml（合并篇）+ {bead,wuxing,style}_catalog.semantic.yaml + data/*.sql（Apache Ossie v0.2）→ tools/gen-ossie-db.mjs/gen-bindings.mjs 生成绑定；资源 assets/beads/*.png"
 deps: []
 input: {"type":"object","properties":{"domain":{"type":"string","enum":["wuxing","bead","style"]},"term":{"type":"string","description":"可选：概念/术语查询"}}}
@@ -62,7 +63,7 @@ K-->>A: 数据/契约
 **4) 调用图（graph）**
 ```mermaid
 graph TD
-rules.* --> bazidiy.kb
+rules --> bazidiy.kb
 calculate_chart --> bazidiy.kb
 infer_verdict --> bazidiy.kb
 solve_styles --> bazidiy.kb
@@ -71,7 +72,8 @@ solve_styles --> bazidiy.kb
 ## 何时用
 
 - 适用：全领域概念/实例/契约的权威来源；构建其它原子与对外数据接口。
-- 不适用：不做判据/求解（那是 rules.* 与能力原子）。
+- 不适用：不做判据/求解（那是 rules 与能力原子）。
+- 共享类型契约（Bead / DesignOption / WuxingVerdict 等）以 `impl/contracts.ts` 随本原子发布，供其它原子相对引用；不再单独设 `__shared` 目录。
 
 ## 示例
 

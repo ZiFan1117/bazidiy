@@ -6,8 +6,8 @@
 
 import type { Bead, DesignOption } from '../kb/contracts.ts'
 import { wuxing as wuxingData } from '../kb/wuxing.ts'
-import { SPACER_MAP, candidatesFor, checkConstraint, loadStyles } from './styles.ts'
-import type { Position, Style } from './styles.ts'
+import { SPACER_MAP, candidatesFor, checkConstraint, loadStyles } from '../styles/index.ts'
+import type { Position, Style } from '../styles/index.ts'
 
 /** 腕围 + 珠径 → 手串颗数（圆形展开物理公式）。 */
 export function beadCount(wristCm: number, diameterMm: number, spacerMm?: number): number {

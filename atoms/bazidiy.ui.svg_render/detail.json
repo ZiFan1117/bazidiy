@@ -18,10 +18,8 @@
     "bracelet",
     "render"
   ],
-  "deps": [
-    "bazidiy.kb.bead_catalog"
-  ],
-  "implementation_ref": "bazidiy @bazidiy/ontology: src/client/BraceletSvg.tsx + geometry.ts",
+  "deps": [],
+  "implementation_ref": "bazidiy @bazidiy/ontology: atoms/bazidiy.ui.svg_render/impl/BraceletSvg.tsx + geometry.ts",
   "io": {
     "input": {
       "type": "object",

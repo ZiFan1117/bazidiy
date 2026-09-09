@@ -10,9 +10,10 @@ category: web
 side_effects: none
 lang: "tsx (react)"
 author: ZiFan1117
-verified: false
-implementation_ref: "bazidiy @bazidiy/ontology: src/client/BeadEditor.tsx"
-deps: ["bazidiy.ui.svg_render","bazidiy.kb"]
+verified: true
+tests: [{"input":{"slot":{"name":"南红","diameter":8}},"expect":{"replaceFrom":"/beads/catalog.json"}}]
+implementation_ref: "bazidiy @bazidiy/ontology: atoms/bazidiy.ui.bead_editor/impl/BeadEditor.tsx + DesignResultView.tsx"
+deps: ["bazidiy.ui.svg_render"]
 input: {"type":"object","required":["slots"],"properties":{"slots":{"type":"array","items":{"type":"object"}}}}
 output: {"type":"object","properties":{"beads":{"type":"string","description":"替换后的珠序串（供 generate_design 回填）"}}}
 ---

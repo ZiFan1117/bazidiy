@@ -24,7 +24,7 @@
     "bazidiy.generate_design",
     "bazidiy.design_memory"
   ],
-  "implementation_ref": "bazidiy @bazidiy/ontology: packages/presets/bazidiy/agent.cordis.yml",
+  "implementation_ref": "bazidiy @bazidiy/ontology: atoms/bazidiy.assistant_preset/impl/agent.cordis.yml",
   "io": {
     "input": {
       "type": "object",

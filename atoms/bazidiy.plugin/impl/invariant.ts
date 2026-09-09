@@ -3,6 +3,8 @@
 import type { Context } from '@deepseek-ai/cordis'
 import type { InvariantFailure, InvariantInstaller } from '@deepseek-ai/dsh-invariants'
 import { validateConsistency } from './_atoms/infer_verdict/index.ts'
+import { assertSingleWuxing, validateWuxingData } from './_atoms/rules/index.ts'
+import { beads as beadsData } from './_atoms/kb/beadCatalog.ts'
 
 const PACKAGE_NAME = '@bazidiy/ontology'
 
@@ -16,6 +18,17 @@ function validateOntology(fail: InvariantFailure): void {
   const conflicts = validateConsistency()
   for (const conflict of conflicts) {
     fail(`ontology rules inconsistent: ${conflict}`)
+  }
+  // R4 / FunctionalProperty: catalog size and single-valued wuxing.
+  const expectedBeadRows = 33
+  if (beadsData.length !== expectedBeadRows) {
+    fail(`beads catalog count drift: got ${beadsData.length}, expected ${expectedBeadRows}`)
+  }
+  for (const conflict of assertSingleWuxing()) {
+    fail(`bead wuxing not single-valued: ${conflict}`)
+  }
+  for (const gap of validateWuxingData()) {
+    fail(`wuxing data incomplete: ${gap}`)
   }
 }
 

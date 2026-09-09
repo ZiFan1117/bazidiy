@@ -1,0 +1,157 @@
+{
+  "schema": "bazidiy-atom-detail",
+  "atom": "bazidiy.rules",
+  "file": "bazidiy.rules.atom.md",
+  "language": {
+    "content": "zh-CN",
+    "identifiers": "en"
+  },
+  "layer": "primitive",
+  "category": "other",
+  "side_effects": "none",
+  "lang": "rule-data + evaluator",
+  "intent": "五行判据与约束：生克关系遍历、旺衰、喜忌、全组合自检、R1–R14 规则清单与封闭世界守卫",
+  "when_to_use": "适用：任何需要五行生克/旺衰/喜忌判定、规则可发现性或域外值拒绝的推理。",
+  "tags_en": [
+    "rule",
+    "wuxing",
+    "strength",
+    "verdict",
+    "consistency",
+    "catalog",
+    "guard"
+  ],
+  "deps": [
+    "bazidiy.kb"
+  ],
+  "implementation_ref": "bazidiy @bazidiy/ontology: atoms/bazidiy.rules/impl/index.ts（loadRelations/judgeStrength/chooseVerdict/checkConsistency/listRules/guards）",
+  "io": {
+    "input": {
+      "type": "object",
+      "required": [
+        "day_master_element",
+        "month_branch_wuxing"
+      ],
+      "properties": {
+        "day_master_element": {
+          "type": "string",
+          "description": "单字五行：金/木/水/火/土"
+        },
+        "month_branch_wuxing": {
+          "type": "string",
+          "description": "单字五行"
+        },
+        "element": {
+          "type": "string"
+        },
+        "relation": {
+          "type": "string",
+          "enum": [
+            "self",
+            "generates",
+            "restricts",
+            "generated_by",
+            "restricted_by"
+          ]
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "strength": {
+          "type": "string",
+          "enum": [
+            "strong",
+            "weak"
+          ]
+        },
+        "favorable": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "unfavorable": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "conflicts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "tests": [
+      {
+        "input": {
+          "day_master_element": "金",
+          "month_branch_wuxing": "金"
+        },
+        "expect": {
+          "strength": "strong",
+          "favorable": [
+            "木",
+            "水"
+          ]
+        }
+      }
+    ]
+  },
+  "disclosure": {
+    "list": "frontmatter id+intent(+when_to_use)",
+    "detail": "body (four ## sections + four mermaid)",
+    "machine": "atoms/bazidiy.rules/detail.json"
+  },
+  "diagrams": {
+    "flow": [
+      "KB[kb: wuxing 规则数据 + 珠库] --> R[loadRelations]",
+      "DM[day_master_element, month_branch_wuxing] --> S[judgeStrength]",
+      "S --> V[chooseVerdict]",
+      "R --> S",
+      "R --> V",
+      "V --> OUT[strength + favorable + unfavorable]",
+      "KB --> G[guards / listRules]",
+      "G --> OUT2[冲突清单 / R1–R14 / 域外拒绝]"
+    ],
+    "classDiagram": [
+      "class Rules { +loadRelations() +follows() +deriveElements() +judgeStrength() +chooseVerdict() +checkConsistency() +listRules() +ruleById() +isWuxingElement() +assertSingleWuxing() +validateWuxingData() }",
+      "Rules --> WuxingData",
+      "Rules --> BeadCatalog"
+    ],
+    "sequence": [
+      "participant I as infer_verdict",
+      "participant D as derive",
+      "participant R as rules",
+      "I->>R: judgeStrength(金, 金)",
+      "R-->>I: { strength: strong, reasons }",
+      "I->>R: chooseVerdict(strong, 金)",
+      "R-->>I: { favorable: [木,水], unfavorable: [金,土] }",
+      "D->>R: isWuxingElement(金)",
+      "R-->>D: true"
+    ],
+    "callGraph": [
+      "infer_verdict --> rules",
+      "derive --> rules",
+      "invariant --> rules",
+      "beads_rules --> rules",
+      "rules --> wuxingData",
+      "rules --> beadCatalog"
+    ]
+  },
+  "when": [
+    "适用：任何需要五行生克/旺衰/喜忌判定、规则可发现性或域外值拒绝的推理。",
+    "不适用：不排盘（bazidiy.calculate_chart）；不筛珠/求解款式（bazidiy.select_beads / solve_styles）；不命名消歧（bazidiy.rules.naming）。"
+  ],
+  "example": "输入 { day_master_element:\"金\", month_branch_wuxing:\"金\" } → { strength:\"strong\", favorable:[\"木\",\"水\"], unfavorable:[\"金\",\"土\"] }；listRules() 返回 R1–R14；checkConsistency() 返回空数组。"
+}

@@ -12,7 +12,7 @@ lang: "rule-data + evaluator"
 author: ZiFan1117
 verified: true
 tests: [{"input":{"name":"玛瑙"},"expect":{"ok":false}},{"input":{"name":"白银","diameter":10},"expect":{"variant":"round"}}]
-implementation_ref: "bazidiy @bazidiy/ontology: src/atoms/naming.ts（VALID_NAMES + resolveVariant 消歧）"
+implementation_ref: "bazidiy @bazidiy/ontology: atoms/bazidiy.rules.naming/impl/index.ts（VALID_NAMES + resolveVariant 消歧）"
 deps: ["bazidiy.kb"]
 input: {"type":"object","properties":{"name":{"type":"string","description":"珠子名（须全称）"},"diameter":{"type":"integer"}}}
 output: {"type":"object","properties":{"ok":{"type":"boolean"},"bead_id":{"type":"string"},"variant":{"type":"string"},"reason":{"type":"string"}}}

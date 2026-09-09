@@ -20,7 +20,7 @@
     "load"
   ],
   "deps": [],
-  "implementation_ref": "bazidiy @bazidiy/ontology: src/designs.ts（storage domain bazidiy_designs）",
+  "implementation_ref": "bazidiy @bazidiy/ontology: atoms/bazidiy.design_memory/impl/index.ts（storage domain bazidiy_designs）",
   "io": {
     "input": {
       "type": "object",

@@ -1,3 +1,2 @@
 - insert:
-    - id: bazidiy-ontology
-      name: @bazidiy/ontology
+  - { id: bazidiy-ontology, name: '@bazidiy/ontology' }

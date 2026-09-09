@@ -12,8 +12,8 @@ lang: typescript
 author: ZiFan1117
 verified: true
 tests: [{"input":{"day_master_element":"金","month_branch_wuxing":"金"},"expect":{"strength":"strong","favorable":["木","水"]}}]
-implementation_ref: "bazidiy @bazidiy/ontology: src/wuxing.ts（组合 atoms/rules/{strength,verdictChoice}）"
-deps: ["bazidiy.rules.strength","bazidiy.rules.verdict_choice","bazidiy.kb"]
+implementation_ref: "bazidiy @bazidiy/ontology: atoms/bazidiy.infer_verdict/impl/index.ts（组合 rules.strength + rules.verdict_choice）"
+deps: ["bazidiy.kb","bazidiy.rules"]
 input: {"type":"object","required":["day_master_element","month_branch_wuxing"],"properties":{"day_master_element":{"type":"string"},"month_branch_wuxing":{"type":"string"}}}
 output: {"type":"object","properties":{"day_master":{"type":"string"},"strength":{"type":"string","enum":["strong","weak"]},"favorable":{"type":"array","items":{"type":"string"}},"unfavorable":{"type":"array","items":{"type":"string"}},"reasons":{"type":"array","items":{"type":"string"}}}}
 ---

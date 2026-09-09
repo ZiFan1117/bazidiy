@@ -19,10 +19,9 @@
     "bracelet"
   ],
   "deps": [
-    "bazidiy.kb.bead_catalog",
-    "bazidiy.rules.verdict_choice"
+    "bazidiy.kb"
   ],
-  "implementation_ref": "bazidiy @bazidiy/ontology: src/propose.ts 筛选段",
+  "implementation_ref": "bazidiy @bazidiy/ontology: atoms/bazidiy.select_beads/impl/index.ts",
   "io": {
     "input": {
       "type": "object",

@@ -10,9 +10,10 @@ category: web
 side_effects: none
 lang: "tsx (react)"
 author: ZiFan1117
-verified: false
-implementation_ref: "bazidiy @bazidiy/ontology: src/client/BraceletSvg.tsx + geometry.ts"
-deps: ["bazidiy.kb"]
+verified: true
+tests: [{"input":{"slots":[{"name":"南红","diameter":8,"image":"nanhong_round","ratio":1}]},"expect":{"svg":true}}]
+implementation_ref: "bazidiy @bazidiy/ontology: atoms/bazidiy.ui.svg_render/impl/BraceletSvg.tsx + geometry.ts"
+deps: []
 input: {"type":"object","required":["slots"],"properties":{"slots":{"type":"array","items":{"type":"object","properties":{"name":{"type":"string"},"image":{"type":"string"},"ratio":{"type":"number"}}}}}}
 output: {"type":"object","properties":{"svg":{"type":"string","description":"SVG markup"}}}
 ---

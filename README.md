@@ -39,7 +39,7 @@ atoms/                       # 【唯一真源】每个原子一个文件夹：�
   bazidiy.kb/                # 知识本体原子：atom.md · impl/(绑定) · tests/ · assets/beads(35图)
   bazidiy.calculate_chart/   #   · tools/
   bazidiy.infer_verdict/     #  （…其余每个原子同构：atom.md · detail.json · impl/ · tests/）
-  …（共 17 个 bazidiy.* 原子）＋ bazidiy.plugin/   # 插件装配原子：impl/(壳代码) · pkg/(打包配置)
+  …（共 16 个 bazidiy.* 原子）＋ bazidiy.plugin/   # 插件装配原子：impl/(壳代码) · pkg/(打包配置)
   __shared/                  # 跨原子共享（bazidiy.framework 契约/判据 + 集成测试）
 tools/
   sync-atoms.mjs             # 原子真源 → 组装 .build/ontology（src/_atoms + tests + assets + persona）
@@ -47,6 +47,9 @@ tools/
   gen-bindings.mjs           # DB → atoms/bazidiy.kb/impl 绑定 + kb/*.ttl
   ossie-validate.mjs         # Apache Ossie 官方 validator（4 文档闸）
   contract-check.mjs         # 原子契约回归（先跑 sync 组装 .build）
+  check-imports.mjs          # 引用纪律：原子真源只允许相对/裸包 import
+  check-encoding.mjs         # 编码闸：UTF-8 无 BOM + 无 GBK mojibake 残码
+  check-deps.mjs             # 依赖透明闸：atom.md/detail.json 的 deps == 真实 import（--fix 回写）
 .build/ontology              # 组装视图（gitignore；发布/打包输入）
 dist/                        # 产物（tgz）
 ```

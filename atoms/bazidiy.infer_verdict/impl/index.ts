@@ -1,15 +1,13 @@
 /**
  * 旺衰/喜忌推理（bazidiy.infer_verdict 引擎层）。
- * 判据逻辑已下沉到规则原子：atoms/rules/{strength,verdictChoice,consistency}；本模块只做组合与类型对齐。
+ * 判据逻辑已下沉到 bazidiy.rules；本模块只做组合与类型对齐。
  * @module @bazidiy/ontology/wuxing
  */
 
-import { judgeStrength } from '../rules.strength/index.ts'
-import { chooseVerdict } from '../rules.verdict_choice/index.ts'
-import { checkConsistency } from '../rules.consistency/index.ts'
+import { checkConsistency, chooseVerdict, judgeStrength } from '../rules/index.ts'
 import type { WuxingVerdict } from '../kb/contracts.ts'
 
-export { loadRelations } from '../rules.relations/index.ts'
+export { loadRelations } from '../rules/index.ts'
 export { checkConsistency }
 /** 一致性自检（兼容导出名）。 */
 export const validateConsistency = checkConsistency

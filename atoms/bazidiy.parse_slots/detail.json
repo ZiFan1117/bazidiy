@@ -19,10 +19,9 @@
     "disambiguate"
   ],
   "deps": [
-    "bazidiy.kb.bead_catalog",
     "bazidiy.rules.naming"
   ],
-  "implementation_ref": "bazidiy @bazidiy/ontology: src/index.ts parseSlots/resolveBead",
+  "implementation_ref": "bazidiy @bazidiy/ontology: atoms/bazidiy.parse_slots/impl/index.ts（解析/消歧，底层 rules.naming）",
   "io": {
     "input": {
       "type": "object",

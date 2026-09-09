@@ -19,11 +19,9 @@
     "slots"
   ],
   "deps": [
-    "bazidiy.parse_slots",
-    "bazidiy.rules.naming",
-    "bazidiy.kb.bead_catalog"
+    "bazidiy.parse_slots"
   ],
-  "implementation_ref": "bazidiy @bazidiy/ontology: src/index.ts generate_design 工具壳",
+  "implementation_ref": "bazidiy @bazidiy/ontology: atoms/bazidiy.generate_design/impl/index.ts（parse + naming 定稿）",
   "io": {
     "input": {
       "type": "object",

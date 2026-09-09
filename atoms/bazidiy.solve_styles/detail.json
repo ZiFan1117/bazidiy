@@ -19,10 +19,10 @@
     "enumeration"
   ],
   "deps": [
-    "bazidiy.kb.style_library",
-    "bazidiy.kb.bead_catalog"
+    "bazidiy.kb",
+    "bazidiy.styles"
   ],
-  "implementation_ref": "bazidiy @bazidiy/ontology: src/solver.ts（beadCount + 约束枚举）",
+  "implementation_ref": "bazidiy @bazidiy/ontology: atoms/bazidiy.solve_styles/impl/index.ts（beadCount + 约束求解）+ impl/styles.ts（款式规格构建）",
   "io": {
     "input": {
       "type": "object",

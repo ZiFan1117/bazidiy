@@ -19,10 +19,9 @@
     "interactive"
   ],
   "deps": [
-    "bazidiy.ui.svg_render",
-    "bazidiy.kb.bead_catalog"
+    "bazidiy.ui.svg_render"
   ],
-  "implementation_ref": "bazidiy @bazidiy/ontology: src/client/BeadEditor.tsx",
+  "implementation_ref": "bazidiy @bazidiy/ontology: atoms/bazidiy.ui.bead_editor/impl/BeadEditor.tsx + DesignResultView.tsx",
   "io": {
     "input": {
       "type": "object",

@@ -12,8 +12,8 @@ lang: typescript
 author: ZiFan1117
 verified: true
 tests: [{"input":{"unfavorable":["火","木"]},"expect":{"suitable":[{"id":"baiyin_round"}],"unsuitable":[{"id":"nanhong_round"}]}}]
-implementation_ref: "bazidiy @bazidiy/ontology: src/atoms/selectBeads.ts"
-deps: ["bazidiy.kb","bazidiy.rules.verdict_choice"]
+implementation_ref: "bazidiy @bazidiy/ontology: atoms/bazidiy.select_beads/impl/index.ts"
+deps: ["bazidiy.kb"]
 input: {"type":"object","required":["unfavorable"],"properties":{"bead_ids":{"type":"string","description":"逗号分隔限定，空=全部"},"unfavorable":{"type":"array","items":{"type":"string"}}}}
 output: {"type":"object","properties":{"suitable":{"type":"array","items":{"type":"object"}},"unsuitable":{"type":"array","items":{"type":"object","properties":{"reason":{"type":"string"}}}}}}
 ---

@@ -11,8 +11,8 @@ side_effects: none
 lang: typescript
 author: ZiFan1117
 verified: true
-implementation_ref: "bazidiy @bazidiy/ontology: src/atoms/parseSlots.ts（解析/消歧，底层 src/atoms/naming.ts）"
-deps: ["bazidiy.kb","bazidiy.rules.naming"]
+implementation_ref: "bazidiy @bazidiy/ontology: atoms/bazidiy.parse_slots/impl/index.ts（解析/消歧，底层 rules.naming）"
+deps: ["bazidiy.rules.naming"]
 input: {"type":"object","required":["beads"],"properties":{"beads":{"type":"string","description":"珠名:直径,珠名:直径"}}}
 output: {"type":"object","properties":{"slots":{"type":"array","items":{"type":"object","properties":{"name":{"type":"string"},"diameter":{"type":"integer"},"slot":{"type":"integer"},"image":{"type":"string"},"ratio":{"type":"number"}}}},"valid":{"type":"boolean"}}}
 tests: [{"input":{"beads":"南红:8,碎银子:4,南红:8"},"expect":{"valid":true}}]

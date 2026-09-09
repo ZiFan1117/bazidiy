@@ -1,0 +1,104 @@
+# BaziDIY beads ontology — v2 (L1 图纸 / 学术本体语义层)
+# 来源：bazidiy-v4/ontology v2 类树版（五行五叉 + 31 材质种类 = 类 + Bead/hasSpec 占位）。
+# 注意：IRI 为开发期占位 base；目录与插件 data/*.ts 的 33 条存在漂移，对齐见 docs/DRIFT。
+# 本文档为语义对齐/文档用途；运行时推导不依赖本文件（见 schema/guards.ts）。
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix beads: <https://example.com/bazidiy/beads-onto#> .
+
+# =====================================================================
+# v2 教学示范 · 第 1 层【图纸 TBox】—— 只装"类的树"，一个个体都没有
+#
+# 记住规则：
+#   1) 每种材质在图纸里只出现【一次】，作为一个"类"；
+#   2) 树 = BeadMaterial(顶) → 五行(中) → 具体材质(叶)；
+#   3) 图纸里【不出现】桶珠/圆珠/8mm 等任何"货号/尺寸"。
+# 完整的 35 个变体货号在另一个文件 v2_demo_seed.ttl 里（第 2 层）。
+# =====================================================================
+
+beads: rdf:type owl:Ontology ;
+  rdfs:comment "v2 schema demo (TBox only). 材质种类=类, 五行=类。"@zh .
+
+# ---------- 树的第 1 层：根 ----------
+beads:BeadMaterial a owl:Class ;
+  rdfs:label "材质"@zh , "Bead material"@en ;
+  rdfs:comment "所有材质种类的上界。此树的顶层。"@zh .
+
+# ---------- 树的第 2 层：五行（我们的分类主轴）----------
+beads:Wood  a owl:Class ; rdfs:subClassOf beads:BeadMaterial ; rdfs:label "木行材质"@zh .
+beads:Fire  a owl:Class ; rdfs:subClassOf beads:BeadMaterial ; rdfs:label "火行材质"@zh .
+beads:Earth a owl:Class ; rdfs:subClassOf beads:BeadMaterial ; rdfs:label "土行材质"@zh .
+beads:Metal a owl:Class ; rdfs:subClassOf beads:BeadMaterial ; rdfs:label "金行材质"@zh .
+beads:Water a owl:Class ; rdfs:subClassOf beads:BeadMaterial ; rdfs:label "水行材质"@zh .
+
+# ---------- 树的第 3 层：31 种材质 = 31 个"类"（每种只出现一次）----------
+# 木行 10
+beads:XiaoyeZitan      a owl:Class ; rdfs:subClassOf beads:Wood  ; rdfs:label "小叶紫檀"@zh ; skos:notation "xiaoye-zitan" .
+beads:JinsiNan         a owl:Class ; rdfs:subClassOf beads:Wood  ; rdfs:label "金丝楠"@zh   ; skos:notation "jinsi-nan" .
+beads:Chenxiang        a owl:Class ; rdfs:subClassOf beads:Wood  ; rdfs:label "沉香"@zh     ; skos:notation "chenxiang" .
+beads:LeijiZaomu       a owl:Class ; rdfs:subClassOf beads:Wood  ; rdfs:label "雷击枣木"@zh ; skos:notation "leiji-zaomu" .
+beads:Jiangzhenxiang   a owl:Class ; rdfs:subClassOf beads:Wood  ; rdfs:label "降真香"@zh   ; skos:notation "jiangzhenxiang" .
+beads:YinggeLvQinan    a owl:Class ; rdfs:subClassOf beads:Wood  ; rdfs:label "莺歌绿奇楠"@zh ; skos:notation "yingge-lv-qinan" .
+beads:LvTan            a owl:Class ; rdfs:subClassOf beads:Wood  ; rdfs:label "绿檀"@zh     ; skos:notation "lvtan" .
+beads:Heitan           a owl:Class ; rdfs:subClassOf beads:Wood  ; rdfs:label "黑檀"@zh     ; skos:notation "heitan" .
+beads:HainanHuanghuali a owl:Class ; rdfs:subClassOf beads:Wood  ; rdfs:label "海南黄花梨"@zh ; skos:notation "hainan-huanghuali" .
+beads:Daqi             a owl:Class ; rdfs:subClassOf beads:Wood  ; rdfs:label "大漆珠"@zh   ; skos:notation "daqi" .
+# 火行 3
+beads:Nanhong          a owl:Class ; rdfs:subClassOf beads:Fire  ; rdfs:label "南红"@zh     ; skos:notation "nanhong" .
+beads:ZijinSha         a owl:Class ; rdfs:subClassOf beads:Fire  ; rdfs:label "紫金砂"@zh   ; skos:notation "zijin-sha" .
+beads:Shanhu           a owl:Class ; rdfs:subClassOf beads:Fire  ; rdfs:label "珊瑚"@zh     ; skos:notation "shanhu" .
+# 土行 6
+beads:TaishanYu        a owl:Class ; rdfs:subClassOf beads:Earth ; rdfs:label "泰山玉"@zh   ; skos:notation "taishan-yu" .
+beads:HuanglongYu      a owl:Class ; rdfs:subClassOf beads:Earth ; rdfs:label "黄龙玉"@zh   ; skos:notation "huanglong-yu" .
+beads:Mihuang          a owl:Class ; rdfs:subClassOf beads:Earth ; rdfs:label "蜜蜡"@zh     ; skos:notation "mihuang" .
+beads:Y180Yu           a owl:Class ; rdfs:subClassOf beads:Earth ; rdfs:label "180玉"@zh    ; skos:notation "180-yu" .
+beads:QinghaiLiaoYu    a owl:Class ; rdfs:subClassOf beads:Earth ; rdfs:label "青海料玉"@zh ; skos:notation "qinghai-liao-yu" .
+beads:JinshanTangyu    a owl:Class ; rdfs:subClassOf beads:Earth ; rdfs:label "金山糖玉"@zh ; skos:notation "jinshan-tangyu" .
+# 金行 6
+beads:JinyaoShi        a owl:Class ; rdfs:subClassOf beads:Metal ; rdfs:label "金曜石"@zh   ; skos:notation "jinyao-shi" .
+beads:Baiyin           a owl:Class ; rdfs:subClassOf beads:Metal ; rdfs:label "白银"@zh     ; skos:notation "baiyin" .
+beads:Suiyinzi         a owl:Class ; rdfs:subClassOf beads:Metal ; rdfs:label "碎银子"@zh   ; skos:notation "suiyinzi" .
+beads:JinggongHuangtong a owl:Class ; rdfs:subClassOf beads:Metal ; rdfs:label "精工黄铜珠"@zh ; skos:notation "jinggong-huangtong" .
+beads:JinggongYinzhu   a owl:Class ; rdfs:subClassOf beads:Metal ; rdfs:label "精工银珠"@zh ; skos:notation "jinggong-yinzhu" .
+beads:JinggongZuojiutong a owl:Class ; rdfs:subClassOf beads:Metal ; rdfs:label "精工做旧铜珠"@zh ; skos:notation "jinggong-zuojiutong" .
+# 水行 6
+beads:Qingjinji        a owl:Class ; rdfs:subClassOf beads:Water ; rdfs:label "青金石"@zh   ; skos:notation "qingjinji" .
+beads:HeiYaoshi        a owl:Class ; rdfs:subClassOf beads:Water ; rdfs:label "黑曜石"@zh   ; skos:notation "hei-yao-shi" .
+beads:Tanquanshi       a owl:Class ; rdfs:subClassOf beads:Water ; rdfs:label "坦桑石"@zh   ; skos:notation "tanquanshi" .
+beads:Hailanbao        a owl:Class ; rdfs:subClassOf beads:Water ; rdfs:label "海蓝宝"@zh   ; skos:notation "hailan-bao" .
+beads:Chequ            a owl:Class ; rdfs:subClassOf beads:Water ; rdfs:label "砗磲"@zh     ; skos:notation "chequ" .
+beads:Zhenzhu          a owl:Class ; rdfs:subClassOf beads:Water ; rdfs:label "珍珠"@zh     ; skos:notation "zhenzhu" .
+
+# ---------- 与"货号/变体"打交道的类与属性（图纸里定义，个体在 seed 里） ----------
+beads:BeadVariantSpec a owl:Class ; rdfs:label "变体货号"@zh ;
+  rdfs:comment "一条可售规格=一个货号。货号个体在 v2_demo_seed.ttl，不写进本图纸。"@zh .
+
+# 物理珠：只在图纸里留"类"，ABox 保持为空（不建个体、无编号）。
+# 理由：选品/设计/推荐只到"货号"粒度；实物庞大且无"一物一码"需求。
+# 决策见 08 §6。类存在即可支持将来推理/实例化，无需任何个体。
+beads:Bead a owl:Class ;
+  rdfs:label "物理珠"@zh , "Bead (physical unit)"@en ;
+  rdfs:comment "单个物理珠的类型占位。ABox 为空；禁止用单个匿名个体代表所有实物（会破坏计数与推理）。"@zh .
+
+beads:hasSpec a owl:ObjectProperty ;
+  rdfs:domain beads:Bead ; rdfs:range beads:BeadVariantSpec ;
+  rdfs:comment "物理珠对应的货号。将来做库存/定制串时启用。"@zh .
+
+beads:hasMaterialKind a owl:ObjectProperty, owl:FunctionalProperty ;
+  rdfs:domain beads:BeadVariantSpec ;
+  rdfs:range  beads:BeadMaterial ;
+  rdfs:label "属于材质类"@zh ;
+  rdfs:comment "把货号(个体)指回图纸里对应的材质(类)。南红桶珠 → :Nanhong。"@zh .
+
+beads:hasDiameterMm a owl:DatatypeProperty ;
+  rdfs:domain beads:BeadVariantSpec ; rdfs:range xsd:integer ;
+  rdfs:label "可选直径(mm)"@zh ;
+  rdfs:comment "尺寸(mm)只住在这层(货号)，图纸的树里不出现数字。"@zh .
+
+beads:hasShape a owl:ObjectProperty ;
+  rdfs:domain beads:BeadVariantSpec ;
+  rdfs:label "珠形"@zh .
+
